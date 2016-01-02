@@ -20,6 +20,8 @@
   "dependencies": {
     "angular": "^1.4.8",
     "angular-ui-bootstrap": "^0.14.3",
+    "lodash": "^3.10.1",
+    "uuid": "^2.0.1",
     "viz.js": "^1.3.0"
   },
   "devDependencies": {
@@ -27,6 +29,7 @@
     "browserify": "^12.0.1",
     "cssify": "^1.0.2",
     "envify": "^3.4.0",
+    "function-bind": "^1.0.2",
     "jasmine-core": "^2.4.1",
     "karma": "^0.13.16",
     "karma-browserify": "^4.4.2",
@@ -41,7 +44,17 @@
   "browserify": {
     "transform": [
       "cssify",
-      "stringify",
+      [
+        "stringify",
+        {
+          "extensions": [
+            ".txt",
+            ".json",
+            ".dot",
+            ".html"
+          ]
+        }
+      ],
       "envify"
     ]
   }

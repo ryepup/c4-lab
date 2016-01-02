@@ -7,6 +7,9 @@ module.exports = function(config) {
     browsers: ['PhantomJS'],
     preprocessors: {
       'src/**/*.js': 'browserify'
+    },
+    browserify: {
+      debug: true
     }
   });
 };

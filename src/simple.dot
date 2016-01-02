@@ -1,0 +1,3 @@
+digraph g {
+  g0 [shape=record label="{foo | &#171; actor &#187; }"]
+}

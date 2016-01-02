@@ -1,6 +1,6 @@
 var Viz = require('viz.js');
 
-module.exports = function() {
+module.exports = function(exporter) {
   var self = this;
 
   self.toSVG = toSVG;
@@ -8,5 +8,7 @@ module.exports = function() {
   /**
    * @return string serialized graph as SVG
    */
-  function toSVG(graph) { throw new Error('Not implemented'); }
+  function toSVG(graph) {
+    return Viz(exporter.toDOT(graph), { format:"svg", engine:"dot" });
+  }
 };

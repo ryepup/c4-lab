@@ -1,4 +1,5 @@
 var angular = require('angular');
+require('angular-ui-bootstrap');
 
 function component(template, controller, bindings) {
   return function() {
@@ -14,12 +15,12 @@ function component(template, controller, bindings) {
 }
 
 
-angular.module('c4-lab', [])
+angular.module('c4-lab', ['ui.bootstrap'])
   .directive('c4LabShell', component(require('./shell.html'), require('./shell.controller.js')))
-  .directive('c4LabEditor', component(require('./editor.html'), null, { graph: '='}))
-  .directive('c4LabViewer', component(require('./viewer.html'), null, { graph: '='}))
-  .directive('c4LabActorEditor', component(require('./actorEditor.html')))
-  .directive('c4LabSystemEditor', component(require('./systemEditor.html')))
-  .directive('c4LabContainerEditor', component(require('./containerEditor.html')))
-  .directive('c4LabComponentEditor', component(require('./componentEditor.html')))
+  .directive('c4LabEditor', component(require('./editor.html'), require('./editor.controller.js'), { graph: '='}))
+  .directive('c4LabViewer', component(require('./viewer.html'), require('./viewer.controller.js'), { graph: '='}))
+  .service('editors', require('./editors'))
+  .service('model', require('./model'))
+  .service('exporter', require('./exporter'))
+  .service('renderer', require('./renderer'))
 ;

@@ -1,5 +1,29 @@
 <div>
   <h2>Editor</h2>
-  [ADD]
-  [ITEMS]
+  <div class="btn-group" uib-dropdown>
+    <button id="add-root-item" type="button" class="btn btn-primary"
+            uib-dropdown-toggle>
+      Add <span class="caret"></span>
+    </button>
+    <ul class="uib-dropdown-menu" role="menu" aria-labelledby="add-root-item">
+      <li role="menuitem"><a href="#" ng-click="vm.addActor()">New Actor</a></li>
+      <li role="menuitem"><a href="#" ng-click="vm.addSystem()">New System</a></li>
+      <li role="menuitem"><a href="#" ng-click="vm.addConnection()">New Connection</a></li>
+    </ul>
+  </div>
+  <div>
+    <ol>
+      <li ng-repeat="item in vm.graph.items"
+          ng-class="{'bg-info':vm.isHighlighted(item.id)}">
+        {{item.type}}: {{item.name}}
+        <ol>
+          <li ng-repeat="item in vm.edges(item)"
+              ng-mouseenter="vm.highlight(item.destinationId)"
+              ng-mouseleave="vm.highlight(null)">
+            {{item.description}}
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </div>
 </div>

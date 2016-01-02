@@ -6,5 +6,5 @@ module.exports = function() {
   /**
    * @return fully formed graph ready for editing
    */
-  function parse(json) { throw new Error('Not implemented'); }
+  function parse(json) { return JSON.parse(json); }
 };
