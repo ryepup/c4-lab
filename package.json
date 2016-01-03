@@ -6,6 +6,7 @@
   "scripts": {
     "test": "karma start karma.conf.js --single-run",
     "test:watch": "karma start karma.conf.js",
+    "build": "mkdir -p dist && browserify -g uglifyify src/index.js -d | exorcist dist/bundle.js.map > dist/bundle.js && cp src/index.html dist/",
     "serve": "live-server src",
     "watch": "watchify src/index.js -o 'node_modules/.bin/exorcist src/bundle.js.map > src/bundle.js' -d",
     "start": "parallelshell 'npm run watch -s' 'npm run serve -s' 'npm run test:watch'"

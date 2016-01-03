@@ -1,4 +1,9 @@
 language: node_js
+after_success: "./deploy.sh"
 node_js:
   - "0.10"
   - "stable"
+env:
+  global:
+    - GH_REF: github.com/ryepup/c4-lab.git
+    - secure: PK2WcJ91ZJbXuL+aaa9S0pNh/KUpIrnBu78mYuNiplqpT7MtsiJAF8D2/OFw3xqpZxoEioNJ8tVq0Z5LNnfc72k+dgZBJfK52GtpZ+svx2ep5+ES8HhbTYAYpKWRgZJ+x//iuf5pot8LiCsNuba4OiT4AyiMEgOCNXS3lOodw+SN2JCvsYhqwjT98H+KxT2M58/3c2IMx6ycRPCj/c8kfKmkfYsU7eKtm/3AIV7ugIB1ztpRr+lSO3vGVcowevoSacLNI7oSBuBcf8c8s3FZM2bvyez5NG9oCQeynjXVlEmHwWTMcvlHw7oqB20QbbluJkmqvmm1w4aWYddAyOfPiVCRFHiiFgrk5l1KOUDgTfXGGL1oTjKSLbxUGCM6+9ker+NKquMgTUILhrayDzkopTmPga4/VfjKUWjNVJ5ImYdulqmw1IqVgNmNVbLZMEeDpLVsrbt5uy1QuNwh6zrZWTUeBjjHR8hTi3AbbmG6twLlZSh+GW5JQGjNDLxduCJBOZH8OTdPfJl7oSZc9+/kxxLHuIWJT/GO/H8xyeOP/cM9Tk9k4+srpV/9S5WEe292wq0QYpltncwKckZpIW+sFFfX3H8VSR0Mb7p7BDKjlvTduc4JRCteNh+hDk079MjopsZ6GRXKk5rQTbVAOEDu2gTYxUYGjPDcTGw535fVsK4=
