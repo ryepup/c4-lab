@@ -1,3 +1,4 @@
+// @ngInject
 module.exports = function(model) {
   var vm = this;
 

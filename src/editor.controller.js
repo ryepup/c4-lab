@@ -1,3 +1,4 @@
+// @ngInject
 module.exports = function(editors, model, hotkeys) {
   var vm = this,
       highlightId,

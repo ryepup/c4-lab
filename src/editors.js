@@ -1,5 +1,5 @@
 var _ = require('lodash');
-
+// @ngInject
 module.exports = function($uibModal, model) {
   var self = this;
   self.openActorModal = openActorModal;

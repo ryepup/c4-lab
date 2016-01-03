@@ -1,3 +1,4 @@
+// @ngInject
 module.exports = function(renderer, $sce) {
   var vm = this;
   vm.toSVG = toSVG;

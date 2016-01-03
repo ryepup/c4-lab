@@ -1,5 +1,5 @@
 var Viz = require('viz.js');
-
+// @ngInject
 module.exports = function(exporter) {
   var self = this;
 
