@@ -1,6 +1,10 @@
 var angular = require('angular');
 require('angular-ui-bootstrap');
-require('ng-focus-if')
+require('ng-focus-if');
+require('angular-hotkeys');
+
+require('./style.css');
+
 
 function component(template, controller, bindings) {
   return function() {
@@ -16,7 +20,7 @@ function component(template, controller, bindings) {
 }
 
 
-angular.module('c4-lab', ['ui.bootstrap', 'focus-if'])
+angular.module('c4-lab', ['ui.bootstrap', 'focus-if', 'cfp.hotkeys'])
   .directive('c4LabShell', component(require('./shell.html'), require('./shell.controller.js')))
   .directive('c4LabEditor', component(require('./editor.html'), require('./editor.controller.js'), { graph: '='}))
   .directive('c4LabViewer', component(require('./viewer.html'), require('./viewer.controller.js'), { graph: '='}))
