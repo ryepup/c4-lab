@@ -1,5 +1,6 @@
 language: node_js
-after_success: "./deploy.sh"
+after_success:
+  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && ./deploy.sh || false'
 node_js:
   - "0.10"
   - "stable"
