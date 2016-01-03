@@ -7,19 +7,19 @@
     </button>
     <ul class="uib-dropdown-menu" role="menu" aria-labelledby="add-root-item">
       <li role="menuitem">
-        <a href="#" ng-click="vm.addActor()">
+        <a href="#" ng-click="vm.editActor()">
           <c4-lab-icon type="actor"></c4-lab-icon>
           New <u>a</u>ctor
         </a>
       </li>
       <li role="menuitem">
-        <a href="#" ng-click="vm.addSystem()">
+        <a href="#" ng-click="vm.editSystem()">
           <c4-lab-icon type="system"></c4-lab-icon>
           New <u>s</u>ystem
         </a>
       </li>
       <li role="menuitem">
-        <a href="#" ng-click="vm.addConnection()">
+        <a href="#" ng-click="vm.editConnection()">
           <c4-lab-icon type="connection"></c4-lab-icon>
           New <u>c</u>onnection
         </a>
@@ -30,17 +30,19 @@
   <div>
     <h3>{{vm.graph.items.length}} nodes with {{vm.graph.edges.length}} connections</h3>
     <ol>
-      <li ng-repeat="item in vm.graph.items"
-          ng-class="{'bg-info':vm.isHighlighted(item.id)}">
+      <li ng-repeat="item in vm.graph.items track by item.id"
+          ng-class="{'bg-info': vm.isHighlighted(item.id)}">
 
         <c4-lab-icon type="{{item.type}}"></c4-lab-icon>
         {{item.name}}
+        <button class="btn btn-xs btn-default" ng-click="vm.editItem(item)">Edit</button>
         <ol>
           <li ng-repeat="item in vm.edges(item)"
               ng-mouseenter="vm.highlight(item.destinationId)"
               ng-mouseleave="vm.highlight(null)">
             <c4-lab-icon type="connection"></c4-lab-icon>
             {{item.description}}
+            <button class="btn btn-xs btn-default" ng-click="vm.editItem(item)">Edit</button>
           </li>
         </ol>
       </li>

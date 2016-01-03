@@ -3,17 +3,17 @@ module.exports = function(model) {
 
   vm.graph = {};
 
-  var sr = model.addActor(vm.graph, {name: 'Sr. Devs'}),
-      jr = model.addActor(vm.graph, {name: 'Jr. Devs'}),
-      c4 = model.addSystem(vm.graph, {name: 'C4-Lab'});
+  var sr = model.saveActor(vm.graph, {name: 'Sr. Devs'}),
+      jr = model.saveActor(vm.graph, {name: 'Jr. Devs'}),
+      c4 = model.saveSystem(vm.graph, {name: 'C4-Lab'});
 
-  model.addConnection(vm.graph, {
+  model.saveConnection(vm.graph, {
     source: sr,
     destination: c4,
     description: 'Create/Edit designs'
   });
 
-  model.addConnection(vm.graph, {
+  model.saveConnection(vm.graph, {
     source: jr,
     destination: c4,
     description: 'Read/Implement designs'

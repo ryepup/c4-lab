@@ -4,15 +4,15 @@ var uuid = require('uuid'),
 module.exports = function() {
   var self = this;
 
-  self.addActor = addItem.bind(null, 'actor');
-  self.addSystem = addItem.bind(null, 'system');
+  self.saveActor = saveItem.bind(null, 'actor');
+  self.saveSystem = saveItem.bind(null, 'system');
   self.toJSON = JSON.stringify;
   self.parse = JSON.parse;
-  self.addConnection = addConnection;
+  self.saveConnection = saveConnection;
   self.sources = function(graph) { return graph.items || []; };
   self.destinations = destinations;
   self.edges = edges;
-
+  self.findItem = function(graph, id) { return byId(graph.items, id); };
 
   function edges(graph, item) {
     return _.chain(graph.edges || [])
@@ -26,23 +26,33 @@ module.exports = function() {
       : [];
   }
 
-  function addItem(type, graph, item) {
+  function saveItem(type, graph, item) {
     graph.items = graph.items || [];
     item.type = type;
-    item.id = uuid.v4();
-    graph.items.push(item);
-    return item;
+    return findOrCreate(graph.items, item);
   }
 
-  function addConnection(graph, item) {
+  function saveConnection(graph, item) {
     graph.edges = graph.edges || [];
     var edge = {
-      id: uuid.v4(),
+      id: item.id,
       sourceId: item.source.id,
       destinationId: item.destination.id,
       description: item.description
     };
-    graph.edges.push(edge);
-    return edge;
+    return findOrCreate(graph.edges, edge);
   }
+
+  function findOrCreate(collection, item) {
+    var match = byId(collection, item.id);
+    if(match){
+      return _.assign(match, item);
+    }else{
+      _.assign(item, { id: uuid.v4() });
+      collection.push(item);
+      return item;
+    }
+  }
+
+  function byId(collection, id) { return collection && id ? _.find(collection, 'id', id) : null; }
 };

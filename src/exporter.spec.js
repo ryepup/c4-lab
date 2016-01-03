@@ -17,14 +17,14 @@ describe('exporter', function() {
     });
 
     it('renders one actor', function() {
-      model.addActor(graph, {name: 'foo'});
+      model.saveActor(graph, {name: 'foo'});
       expect(exporter.toDOT(graph).trim())
         .toBe(require('./simple.dot').trim());
     });
 
     it('renders two actors', function() {
-      model.addActor(graph, {name: 'foo'});
-      model.addActor(graph, {name: 'bar'});
+      model.saveActor(graph, {name: 'foo'});
+      model.saveActor(graph, {name: 'bar'});
       expect(exporter.toDOT(graph).trim())
         .toBe(require('./two-actors.dot').trim());
     });
