@@ -1,26 +1,45 @@
 <div>
   <h2>Editor</h2>
-  <p class="small">Hit ? to see keyboard shortcuts</p>
   <div class="btn-group" uib-dropdown>
     <button id="add-root-item" type="button" class="btn btn-primary"
             uib-dropdown-toggle>
       Add <span class="caret"></span>
     </button>
     <ul class="uib-dropdown-menu" role="menu" aria-labelledby="add-root-item">
-      <li role="menuitem"><a href="#" ng-click="vm.addActor()">New <u>a</u>ctor</a></li>
-      <li role="menuitem"><a href="#" ng-click="vm.addSystem()">New <u>s</u>ystem</a></li>
-      <li role="menuitem"><a href="#" ng-click="vm.addConnection()">New <u>c</u>onnection</a></li>
+      <li role="menuitem">
+        <a href="#" ng-click="vm.addActor()">
+          <c4-lab-icon type="actor"></c4-lab-icon>
+          New <u>a</u>ctor
+        </a>
+      </li>
+      <li role="menuitem">
+        <a href="#" ng-click="vm.addSystem()">
+          <c4-lab-icon type="system"></c4-lab-icon>
+          New <u>s</u>ystem
+        </a>
+      </li>
+      <li role="menuitem">
+        <a href="#" ng-click="vm.addConnection()">
+          <c4-lab-icon type="connection"></c4-lab-icon>
+          New <u>c</u>onnection
+        </a>
+      </li>
     </ul>
   </div>
+  <p class="small">Hit ? to see keyboard shortcuts</p>
   <div>
+    <h3>{{vm.graph.items.length}} nodes with {{vm.graph.edges.length}} connections</h3>
     <ol>
       <li ng-repeat="item in vm.graph.items"
           ng-class="{'bg-info':vm.isHighlighted(item.id)}">
-        {{item.type}}: {{item.name}}
+
+        <c4-lab-icon type="{{item.type}}"></c4-lab-icon>
+        {{item.name}}
         <ol>
           <li ng-repeat="item in vm.edges(item)"
               ng-mouseenter="vm.highlight(item.destinationId)"
               ng-mouseleave="vm.highlight(null)">
+            <c4-lab-icon type="connection"></c4-lab-icon>
             {{item.description}}
           </li>
         </ol>
