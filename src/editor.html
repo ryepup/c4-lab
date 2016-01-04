@@ -1,5 +1,13 @@
 <div>
   <h2>Editor</h2>
+
+  <div class="small text-muted">
+    Hit ? to see keyboard shortcuts.
+    <span ng-show="vm.lastSaved">
+      Last saved at {{vm.lastSaved | date:'shortTime'}}
+    </span>
+  </div>
+
   <div class="btn-group" uib-dropdown>
     <button id="add-root-item" type="button" class="btn btn-primary"
             uib-dropdown-toggle>
@@ -26,7 +34,7 @@
       </li>
     </ul>
   </div>
-  <p class="small">Hit ? to see keyboard shortcuts</p>
+
   <div>
     <h3>{{vm.graph.items.length}} nodes with {{vm.graph.edges.length}} connections</h3>
     <ol>
@@ -37,7 +45,7 @@
         {{item.name}}
         <button class="btn btn-xs btn-default" ng-click="vm.editItem(item)">Edit</button>
         <ol>
-          <li ng-repeat="item in vm.edges(item)"
+          <li ng-repeat="item in vm.edges(item) track by item.id"
               ng-mouseenter="vm.highlight(item.destinationId)"
               ng-mouseleave="vm.highlight(null)">
             <c4-lab-icon type="connection"></c4-lab-icon>

@@ -1,6 +1,6 @@
 describe('exporter', function() {
-  var Exporter = require('./exporter'),
-      Model = require('./model'),
+  var Exporter = require('../exporter'),
+      Model = require('../model'),
       model = new Model(),
       graph, exporter;
 

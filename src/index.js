@@ -31,4 +31,5 @@ angular.module('c4-lab', ['ui.bootstrap', 'focus-if', 'cfp.hotkeys'])
   .service('model', require('./model'))
   .service('exporter', require('./exporter'))
   .service('renderer', require('./renderer'))
+  .service('autoSave', require('./autoSave'))
 ;

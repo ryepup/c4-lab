@@ -64,7 +64,12 @@
       ],
       "envify",
       "browserify-ngannotate",
-      "uglifyify"
+      [
+        "uglifyify",
+        {
+          "ignore": "**/*.spec.js"
+        }
+      ]
     ]
   }
 }

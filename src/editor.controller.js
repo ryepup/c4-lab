@@ -1,5 +1,7 @@
+var _ = require('lodash');
+
 // @ngInject
-module.exports = function(editors, model, hotkeys) {
+module.exports = function(editors, model, hotkeys, autoSave) {
   var vm = this,
       highlightId,
       map = {
@@ -17,20 +19,34 @@ module.exports = function(editors, model, hotkeys) {
   vm.editItem = editItem;
 
   setupHotkeys();
+  loadFromStorage();
+
+  function loadFromStorage() {
+    var graph = autoSave.load();
+    if(graph){ _.assign(vm.graph, graph); }
+  }
+
+  function saveToStorage() {
+    return autoSave.save(vm.graph)
+      .then(function() { vm.lastSaved = new Date(); });
+  }
 
   function editItem(item) { (map[item.type] || editConnection)(item); }
 
   function editActor(item) {
     editors.openActorModal(item)
-      .then(model.saveActor.bind(model, vm.graph));
+      .then(model.saveActor.bind(model, vm.graph))
+      .then(saveToStorage);
   }
   function editSystem (item) {
     editors.openSystemModal(item)
-      .then(model.saveSystem.bind(model, vm.graph));
+      .then(model.saveSystem.bind(model, vm.graph))
+      .then(saveToStorage);
   }
   function editConnection(item) {
     editors.openConnectionModal(vm.graph, item)
-      .then(model.saveConnection.bind(model, vm.graph));
+      .then(model.saveConnection.bind(model, vm.graph))
+      .then(saveToStorage);
   }
   function setupHotkeys() {
     [{
