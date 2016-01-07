@@ -27,9 +27,15 @@ angular.module('c4-lab', ['ui.bootstrap', 'focus-if', 'cfp.hotkeys'])
   .directive('c4LabIcon',
              component(require('./icon.html'), require('./icon.controller.js'), {type: '@'}))
   .directive('c4LabMeta', component(require('./meta.html'), require('./meta.controller.js')))
+  .directive('c4LabSaveAs', component(require('./saveAs.html'), require('./saveAs.controller.js'), { graph: '='}))
   .service('editors', require('./editors'))
   .service('model', require('./model'))
   .service('exporter', require('./exporter'))
-  .service('renderer', require('./renderer'))
   .service('autoSave', require('./autoSave'))
+  .config(allowBlobsAndDataHrefs)
 ;
+
+// @ngInject
+function allowBlobsAndDataHrefs($compileProvider) {
+  $compileProvider.aHrefSanitizationWhitelist(/^(https?|ftp|mailto|blob|data):/i);
+}

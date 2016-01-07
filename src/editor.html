@@ -8,6 +8,8 @@
     </span>
   </div>
 
+  <div class="row">
+    <div class="col-md-6">
   <div class="btn-group" uib-dropdown>
     <button id="add-root-item" type="button" class="btn btn-primary"
             uib-dropdown-toggle>
@@ -34,7 +36,11 @@
       </li>
     </ul>
   </div>
-
+    </div>
+    <div class="col-md-6">
+      <div c4-lab-save-as graph="vm.graph"></div>
+    </div>
+  </div>
   <div>
     <h3>{{vm.graph.items.length}} nodes with {{vm.graph.edges.length}} connections</h3>
     <ol>

@@ -1,9 +1,9 @@
 // @ngInject
-module.exports = function(renderer, $sce) {
+module.exports = function(exporter, $sce) {
   var vm = this;
   vm.toSVG = toSVG;
 
   function toSVG() {
-    return $sce.trustAsHtml(renderer.toSVG(vm.graph));
+    return $sce.trustAsHtml(exporter.toSVG(vm.graph));
   }
 };
