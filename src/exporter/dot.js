@@ -1,18 +1,26 @@
+var _ = require('lodash');
+
 /**
  * @return string serialized graph in graphviz DOT
  */
 function toDOT(graph) {
-  var lines = ['digraph g {'],
+  var lines = ['digraph g {', '  compound=true'],
       nodeId = 0,
       idMap = {};
 
-  (graph.items || [])
+  // sort so we get consistent output
+  _.sortBy(graph.items || [], 'id')
     .map(function(item) {
-      idMap[item.id] = nodeId++;
-      lines.push(itemToDOT(item, idMap[item.id]));
+      var id = idMap[item.id] = nodeId++;
+      lines.push('  subgraph cluster' + id +' {');
+      lines.push('    label=<<B>' + item.name+ '</B><BR/><I>&#171;'+item.type+'&#187;</I>>');
+      lines.push('    g' + id + ' [shape=plaintext label="' + (item.description || '') + '"]');
+      lines.push('  }');
     });
 
-  (graph.edges || [])
+  if(graph.edges) { lines.push('edge[fontsize=12 fontcolor="#666666"]'); }
+
+  _.sortBy(graph.edges || [], 'id')
     .map(function(item) {
       lines.push(edgeToDOT(item, idMap));
     });
@@ -21,12 +29,11 @@ function toDOT(graph) {
   return lines.join('\n');
 }
 
-function itemToDOT(item, id) {
-  return '  g' + id + ' [shape=record label="{'+ item.name + ' | &#171; '+item.type+' &#187; }"]';
-};
-
 function edgeToDOT(edge, idMap) {
-  return '  g' + idMap[edge.sourceId] + ' -> g' + idMap[edge.destinationId] + '[label="' + edge.description + '"]';
+  var srcId = idMap[edge.sourceId],
+      dstId = idMap[edge.destinationId];
+
+  return '  g' + srcId + ' -> g' + dstId + '[label="' + edge.description + '" ltail=cluster' + srcId + ' lhead=cluster' + dstId + ']';
 };
 
 module.exports = toDOT;

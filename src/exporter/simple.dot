@@ -1,3 +1,7 @@
 digraph g {
-  g0 [shape=record label="{foo | &#171; actor &#187; }"]
+  compound=true
+  subgraph cluster0 {
+    label=<<B>foo</B><BR/><I>&#171;actor&#187;</I>>
+    g0 [shape=plaintext label=""]
+  }
 }

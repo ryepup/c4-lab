@@ -48,7 +48,7 @@ module.exports = function() {
     if(match){
       return _.assign(match, item);
     }else{
-      _.assign(item, { id: uuid.v4() });
+      _.assign(item, { id: item.id || uuid.v4() });
       collection.push(item);
       return item;
     }
