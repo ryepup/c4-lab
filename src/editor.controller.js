@@ -19,12 +19,6 @@ module.exports = function(editors, model, hotkeys, autoSave) {
   vm.editItem = editItem;
 
   setupHotkeys();
-  loadFromStorage();
-
-  function loadFromStorage() {
-    var graph = autoSave.load();
-    if(graph){ _.assign(vm.graph, graph); }
-  }
 
   function saveToStorage() {
     return autoSave.save(vm.graph)
