@@ -1,6 +1,6 @@
 {
   "name": "rpd-c4-lab",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "web interface to create software architecture diagrams",
   "main": "src/index.js",
   "scripts": {
