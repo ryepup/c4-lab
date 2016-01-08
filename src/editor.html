@@ -1,78 +1,45 @@
 <div>
   <h2>Editor</h2>
-  <form class="form-horizontal">
-    <div class="form-group form-group-lg">
-      <label class="col-md-1 control-label">Title</label>
-      <div class="col-md-6">
-        <input type="text" ng-model="vm.graph.title" class="form-control"
-               ng-model-options="{ debounce: 500 }"
-               ng-change="vm.saveToStorage()">
-      </div>
-    </div>
-  </form>
-  <div class="small text-muted">
-    Hit ? to see keyboard shortcuts.
-    <span ng-show="vm.lastSaved">
-      Last saved at {{vm.lastSaved | date:'shortTime'}}
-    </span>
-  </div>
-
-  <div class="row">
-    <div class="col-md-6">
-  <div class="btn-group" uib-dropdown>
-    <button id="add-root-item" type="button" class="btn btn-primary"
-            uib-dropdown-toggle>
-      Add <span class="caret"></span>
+  <div class="btn-group" role="group" aria-label="...">
+    <button type="button" class="btn btn-default"
+            ng-click="vm.editActor()">
+      <c4-lab-icon type="actor"></c4-lab-icon>
+      New <u>a</u>ctor
     </button>
-    <ul class="uib-dropdown-menu" role="menu" aria-labelledby="add-root-item">
-      <li role="menuitem">
-        <a href="#" ng-click="vm.editActor()">
-          <c4-lab-icon type="actor"></c4-lab-icon>
-          New <u>a</u>ctor
-        </a>
-      </li>
-      <li role="menuitem">
-        <a href="#" ng-click="vm.editSystem()">
-          <c4-lab-icon type="system"></c4-lab-icon>
-          New <u>s</u>ystem
-        </a>
-      </li>
-      <li role="menuitem">
-        <a href="#" ng-click="vm.editConnection()">
-          <c4-lab-icon type="connection"></c4-lab-icon>
-          New <u>c</u>onnection
-        </a>
-      </li>
-    </ul>
+    <button type="button" class="btn btn-default"
+            ng-click="vm.editSystem()">
+      <c4-lab-icon type="system"></c4-lab-icon>
+      New <u>s</u>ystem
+    </button>
+    <button type="button" class="btn btn-default"
+            ng-click="vm.editConnection()">
+      <c4-lab-icon type="connection"></c4-lab-icon>
+      New <u>c</u>onnection
+    </button>
   </div>
-    </div>
-    <div class="col-md-3">
-      <div c4-lab-save-as graph="vm.graph"></div>
-    </div>
-    <div class="col-md-3">
-      <div c4-lab-import graph="vm.graph"></div>
-    </div>
-  </div>
-  <div>
-    <h3>{{vm.graph.items.length}} nodes with {{vm.graph.edges.length}} connections</h3>
-    <ol>
-      <li ng-repeat="item in vm.graph.items track by item.id"
-          ng-class="{'bg-info': vm.isHighlighted(item.id)}">
 
-        <c4-lab-icon type="{{item.type}}"></c4-lab-icon>
-        {{item.name}}
-        <button class="btn btn-xs btn-default" ng-click="vm.editItem(item)">Edit</button>
-        <button class="btn btn-xs btn-danger" ng-click="vm.deleteItem(item)">Delete</button>
-        <ol>
-          <li ng-repeat="item in vm.edges(item) track by item.id"
-              ng-mouseenter="vm.highlight(item.destinationId)"
-              ng-mouseleave="vm.highlight(null)">
-            <c4-lab-icon type="connection"></c4-lab-icon>
-            {{item.description}}
-            <button class="btn btn-xs btn-default" ng-click="vm.editItem(item)">Edit</button>
-          </li>
-        </ol>
-      </li>
-    </ol>
-  </div>
+  <p class="small text-muted">
+    Hit ? to see keyboard shortcuts.
+  </p>
+
+  <h3 class="btn-group">{{vm.graph.items.length}} nodes with {{vm.graph.edges.length}} connections</h3>
+  <ol>
+    <li ng-repeat="item in vm.graph.items track by item.id"
+        ng-class="{'bg-info': vm.isHighlighted(item.id)}">
+
+      <c4-lab-icon type="{{item.type}}"></c4-lab-icon>
+      {{item.name}}
+      <button class="btn btn-xs btn-default" ng-click="vm.editItem(item)">Edit</button>
+      <button class="btn btn-xs btn-danger" ng-click="vm.deleteItem(item)">Delete</button>
+      <ol>
+        <li ng-repeat="item in vm.edges(item) track by item.id"
+            ng-mouseenter="vm.highlight(item.destinationId)"
+            ng-mouseleave="vm.highlight(null)">
+          <c4-lab-icon type="connection"></c4-lab-icon>
+          {{item.description}}
+          <button class="btn btn-xs btn-default" ng-click="vm.editItem(item)">Edit</button>
+        </li>
+      </ol>
+    </li>
+  </ol>
 </div>

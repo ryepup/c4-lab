@@ -1,7 +1,8 @@
 var _ = require('lodash');
+var exporter = require('./exporter/json');
 
 // @ngInject
-module.exports = function($q, exporter, autoSave) {
+module.exports = function($q) {
   var vm = this;
   vm.importJSON = importJSON;
 
@@ -12,7 +13,6 @@ module.exports = function($q, exporter, autoSave) {
   function restoreGraph(json) {
     var g = exporter.fromJson(json);
     _.assign(vm.graph, g);
-    autoSave.save(vm.graph);
   }
 
   function readAsText(file) {

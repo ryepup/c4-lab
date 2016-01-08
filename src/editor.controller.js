@@ -1,7 +1,7 @@
 var _ = require('lodash');
 
 // @ngInject
-module.exports = function(editors, model, hotkeys, autoSave) {
+module.exports = function(editors, model, hotkeys) {
   var vm = this,
       highlightId,
       map = {
@@ -17,37 +17,23 @@ module.exports = function(editors, model, hotkeys, autoSave) {
   vm.isHighlighted = function(id) { return id === highlightId; };
   vm.highlight = function(id) { highlightId = id; };
   vm.editItem = editItem;
-  vm.deleteItem = deleteItem;
-  vm.saveToStorage = saveToStorage;
+  vm.deleteItem = model.deleteItem.bind(model, vm.graph);
 
   setupHotkeys();
-
-  function deleteItem(item) {
-    model.deleteItem(vm.graph, item);
-    saveToStorage();
-  }
-
-  function saveToStorage() {
-    return autoSave.save(vm.graph)
-      .then(function() { vm.lastSaved = new Date(); });
-  }
 
   function editItem(item) { (map[item.type] || editConnection)(item); }
 
   function editActor(item) {
     editors.openActorModal(item)
-      .then(model.saveActor.bind(model, vm.graph))
-      .then(saveToStorage);
+      .then(model.saveActor.bind(model, vm.graph));
   }
   function editSystem (item) {
     editors.openSystemModal(item)
-      .then(model.saveSystem.bind(model, vm.graph))
-      .then(saveToStorage);
+      .then(model.saveSystem.bind(model, vm.graph));
   }
   function editConnection(item) {
     editors.openConnectionModal(vm.graph, item)
-      .then(model.saveConnection.bind(model, vm.graph))
-      .then(saveToStorage);
+      .then(model.saveConnection.bind(model, vm.graph));
   }
   function setupHotkeys() {
     [{

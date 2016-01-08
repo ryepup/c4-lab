@@ -1,0 +1,40 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">C4 Lab</a>
+    </div>
+    <form class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+        <label class="control-label">Title</label>
+        <input type="text" ng-model="vm.graph.title" class="form-control"
+               ng-model-options="{ debounce: 500 }"
+               ng-change="vm.saveToStorage()"/>
+      </div>
+    </form>
+
+
+    <p class="navbar-text navbar-right" c4-lab-meta></p>
+    <p class="navbar-text navbar-right" ng-show="vm.lastSaved">
+      Last saved at {{vm.lastSaved | date:'shortTime'}}
+    </p>
+
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li c4-lab-import graph="vm.graph"></li>
+        <li class="dropdown" uib-dropdown>
+          <a href="#" uib-dropdown-toggle>
+            <span class="glyphicon glyphicon-save-file"> </span>
+            Save <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li ng-repeat="format in vm.formats">
+              <a ng-click="vm.saveFile(format)" href="#">{{format.extension}}</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+
+  </div>
+</nav>
