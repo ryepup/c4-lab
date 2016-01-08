@@ -29,11 +29,13 @@ module.exports = function() {
   function saveItem(type, graph, item) {
     graph.items = graph.items || [];
     item.type = type;
+    graph.lastModified = new Date();
     return findOrCreate(graph.items, item);
   }
 
   function saveConnection(graph, item) {
     graph.edges = graph.edges || [];
+    graph.lastModified = new Date();
     var edge = {
       id: item.id,
       sourceId: item.source.id,
