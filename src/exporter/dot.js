@@ -1,4 +1,5 @@
-var _ = require('lodash');
+var _ = require('lodash'),
+    wordwrap = require('wordwrap')(30);
 
 /**
  * @return string serialized graph in graphviz DOT
@@ -14,7 +15,7 @@ function toDOT(graph) {
       var id = idMap[item.id] = nodeId++;
       lines.push('  subgraph cluster' + id +' {');
       lines.push('    label=<<B>' + item.name+ '</B><BR/><FONT POINT-SIZE="12" COLOR="#666666"><I>&#171;'+item.type+'&#187;</I></FONT>>');
-      lines.push('    g' + id + ' [shape=plaintext label="' + sanitize(item.description) + '"]');
+      lines.push('    g' + id + ' [shape=plaintext fontsize=12 label="' + sanitize(item.description) + '"]');
       lines.push('  }');
     });
 
@@ -31,7 +32,7 @@ function toDOT(graph) {
 
 function sanitize(description) {
   return description
-    ? description.replace('"', '\\"').replace(/\n/g, '\\l') + '\\l'
+    ? wordwrap(description).replace('"', '\\"').replace(/\n/g, '\\l') + '\\l'
     : '';
 }
 
