@@ -15,6 +15,7 @@ function toDOT(graph) {
       lines.push('  subgraph cluster' + id +' {');
       lines.push('    label=<<B>' + item.name+ '</B><BR/><I>&#171;'+item.type+'&#187;</I>>');
       lines.push('    g' + id + ' [shape=plaintext label="' + (item.description || '') + '"]');
+      lines.push('    g' + id + ' [shape=plaintext label="' + sanitize(item.description) + '"]');
       lines.push('  }');
     });
 
@@ -29,11 +30,17 @@ function toDOT(graph) {
   return lines.join('\n');
 }
 
+function sanitize(description) {
+  return description
+    ? description.replace('"', '\\"').replace(/\n/g, '\\l') + '\\l'
+    : '';
+}
+
 function edgeToDOT(edge, idMap) {
   var srcId = idMap[edge.sourceId],
       dstId = idMap[edge.destinationId];
 
-  return '  g' + srcId + ' -> g' + dstId + '[label="' + edge.description + '" ltail=cluster' + srcId + ' lhead=cluster' + dstId + ']';
+  return '  g' + srcId + ' -> g' + dstId + '[label="' + sanitize(edge.description) + '" ltail=cluster' + srcId + ' lhead=cluster' + dstId + ']';
 };
 
 module.exports = toDOT;
