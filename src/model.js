@@ -16,12 +16,16 @@ module.exports = function() {
   self.deleteItem = deleteItem;
 
   function deleteItem(graph, item) {
-    graph.items = _.reject(graph.items || [], 'id', item.id);
-    graph.edges = _.reject(graph.edges || [],
+    if(item.type){
+      graph.items = _.reject(graph.items || [], 'id', item.id);
+      graph.edges = _.reject(graph.edges || [],
                            function(edge) {
                              return edge.sourceId === item.id
                                || edge.destinationId === item.id;
-                           });
+                           });}
+    else{
+      graph.edges = _.reject(graph.edges || [], 'id', item.id);
+    }
     graph.lastModified = new Date();
   }
 
