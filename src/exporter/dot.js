@@ -13,8 +13,7 @@ function toDOT(graph) {
     .map(function(item) {
       var id = idMap[item.id] = nodeId++;
       lines.push('  subgraph cluster' + id +' {');
-      lines.push('    label=<<B>' + item.name+ '</B><BR/><I>&#171;'+item.type+'&#187;</I>>');
-      lines.push('    g' + id + ' [shape=plaintext label="' + (item.description || '') + '"]');
+      lines.push('    label=<<B>' + item.name+ '</B><BR/><FONT POINT-SIZE="12" COLOR="#666666"><I>&#171;'+item.type+'&#187;</I></FONT>>');
       lines.push('    g' + id + ' [shape=plaintext label="' + sanitize(item.description) + '"]');
       lines.push('  }');
     });

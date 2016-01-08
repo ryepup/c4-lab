@@ -1,7 +1,7 @@
 digraph g {
   compound=true
   subgraph cluster0 {
-    label=<<B>foo</B><BR/><I>&#171;actor&#187;</I>>
+    label=<<B>foo</B><BR/><FONT POINT-SIZE="12" COLOR="#666666"><I>&#171;actor&#187;</I></FONT>>
     g0 [shape=plaintext label=""]
   }
 }
