@@ -13,6 +13,17 @@ module.exports = function() {
   self.destinations = destinations;
   self.edges = edges;
   self.findItem = function(graph, id) { return byId(graph.items, id); };
+  self.deleteItem = deleteItem;
+
+  function deleteItem(graph, item) {
+    graph.items = _.reject(graph.items || [], 'id', item.id);
+    graph.edges = _.reject(graph.edges || [],
+                           function(edge) {
+                             return edge.sourceId === item.id
+                               || edge.destinationId === item.id;
+                           });
+    graph.lastModified = new Date();
+  }
 
   function edges(graph, item) {
     return _.chain(graph.edges || [])

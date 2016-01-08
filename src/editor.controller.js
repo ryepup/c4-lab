@@ -17,8 +17,14 @@ module.exports = function(editors, model, hotkeys, autoSave) {
   vm.isHighlighted = function(id) { return id === highlightId; };
   vm.highlight = function(id) { highlightId = id; };
   vm.editItem = editItem;
+  vm.deleteItem = deleteItem;
 
   setupHotkeys();
+
+  function deleteItem(item) {
+    model.deleteItem(vm.graph, item);
+    saveToStorage();
+  }
 
   function saveToStorage() {
     return autoSave.save(vm.graph)
