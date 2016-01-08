@@ -16,7 +16,7 @@ module.exports = function(exporter, $window, $q) {
     $q.when(serializer(vm.graph))
       .then(function(content) {
         var a = $window.document.createElement('a');
-        a.download = 'c4-graph.' + extension;
+        a.download = (vm.graph.title || 'c4-graph') + '.' + extension;
         if(contentType){
           a.href = 'data:' + contentType + ',' + encodeURIComponent(content);
         } else {

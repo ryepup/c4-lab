@@ -1,6 +1,15 @@
 <div>
   <h2>Editor</h2>
-
+  <form class="form-horizontal">
+    <div class="form-group form-group-lg">
+      <label class="col-md-1 control-label">Title</label>
+      <div class="col-md-6">
+        <input type="text" ng-model="vm.graph.title" class="form-control"
+               ng-model-options="{ debounce: 500 }"
+               ng-change="vm.saveToStorage()">
+      </div>
+    </div>
+  </form>
   <div class="small text-muted">
     Hit ? to see keyboard shortcuts.
     <span ng-show="vm.lastSaved">

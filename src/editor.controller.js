@@ -18,6 +18,7 @@ module.exports = function(editors, model, hotkeys, autoSave) {
   vm.highlight = function(id) { highlightId = id; };
   vm.editItem = editItem;
   vm.deleteItem = deleteItem;
+  vm.saveToStorage = saveToStorage;
 
   setupHotkeys();
 
