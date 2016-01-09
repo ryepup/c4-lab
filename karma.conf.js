@@ -2,6 +2,7 @@ module.exports = function(config) {
   config.set({
     files: [
       'src/test-setup.js',
+      'src/index.js',
       'src/**/*.spec.js'],
     frameworks: ['jasmine', 'browserify'],
     browsers: ['PhantomJS'],
@@ -12,7 +13,7 @@ module.exports = function(config) {
       debug: true,
       transform:[
         ['browserify-istanbul', {
-          ignore: ['**/node_modules/**', '**/*.spec.js', '**/*.dot']
+          ignore: ['**/node_modules/**', '**/*.spec.js', '**/*.dot', '**/*.html', '**/*.css']
         }]
       ]
     },
