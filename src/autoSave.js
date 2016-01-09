@@ -1,7 +1,7 @@
 var exporter = require('./exporter/json');
 
 // @ngInject
-module.exports = function($window, $timeout, $interval) {
+module.exports = function($window, $timeout, $interval, $log) {
   var self = this,
       localStorage = $window.localStorage,
       key = 'C4-LAB-ACTIVE-DOC'
@@ -17,6 +17,7 @@ module.exports = function($window, $timeout, $interval) {
       var json = exporter.toJson(graph);
       localStorage.setItem(key, json);
       self.lastSaved = new Date();
+      $log.debug('saved at', self.lastSaved);
     });
   }
 
@@ -25,7 +26,7 @@ module.exports = function($window, $timeout, $interval) {
   }
 
   function saveIfModified(graph) {
-    if(graph.lastModified > self.lastSaved){ save(graph); }
+    if(!self.lastSaved || graph.lastModified > self.lastSaved){ save(graph); }
   }
 
 };
