@@ -1,11 +1,15 @@
 {
   "name": "rpd-c4-lab",
+  "config": {
+    "codeclimate_token": "ededa0c572bd7d90bd93f248d5510d2ff8f6d4a658f1349590a8c2e5d49497cc"
+  },
   "version": "0.8.0",
   "description": "web interface to create software architecture diagrams",
   "main": "src/index.js",
   "scripts": {
     "test": "karma start karma.conf.js --single-run",
     "test:watch": "karma start karma.conf.js",
+    "codeclimate": "CODECLIMATE_REPO_TOKEN=$npm_package_config_codeclimate_token codeclimate-test-reporter < reports/lcov.info",
     "build": "mkdir -p dist && browserify -g uglifyify src/index.js -d | exorcist dist/bundle.js.map > dist/bundle.js && cp src/index.html dist/",
     "serve": "live-server src",
     "watch": "watchify src/index.js -o 'node_modules/.bin/exorcist src/bundle.js.map > src/bundle.js' -d",
@@ -35,6 +39,7 @@
     "browserify-css": "^0.8.4",
     "browserify-istanbul": "^0.2.1",
     "browserify-ngannotate": "^2.0.0",
+    "codeclimate-test-reporter": "^0.1.1",
     "cssify": "^1.0.2",
     "envify": "^3.4.0",
     "exorcist": "^0.4.0",
