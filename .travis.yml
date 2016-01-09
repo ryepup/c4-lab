@@ -1,8 +1,10 @@
 language: node_js
+cache:
+  directories:
+    - node_modules
 after_success:
   - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && ./deploy.sh || false'
 node_js:
-  - '0.10'
   - stable
 env:
   global:
