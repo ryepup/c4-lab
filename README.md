@@ -4,7 +4,9 @@
 architecture, and share those as images and text-based data.
 
 [![Build Status](https://travis-ci.org/ryepup/c4-lab.svg?branch=master)](https://travis-ci.org/ryepup/c4-lab)
-
+[![Code Climate](https://codeclimate.com/github/ryepup/c4-lab/badges/gpa.svg)](https://codeclimate.com/github/ryepup/c4-lab)
+[![Test Coverage](https://codeclimate.com/github/ryepup/c4-lab/badges/coverage.svg)](https://codeclimate.com/github/ryepup/c4-lab/coverage)
+[![Issue Count](https://codeclimate.com/github/ryepup/c4-lab/badges/issue_count.svg)](https://codeclimate.com/github/ryepup/c4-lab)
 
 `c4-lab` is a based on [Simon Brown][SB]'s [C4][] approach (Context,
 Containers, Components, and Classes). See

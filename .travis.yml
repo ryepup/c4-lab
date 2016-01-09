@@ -3,6 +3,7 @@ cache:
   directories:
     - node_modules
 after_success:
+  - codeclimate-test-reporter < reports/lcov.info
   - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && ./deploy.sh || false'
 node_js:
   - stable
