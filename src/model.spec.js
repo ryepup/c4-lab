@@ -28,14 +28,14 @@ describe('model', function() {
     it('removes related connections to a source', function() {
       graph = exporter.fromJson(require('./exporter/c4-lab.json'));
       expect(graph.edges.length).toBe(2);
-      model.deleteItem(graph, {id: 'b9815283-4bea-4124-afc7-018c347ea1a2'});
+      model.deleteItem(graph, {id: 'b9815283-4bea-4124-afc7-018c347ea1a2', type:'actor'});
       expect(graph.edges.length).toBe(1);
     });
 
     it('removes related connections to a destination', function() {
       graph = exporter.fromJson(require('./exporter/c4-lab.json'));
       expect(graph.edges.length).toBe(2);
-      model.deleteItem(graph, {id: '10cffdf2-901e-4072-8150-a059a836967d'});
+      model.deleteItem(graph, {id: '10cffdf2-901e-4072-8150-a059a836967d', type:'system'});
       expect(graph.edges.length).toBe(0);
     });
 
