@@ -1,7 +1,8 @@
 var map = {
   actor: 'user',
   system: 'cloud',
-  connection: 'flash'
+  connection: 'flash',
+  container: 'home'
 };
 
 module.exports = function() {

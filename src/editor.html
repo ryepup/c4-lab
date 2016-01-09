@@ -16,6 +16,11 @@
       <c4-lab-icon type="connection"></c4-lab-icon>
       New <u>c</u>onnection
     </button>
+    <button type="button" class="btn btn-default"
+            ng-click="vm.editContainer()">
+      <c4-lab-icon type="container"></c4-lab-icon>
+      New container
+    </button>
   </div>
 
   <p class="small text-muted">
@@ -24,7 +29,7 @@
 
   <h3 class="btn-group">{{vm.graph.items.length}} nodes with {{vm.graph.edges.length}} connections</h3>
   <ol>
-    <li ng-repeat="item in vm.graph.items track by item.id"
+    <li ng-repeat="item in vm.rootItems() track by item.id"
         ng-class="{'bg-info': vm.isHighlighted(item.id)}">
 
       <c4-lab-icon type="{{item.type}}"></c4-lab-icon>
@@ -32,13 +37,19 @@
       <button class="btn btn-xs btn-default" ng-click="vm.editItem(item)">Edit</button>
       <button class="btn btn-xs btn-danger" ng-click="vm.deleteItem(item)">Delete</button>
       <ol>
-        <li ng-repeat="item in vm.edges(item) track by item.id"
-            ng-mouseenter="vm.highlight(item.destinationId)"
+        <li ng-repeat="edge in vm.edges(item) track by edge.id"
+            ng-mouseenter="vm.highlight(edge.destinationId)"
             ng-mouseleave="vm.highlight(null)">
           <c4-lab-icon type="connection"></c4-lab-icon>
-          {{item.description}}
-          <button class="btn btn-xs btn-default" ng-click="vm.editItem(item)">Edit</button>
-          <button class="btn btn-xs btn-danger" ng-click="vm.deleteItem(item)">Delete</button>
+          {{edge.description}}
+          <button class="btn btn-xs btn-default" ng-click="vm.editItem(edge)">Edit</button>
+          <button class="btn btn-xs btn-danger" ng-click="vm.deleteItem(edge)">Delete</button>
+        </li>
+        <li ng-repeat="child in vm.children(item) track by child.id">
+          <c4-lab-icon type="{{child.type}}"></c4-lab-icon>
+          {{child.name}}
+          <button class="btn btn-xs btn-default" ng-click="vm.editItem(child)">Edit</button>
+          <button class="btn btn-xs btn-danger" ng-click="vm.deleteItem(child)">Delete</button>
         </li>
       </ol>
     </li>

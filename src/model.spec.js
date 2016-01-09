@@ -8,6 +8,16 @@ describe('model', function() {
     graph = {};
   });
 
+  it('finds children', function() {
+    var system = {name: 'sys'};
+    model.saveSystem(graph, system);
+    expect(system.id).toBeDefined();
+    var container = {name: 'foo', parentId: system.id};
+    model.saveContainer(graph, container);
+
+    expect(model.children(graph, system)).toEqual([container]);
+  });
+
   describe('deleteItem', function() {
     it('removes the item', function() {
       var actor = {name: 'test'};

@@ -1,1 +1,33 @@
-<div>[CONTAINER EDITOR]</div>
+<div>
+  <div class="modal-header"> <h3 class="modal-title">Edit Container</h3> </div>
+  <div class="modal-body">
+    <form name="item">
+      <div class="form-group">
+        <label for="source">System</label>
+        <select name="source" id="source" required class="form-control"
+                ng-model="vm.item.parentId"
+                ng-options="item.id as item.name for item in vm.systems"
+                focus-if focus-delay="100"></select>
+      </div>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" placeholder="Name"
+               ng-model="vm.item.name" required>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea ng-model="vm.item.description" class="form-control"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="name">Technology</label>
+        <input type="text" class="form-control" id="name" placeholder="tech"
+               ng-model="vm.item.tech" required>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="vm.ok()"
+            ng-disabled="item.$invalid">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
+  </div>
+</div>

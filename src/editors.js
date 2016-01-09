@@ -5,6 +5,7 @@ module.exports = function($uibModal, model) {
   self.openActorModal = openActorModal;
   self.openSystemModal = openSystemModal;
   self.openConnectionModal = openConnectionModal;
+  self.openContainerModal = openContainerModal;
 
   /**
    * @return Promise for user-entered actor
@@ -21,26 +22,21 @@ module.exports = function($uibModal, model) {
 
   function openConnectionModal(graph, item) {
     var sources = model.sources(graph);
-
-    var modal = $uibModal.open({
-      template: require('./connectionEditor.html'),
-      controller: function() {
-        var vm = this;
-        vm.item = _.clone(item || {});
+    return openModal(require('./connectionEditor.html'), item, function(vm) {
         vm.item.source = model.findItem(graph, vm.item.sourceId);
         vm.item.destination = model.findItem(graph, vm.item.destinationId);
         vm.sources = sources;
         vm.destinations = model.destinations.bind(model, graph);
-        vm.cancel = function() { modal.dismiss('cancel'); };
-        vm.ok = function() { modal.close(vm.item); };
-      },
-      controllerAs: 'vm'
     });
-    return modal.result;
   }
 
+  function openContainerModal(graph, item) {
+    return openModal(require('./containerEditor.html'), item, function(vm) {
+      vm.systems = model.systems(graph);
+    });
+  }
 
-  function openModal(template, item) {
+  function openModal(template, item, ctrlFn) {
     var modal = $uibModal.open({
           template: template,
           controller: function() {
@@ -48,6 +44,7 @@ module.exports = function($uibModal, model) {
             vm.item = _.clone(item || {});
             vm.cancel = function() { modal.dismiss('cancel'); };
             vm.ok = function() { modal.close(vm.item); };
+            if(ctrlFn) { ctrlFn(vm) };
           },
           controllerAs: 'vm'
         });

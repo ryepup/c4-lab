@@ -1,16 +1,21 @@
 var _ = require('lodash'),
-    wordwrap = require('wordwrap')(30);
+    wordwrap = require('wordwrap')(30),
+    Model = require('../model'),
+    model = new Model()
+;
 
 /**
  * @return string serialized graph in graphviz DOT
  */
-function toDOT(graph) {
+function toDOT(graph, parent) {
   var lines = ['digraph g {', '  compound=true'],
       nodeId = 0,
-      idMap = {};
+      idMap = {},
+      nodes = parent ? model.children(graph, parent) : model.rootItems(graph)
+  ;
 
   // sort so we get consistent output
-  _.sortBy(graph.items || [], 'id')
+  _.sortBy(nodes, 'id')
     .map(function(item) {
       var id = idMap[item.id] = nodeId++;
       lines.push('  subgraph cluster' + id +' {');
@@ -20,6 +25,7 @@ function toDOT(graph) {
     });
 
   if(graph.edges) { lines.push('edge[fontsize=12 fontcolor="#666666"]'); }
+
 
   _.sortBy(graph.edges || [], 'id')
     .map(function(item) {

@@ -6,14 +6,27 @@ module.exports = function() {
 
   self.saveActor = saveItem.bind(null, 'actor');
   self.saveSystem = saveItem.bind(null, 'system');
+  self.saveContainer = saveItem.bind(null, 'container');
   self.toJSON = JSON.stringify;
   self.parse = JSON.parse;
   self.saveConnection = saveConnection;
-  self.sources = function(graph) { return graph.items || []; };
+  self.sources = sources;
   self.destinations = destinations;
   self.edges = edges;
   self.findItem = function(graph, id) { return byId(graph.items, id); };
   self.deleteItem = deleteItem;
+  self.systems = _.partialRight(sources, 'system');
+  self.children = function(graph, item) {
+    return _.select(graph.items||[], 'parentId', item.id);
+  };
+  self.rootItems = function(graph) {
+    return _.select(graph.items, function(item) { return !item.parentId; });
+  };
+
+  function sources(graph, type) {
+    var items = graph.items || [];
+    return type ? _.select(items, 'type', type) : items;
+  };
 
   function deleteItem(graph, item) {
     if(item.type){
