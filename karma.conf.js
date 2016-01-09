@@ -9,7 +9,21 @@ module.exports = function(config) {
       'src/**/*.js': 'browserify'
     },
     browserify: {
-      debug: true
+      debug: true,
+      transform:[
+        ['browserify-istanbul', {
+          ignore: ['**/node_modules/**', '**/*.spec.js', '**/*.dot']
+        }]
+      ]
+    },
+    reporters: config.reporters.concat(['coverage']),
+    coverageReporter: {
+      dir: 'reports',
+      reporters: [
+        { type: 'lcovonly', subdir: '.', file: 'lcov.info' },
+        { type: 'text-summary' },
+      ]
     }
+
   });
 };

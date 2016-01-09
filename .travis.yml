@@ -6,6 +6,9 @@ after_success:
   - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && ./deploy.sh || false'
 node_js:
   - stable
+addons:
+  code_climate:
+    repo_token: ededa0c572bd7d90bd93f248d5510d2ff8f6d4a658f1349590a8c2e5d49497cc
 env:
   global:
     - GH_REF: github.com/ryepup/c4-lab.git
