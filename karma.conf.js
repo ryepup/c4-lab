@@ -23,7 +23,7 @@ module.exports = function(config) {
       dir: 'reports',
       reporters: [
         { type: 'lcovonly', subdir: '.', file: 'lcov.info' },
-        { type: 'text-summary' },
+        { type: 'text-summary' }
       ]
     }
 

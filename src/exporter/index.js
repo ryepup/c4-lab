@@ -1,5 +1,6 @@
 var Viz = require('viz.js'),
-    json = require('./json');
+    json = require('./json'),
+    toDOT = require('./dot');
 
 // @ngInject
 module.exports = function($window, $q) {
@@ -7,7 +8,7 @@ module.exports = function($window, $q) {
       document = $window.document
   ;
 
-  self.toDOT = require('./dot');
+  self.toDOT = toDOT;
   self.toJson = json.toJson;
   self.fromJson = json.fromJson;
   self.toSVG = toSVG;

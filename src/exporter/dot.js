@@ -47,6 +47,6 @@ function edgeToDOT(edge, idMap) {
       dstId = idMap[edge.destinationId];
 
   return '  g' + srcId + ' -> g' + dstId + '[label="' + sanitize(edge.description) + '" ltail=cluster' + srcId + ' lhead=cluster' + dstId + ']';
-};
+}
 
 module.exports = toDOT;

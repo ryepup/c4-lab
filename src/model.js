@@ -26,7 +26,7 @@ module.exports = function() {
   function sources(graph, type) {
     var items = graph.items || [];
     return type ? _.select(items, 'type', type) : items;
-  };
+  }
 
   function deleteItem(graph, item) {
     if(item.type){
