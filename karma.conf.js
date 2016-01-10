@@ -14,7 +14,8 @@ module.exports = function(config) {
       noParse: ['viz.js'],
       transform:[
         ['browserify-istanbul', {
-          ignore: ['**/node_modules/**', '**/*.spec.js', '**/*.dot', '**/*.html', '**/*.css']
+          ignore: '**/node_modules/** **/*.spec.js **/*.dot **/*.html **/*.css **/test-setup.js'
+            .split(' ')
         }]
       ]
     },
