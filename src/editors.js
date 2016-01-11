@@ -34,7 +34,7 @@ module.exports = function($uibModal, model) {
     });
     return modal.result
       .then(model.save.bind(model, graph, type));
-  };
+  }
 
   function containerConfig(vm, graph, item) {
     vm.systems = model.systems(graph);
