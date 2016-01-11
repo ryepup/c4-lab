@@ -7,5 +7,5 @@ var map = {
 
 module.exports = function() {
   var vm = this;
-  vm.icon = map[vm.type];
+  vm.icon = map[vm.type || 'connection'];
 };
