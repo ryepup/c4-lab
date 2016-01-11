@@ -12,29 +12,36 @@
       </div>
     </form>
 
-
     <p class="navbar-text navbar-right" c4-lab-meta></p>
-    <p class="navbar-text navbar-right" ng-show="vm.lastSaved">
-      Last saved at {{vm.lastSaved | date:'shortTime'}}
-    </p>
 
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li c4-lab-import graph="vm.graph"></li>
+        <li>
+          <a href="#" ng-click="vm.save()">
+            <span class="glyphicon glyphicon-save-file"> </span>
+            Save
+          </a>
+        </li>
         <li class="dropdown" uib-dropdown>
           <a href="#" uib-dropdown-toggle>
-            <span class="glyphicon glyphicon-save-file"> </span>
-            Save <span class="caret"></span>
+            <span class="glyphicon glyphicon-picture"> </span>
+            Export <span class="caret"></span>
           </a>
-          <ul class="dropdown-menu">
-            <li ng-repeat="format in vm.formats">
-              <a ng-click="vm.saveFile(format)" href="#">{{format.extension}}</a>
-            </li>
-          </ul>
+          <ul class="uib-dropdown-menu">
+          <li ng-repeat="format in vm.exportFormats">
+            <a ng-click="vm.save(format)" href="#">{{format.extension}}</a>
+          </li>
+        </ul>
+
+        </li>
+        <li ng-show="vm.lastSaved">
+          <p class="navbar-text">
+            Last saved at {{vm.lastSaved | date:'shortTime'}}
+          </p>
         </li>
       </ul>
     </div>
-
 
   </div>
 </nav>
