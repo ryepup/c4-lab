@@ -4,12 +4,6 @@ var uuid = require('uuid'),
 module.exports = function() {
   var self = this;
 
-  self.saveActor = saveItem.bind(null, 'actor');
-  self.saveSystem = saveItem.bind(null, 'system');
-  self.saveContainer = saveItem.bind(null, 'container');
-  self.toJSON = JSON.stringify;
-  self.parse = JSON.parse;
-  self.saveConnection = saveConnection;
   self.sources = sources;
   self.destinations = destinations;
   self.edges = edges;
@@ -22,6 +16,22 @@ module.exports = function() {
   self.rootItems = function(graph) {
     return _.select(graph.items, function(item) { return !item.parentId; });
   };
+  self.save = save;
+
+  function save(graph, type, item) {
+    graph.items = graph.items || [];
+    graph.edges = graph.edges || [];
+
+    var addTo = graph.edges;
+    if(type !== 'connection'){
+      addTo = graph.items;
+      item.type = type;
+    }
+
+    var result = findOrCreate(addTo, item);
+    graph.lastModified = new Date();
+    return result;
+  }
 
   function sources(graph, type) {
     var items = graph.items || [];
@@ -48,29 +58,10 @@ module.exports = function() {
       .value();
   }
 
-  function destinations(graph, item) {
-    return item ?
-      _.reject(self.sources(graph), 'id', item.id)
+  function destinations(graph, sourceId) {
+    return sourceId
+      ? _.reject(sources(graph), 'id', sourceId)
       : [];
-  }
-
-  function saveItem(type, graph, item) {
-    graph.items = graph.items || [];
-    item.type = type;
-    graph.lastModified = new Date();
-    return findOrCreate(graph.items, item);
-  }
-
-  function saveConnection(graph, item) {
-    graph.edges = graph.edges || [];
-    graph.lastModified = new Date();
-    var edge = {
-      id: item.id,
-      sourceId: item.source.id,
-      destinationId: item.destination.id,
-      description: item.description
-    };
-    return findOrCreate(graph.edges, edge);
   }
 
   function findOrCreate(collection, item) {

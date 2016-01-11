@@ -1,0 +1,6 @@
+<div>
+  <c4-lab-icon type="{{vm.item.type}}"></c4-lab-icon>
+  {{vm.item.name || vm.item.description}}
+  <button class="btn btn-xs btn-default" ng-click="vm.addOrEdit()">Edit</button>
+  <button class="btn btn-xs btn-danger" ng-click="vm.deleteItem()">Delete</button>
+</div>

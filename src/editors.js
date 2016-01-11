@@ -4,55 +4,49 @@ var _ = require('lodash'),
     connectionTemplate = require('./connectionEditor.html'),
     containerTemplate = require('./containerEditor.html')
 ;
+
 // @ngInject
 module.exports = function($uibModal, model) {
-  var self = this;
-  self.openActorModal = openActorModal;
-  self.openSystemModal = openSystemModal;
-  self.openConnectionModal = openConnectionModal;
-  self.openContainerModal = openContainerModal;
+  var self = this,
+      modalSettings = {
+        actor: makeSettings(actorTemplate),
+        system: makeSettings(systemTemplate),
+        connection: makeSettings(connectionTemplate, connectionConfig),
+        container: makeSettings(containerTemplate, containerConfig)
+      }
+  ;
 
-  /**
-   * @return Promise for user-entered actor
-   */
-  function openActorModal(item) {
-    return openModal(actorTemplate, item);
-  }
-  /**
-   * @return Promise for user-entered system
-   */
-  function openSystemModal(item) {
-    return openModal(systemTemplate, item);
-  }
+  self.openModal = openModal;
 
-  function openConnectionModal(graph, item) {
-    var sources = model.sources(graph);
-    return openModal(connectionTemplate, item, function(vm) {
-        vm.item.source = model.findItem(graph, vm.item.sourceId);
-        vm.item.destination = model.findItem(graph, vm.item.destinationId);
-        vm.sources = sources;
-        vm.destinations = model.destinations.bind(model, graph);
-    });
-  }
+  function openModal(type, graph, item) {
+    var settings = modalSettings[type || 'connection'];
 
-  function openContainerModal(graph, item) {
-    return openModal(containerTemplate, item, function(vm) {
-      vm.systems = model.systems(graph);
-    });
-  }
-
-  function openModal(template, item, ctrlFn) {
     var modal = $uibModal.open({
-          template: template,
-          controller: function() {
-            var vm = this;
-            vm.item = _.clone(item || {});
-            vm.cancel = function() { modal.dismiss('cancel'); };
-            vm.ok = function() { modal.close(vm.item); };
-            if(ctrlFn) { ctrlFn(vm); }
-          },
-          controllerAs: 'vm'
-        });
-    return modal.result;
+      template: settings.template,
+      controller: function() {
+        var vm = this;
+        vm.item = _.clone(item || {});
+        vm.cancel = function() { modal.dismiss('cancel'); };
+        vm.ok = function() { modal.close(vm.item); };
+        if(settings.configFn) { settings.configFn(vm, graph, vm.item); }
+      },
+      controllerAs: 'vm'
+    });
+    return modal.result
+      .then(model.save.bind(model, graph, type));
+  };
+
+  function containerConfig(vm, graph, item) {
+    vm.systems = model.systems(graph);
   }
+
+  function connectionConfig(vm, graph, item) {
+    vm.sources = model.sources(graph);
+    vm.destinations = model.destinations.bind(model, graph);
+  }
+
+  function makeSettings(template, configFn) {
+    return {template: template, configFn: configFn};
+  }
+
 };

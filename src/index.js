@@ -30,6 +30,7 @@ angular.module('c4-lab', ['ui.bootstrap', 'focus-if', 'cfp.hotkeys', 'ngFileUplo
   .directive('c4LabMeta', component(require('./meta.html'), require('./meta.controller.js')))
   .directive('c4LabImport', component(require('./import.html'), require('./import.controller.js'), { graph: '='}))
   .directive('c4LabMenu', component(require('./menu.html'), require('./menu.controller.js'), { graph: '='}))
+  .directive('c4LabItem', component(require('./item.html'), require('./item.controller.js'), { graph: '=', item: '='}))
   .service('editors', require('./editors'))
   .service('model', require('./model'))
   .service('exporter', require('./exporter'))

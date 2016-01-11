@@ -17,13 +17,13 @@ describe('dot', function() {
   });
 
   it('renders one actor', function() {
-    model.saveActor(graph, {name: 'foo', id: 1});
+    model.save(graph, 'actor', {name: 'foo', id: 1});
     expect(toDOT(graph)).toEqualTrimmed(simple);
   });
 
   it('renders two actors', function() {
-    model.saveActor(graph, {name: 'foo', id: 1});
-    model.saveActor(graph, {name: 'bar', id: 2});
+    model.save(graph, 'actor', {name: 'foo', id: 1});
+    model.save(graph, 'actor', {name: 'bar', id: 2});
     expect(toDOT(graph)).toEqualTrimmed(twoActors);
   });
 });

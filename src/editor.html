@@ -2,24 +2,10 @@
   <h2>Editor</h2>
   <div class="btn-group" role="group" aria-label="...">
     <button type="button" class="btn btn-default"
-            ng-click="vm.editActor()">
-      <c4-lab-icon type="actor"></c4-lab-icon>
-      New <u>a</u>ctor
-    </button>
-    <button type="button" class="btn btn-default"
-            ng-click="vm.editSystem()">
-      <c4-lab-icon type="system"></c4-lab-icon>
-      New <u>s</u>ystem
-    </button>
-    <button type="button" class="btn btn-default"
-            ng-click="vm.editConnection()">
-      <c4-lab-icon type="connection"></c4-lab-icon>
-      New <u>c</u>onnection
-    </button>
-    <button type="button" class="btn btn-default"
-            ng-click="vm.editContainer()">
-      <c4-lab-icon type="container"></c4-lab-icon>
-      New container
+            ng-repeat="opt in vm.addOptions"
+            ng-click="opt.callback()">
+      <c4-lab-icon type="{{opt.type}}"></c4-lab-icon>
+      {{opt.description}}
     </button>
   </div>
 
@@ -29,28 +15,11 @@
 
   <h3 class="btn-group">{{vm.graph.items.length}} nodes with {{vm.graph.edges.length}} connections</h3>
   <ol>
-    <li ng-repeat="item in vm.rootItems() track by item.id"
-        ng-class="{'bg-info': vm.isHighlighted(item.id)}">
-
-      <c4-lab-icon type="{{item.type}}"></c4-lab-icon>
-      {{item.name}}
-      <button class="btn btn-xs btn-default" ng-click="vm.editItem(item)">Edit</button>
-      <button class="btn btn-xs btn-danger" ng-click="vm.deleteItem(item)">Delete</button>
+    <li ng-repeat="item in vm.rootItems() track by item.id">
+      <div c4-lab-item item="item" graph="vm.graph"></div>
       <ol>
-        <li ng-repeat="edge in vm.edges(item) track by edge.id"
-            ng-mouseenter="vm.highlight(edge.destinationId)"
-            ng-mouseleave="vm.highlight(null)">
-          <c4-lab-icon type="connection"></c4-lab-icon>
-          {{edge.description}}
-          <button class="btn btn-xs btn-default" ng-click="vm.editItem(edge)">Edit</button>
-          <button class="btn btn-xs btn-danger" ng-click="vm.deleteItem(edge)">Delete</button>
-        </li>
-        <li ng-repeat="child in vm.children(item) track by child.id">
-          <c4-lab-icon type="{{child.type}}"></c4-lab-icon>
-          {{child.name}}
-          <button class="btn btn-xs btn-default" ng-click="vm.editItem(child)">Edit</button>
-          <button class="btn btn-xs btn-danger" ng-click="vm.deleteItem(child)">Delete</button>
-        </li>
+        <li ng-repeat="child in vm.children(item) track by child.id"
+            c4-lab-item item="child" graph="vm.graph"></li>
       </ol>
     </li>
   </ol>

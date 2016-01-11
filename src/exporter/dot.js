@@ -24,8 +24,9 @@ function toDOT(graph, parent) {
       lines.push('  }');
     });
 
-  if(graph.edges) { lines.push('edge[fontsize=12 fontcolor="#666666"]'); }
-
+  if(graph.edges && graph.edges.length) {
+    lines.push('edge[fontsize=12 fontcolor="#666666"]');
+  }
 
   _.sortBy(graph.edges || [], 'id')
     .map(function(item) {

@@ -14,12 +14,43 @@ describe('model', function() {
     c4LabGraph = exporter.fromJson(sampleC4);
   });
 
+  describe('save', function() {
+    'actor system container component'.split(' ')
+      .map(function(t) {
+        it('handles `'+t+'` nodes', function() {
+          var item = {name: 'whatever'};
+          model.save(graph, t, item);
+          expect(item.id).toBeDefined();
+          expect(item.type).toBe(t);
+          expect(graph.items[0]).toBe(item);
+        });
+      });
+
+    it('handles connections', function() {
+      var item = {name: 'whatever'};
+      model.save(graph, 'connection', item);
+      expect(item.id).toBeDefined();
+      expect(graph.edges[0]).toBe(item);
+    });
+
+    it('updates an existing item by id', function() {
+      var actor = {name: 'foo'};
+      model.save(graph, 'actor', actor);
+      var copy = _.clone(actor);
+      copy.name += 'asdf';
+      model.save(graph, 'actor', copy);
+      expect(actor).toEqual(copy);
+      expect(graph.items.length).toBe(1);
+    });
+
+
+  });
+
   it('finds children', function() {
     var system = {name: 'sys'};
-    model.saveSystem(graph, system);
-    expect(system.id).toBeDefined();
+    model.save(graph, 'system', system);
     var container = {name: 'foo', parentId: system.id};
-    model.saveContainer(graph, container);
+    model.save(graph, 'container', container);
 
     expect(model.children(graph, system)).toEqual([container]);
   });
@@ -27,7 +58,7 @@ describe('model', function() {
   describe('deleteItem', function() {
     it('removes the item', function() {
       var actor = {name: 'test'};
-      model.saveActor(graph, actor);
+      model.save(graph, 'actor', actor);
       expect(graph.items.length).toBe(1);
       model.deleteItem(graph, actor);
       expect(graph.items.length).toBe(0);
@@ -35,7 +66,7 @@ describe('model', function() {
 
     it('updates lastModified', function() {
       var actor = {name: 'test'};
-      model.saveActor(graph, actor);
+      model.save(graph, 'actor', actor);
       delete graph.lastModified;
       model.deleteItem(graph, actor);
       expect(graph.lastModified).toBeDefined();
@@ -53,35 +84,17 @@ describe('model', function() {
 
   });
 
-  describe('saveActor', function() {
-    var actor;
-    beforeEach(function() { actor = {name: 'test'}; });
-
-    it('saves to the graph', function() {
-      model.saveActor(graph, actor);
-      expect(graph.items[0]).toBe(actor);
+  describe('destinations', function() {
+    it('returns eligible items', function() {
+      var id = '10cffdf2-901e-4072-8150-a059a836967d';
+      var dests = model.destinations(c4LabGraph, id);
+      expect(dests.length).toBe(2);
+      expect(_.pluck(dests, 'id')).not.toContain(id);
     });
 
-    it('saves to the end of the graph items', function() {
-      graph.items = [1,2,3];
-      model.saveActor(graph, actor);
-      expect(graph.items[3]).toBe(actor);
-    });
-
-    it('decorates the input with id + type', function() {
-      model.saveActor(graph, actor);
-      expect(actor.type).toBe('actor');
-      expect(actor.id).toBeDefined();
-    });
-
-    it('updates the existing item by id', function() {
-      model.saveActor(graph, actor);
-      var copy = _.clone(actor);
-      copy.name += 'asdf';
-      model.saveActor(graph, copy);
-      expect(actor).toEqual(copy);
-      expect(graph.items.length).toBe(1);
+    it('returns empty list with no input', function() {
+      var dests = model.destinations(c4LabGraph, undefined);
+      expect(dests.length).toBe(0);
     });
   });
-
 });
