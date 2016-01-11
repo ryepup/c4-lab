@@ -74,12 +74,12 @@ describe('model', function() {
 
     it('removes related connections to a source', function() {
       model.deleteItem(c4LabGraph, {id: 'b9815283-4bea-4124-afc7-018c347ea1a2', type:'actor'});
-      expect(c4LabGraph.edges.length).toBe(1);
+      expect(c4LabGraph.edges.length).toBe(3);
     });
 
     it('removes related connections to a destination', function() {
       model.deleteItem(c4LabGraph, {id: '10cffdf2-901e-4072-8150-a059a836967d', type:'system'});
-      expect(c4LabGraph.edges.length).toBe(0);
+      expect(c4LabGraph.edges.length).toBe(2);
     });
 
   });
@@ -88,7 +88,7 @@ describe('model', function() {
     it('returns eligible items', function() {
       var id = '10cffdf2-901e-4072-8150-a059a836967d';
       var dests = model.destinations(c4LabGraph, id);
-      expect(dests.length).toBe(2);
+      expect(dests.length).toBe(4);
       expect(_.pluck(dests, 'id')).not.toContain(id);
     });
 
