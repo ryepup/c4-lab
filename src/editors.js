@@ -43,6 +43,9 @@ module.exports = function($uibModal, model) {
   function connectionConfig(vm, graph, item) {
     vm.sources = model.sources(graph);
     vm.destinations = model.destinations.bind(model, graph);
+    item.source = _.find(vm.sources, 'id', item.sourceId);
+    item.destination = _.find(vm.sources, 'id', item.destinationId);
+
   }
 
   function makeSettings(template, configFn) {

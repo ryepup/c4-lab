@@ -23,11 +23,16 @@ module.exports = function() {
     graph.edges = graph.edges || [];
 
     var addTo = graph.edges;
-    if(type !== 'connection'){
+    if(type && type !== 'connection'){
       addTo = graph.items;
       item.type = type;
     }
-
+    else {
+      item.sourceId = item.source.id;
+      item.destinationId = item.destination.id;
+      delete item.source;
+      delete item.destination;
+    }
     var result = findOrCreate(addTo, item);
     graph.lastModified = new Date();
     return result;

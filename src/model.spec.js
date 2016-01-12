@@ -27,9 +27,23 @@ describe('model', function() {
       });
 
     it('handles connections', function() {
-      var item = {name: 'whatever'};
+      var item = {name: 'whatever', source: {id:1}, destination: {id: 2}};
+
       model.save(graph, 'connection', item);
+
       expect(item.id).toBeDefined();
+      expect(item.sourceId).toBeDefined();
+      expect(item.destinationId).toBeDefined();
+      expect(item.source).toBeUndefined();
+      expect(item.destination).toBeUndefined();
+      expect(graph.edges[0]).toBe(item);
+    });
+
+    it('assumes no type means connection', function() {
+      var item = {name: 'whatever', source: {id:1}, destination: {id: 2}};
+
+      model.save(graph, undefined, item);
+
       expect(graph.edges[0]).toBe(item);
     });
 
