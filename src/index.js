@@ -23,14 +23,14 @@ function component(template, controller, bindings) {
 
 angular.module('c4-lab', ['ui.bootstrap', 'focus-if', 'cfp.hotkeys', 'ngFileUpload'])
   .directive('c4LabShell', component(require('./shell.html'), require('./shell.controller.js')))
-  .directive('c4LabEditor', component(require('./editor.html'), require('./editor.controller.js'), { graph: '='}))
-  .directive('c4LabViewer', component(require('./viewer.html'), require('./viewer.controller.js'), { graph: '='}))
+  .directive('c4LabEditor', component(require('./editor.html'), require('./editor.controller.js'), { graph: '=', itemSelected:'&'}))
+  .directive('c4LabViewer', component(require('./viewer.html'), require('./viewer.controller.js'), { graph: '=', rootItem: '='}))
   .directive('c4LabIcon',
              component(require('./icon.html'), require('./icon.controller.js'), {type: '@'}))
   .directive('c4LabMeta', component(require('./meta.html'), require('./meta.controller.js')))
   .directive('c4LabImport', component(require('./import.html'), require('./import.controller.js'), { graph: '='}))
   .directive('c4LabMenu', component(require('./menu.html'), require('./menu.controller.js'), { graph: '='}))
-  .directive('c4LabItem', component(require('./item.html'), require('./item.controller.js'), { graph: '=', item: '='}))
+  .directive('c4LabItem', component(require('./item.html'), require('./item.controller.js'), { graph: '=', item: '=', renderAsLink:'='}))
   .service('editors', require('./editors'))
   .service('model', require('./model'))
   .service('exporter', require('./exporter'))

@@ -1,0 +1,5 @@
+subgraph clusterRoot {
+  label=<<B>${name}</B>>
+  gRoot [shape=plaintext fontsize=12 label="${description}"]
+  ${children}
+}

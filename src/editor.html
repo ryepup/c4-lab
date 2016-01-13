@@ -1,5 +1,4 @@
 <div>
-  <h2>Editor</h2>
   <div class="btn-group" role="group" aria-label="...">
     <button type="button" class="btn btn-default"
             ng-repeat="opt in vm.addOptions"
@@ -16,7 +15,8 @@
   <h3 class="btn-group">{{vm.graph.items.length}} nodes with {{vm.graph.edges.length}} connections</h3>
   <ol>
     <li ng-repeat="item in vm.rootItems() track by item.id">
-      <div c4-lab-item item="item" graph="vm.graph"></div>
+      <div c4-lab-item item="item" graph="vm.graph" render-as-link="item.type === 'system'"
+           ng-click="vm.itemSelected({item: item})"></div>
       <ol>
         <li ng-repeat="child in vm.children(item) track by child.id"
             c4-lab-item item="child" graph="vm.graph"></li>
