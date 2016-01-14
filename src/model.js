@@ -57,10 +57,17 @@ module.exports = function() {
     graph.lastModified = new Date();
   }
 
-  function edges(graph, item) {
-    return _.chain(graph.edges || [])
-      .filter('sourceId', item.id)
-      .value();
+  function edges(graph, itemOrId) {
+    var result = graph.edges || [],
+        id = _.isString(itemOrId)
+          ? itemOrId
+          : (itemOrId && itemOrId.id);
+
+    if(!id){ return result; }
+
+    return result.filter(function(edge) {
+      return edge.sourceId === id || edge.destinationId === id;
+    });
   }
 
   function destinations(graph, sourceId) {

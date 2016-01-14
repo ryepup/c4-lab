@@ -111,4 +111,24 @@ describe('model', function() {
       expect(dests.length).toBe(0);
     });
   });
+
+  describe('edges', function() {
+    it('can find by id', function() {
+      var edges = model.edges(c4LabGraph, '803dfe63-eb75-4720-8587-86313d48bed1');
+      expect(edges.length).toBe(3);
+    });
+
+    it('can find by item', function() {
+      var github = model.findItem(c4LabGraph, '803dfe63-eb75-4720-8587-86313d48bed1');
+      var edges = model
+            .edges(c4LabGraph, github);
+      expect(edges.length).toBe(3);
+    });
+
+    it('returns all if no criteria is passed', function() {
+      var edges = model.edges(c4LabGraph);
+      expect(edges).toBe(c4LabGraph.edges);
+    });
+
+  });
 });

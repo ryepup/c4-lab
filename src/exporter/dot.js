@@ -44,10 +44,7 @@ function contextDOT(graph, lines) {
 function zoomedDOT(graph, rootItem, lines) {
   var nodeId = 0,
       idMap = {},
-      edges = graph.edges
-        .filter(function(edge) {
-          return edge.sourceId === rootItem.id || edge.destinationId === rootItem.id;
-        }),
+      edges = model.edges(graph, rootItem),
       itemIds = _.chain(edges)
         .map(function(edge) { return [edge.sourceId, edge.destinationId]; })
         .flatten()
