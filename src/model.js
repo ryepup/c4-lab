@@ -46,22 +46,19 @@ module.exports = function() {
   function deleteItem(graph, item) {
     if(item.type){
       graph.items = _.reject(graph.items || [], 'id', item.id);
-      graph.edges = _.reject(graph.edges || [],
-                           function(edge) {
-                             return edge.sourceId === item.id
-                               || edge.destinationId === item.id;
-                           });}
+      var edgesToDelete = edges(graph, item);
+      graph.edges = (graph.edges || [])
+        .filter(function(edge) { return !_.includes(edgesToDelete, edge); });
+    }
     else{
-      graph.edges = _.reject(graph.edges || [], 'id', item.id);
+      graph.edges = _.reject(graph.edges, 'id', item.id);
     }
     graph.lastModified = new Date();
   }
 
   function edges(graph, itemOrId) {
     var result = graph.edges || [],
-        id = _.isString(itemOrId)
-          ? itemOrId
-          : (itemOrId && itemOrId.id);
+        id = idFor(itemOrId);
 
     if(!id){ return result; }
 
@@ -70,10 +67,27 @@ module.exports = function() {
     });
   }
 
-  function destinations(graph, sourceId) {
-    return sourceId
-      ? _.reject(sources(graph), 'id', sourceId)
-      : [];
+  var eligibleTypes = {
+    actor: ['system'],
+    system: ['system', 'actor']
+  };
+
+  function destinations(graph, sourceItemOrId) {
+    if(!sourceItemOrId) return [];
+
+    var item = itemFor(graph, sourceItemOrId),
+        destTypes = eligibleTypes[item.type];
+
+    return (graph.items || [])
+      .filter(function(candidate) {
+        return candidate.id !== item.id
+          && _.includes(destTypes, candidate.type);
+      });
+
+    return _(graph.items || [])
+      .filter('type', {type: destTypes})
+      .reject('id', item.id)
+      .value();
   }
 
   function findOrCreate(collection, item) {
@@ -87,5 +101,20 @@ module.exports = function() {
     }
   }
 
-  function byId(collection, id) { return collection && id ? _.find(collection, 'id', id) : null; }
+  function byId(collection, itemOrId) {
+    var id = idFor(itemOrId);
+    return collection && id ? _.find(collection, 'id', id) : null;
+  }
+
+  function idFor(itemOrId) {
+    return _.isString(itemOrId)
+      ? itemOrId
+      : (itemOrId && itemOrId.id);
+  }
+
+  function itemFor(graph, itemOrId) {
+    return _.isString(itemOrId)
+      ? byId(graph.items, itemOrId)
+      : itemOrId;
+  }
 };

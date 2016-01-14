@@ -12,6 +12,9 @@ describe('model', function() {
     model = new Model();
     graph = {};
     c4LabGraph = exporter.fromJson(sampleC4);
+    c4LabGraph.github = model.findItem(c4LabGraph, '803dfe63-eb75-4720-8587-86313d48bed1');
+    c4LabGraph.c4Lab = model.findItem(c4LabGraph, '10cffdf2-901e-4072-8150-a059a836967d');
+    c4LabGraph.devs = model.findItem(c4LabGraph, 'b9815283-4bea-4124-afc7-018c347ea1a2');
   });
 
   describe('save', function() {
@@ -87,12 +90,12 @@ describe('model', function() {
     });
 
     it('removes related connections to a source', function() {
-      model.deleteItem(c4LabGraph, {id: 'b9815283-4bea-4124-afc7-018c347ea1a2', type:'actor'});
+      model.deleteItem(c4LabGraph, c4LabGraph.devs);
       expect(c4LabGraph.edges.length).toBe(3);
     });
 
     it('removes related connections to a destination', function() {
-      model.deleteItem(c4LabGraph, {id: '10cffdf2-901e-4072-8150-a059a836967d', type:'system'});
+      model.deleteItem(c4LabGraph, c4LabGraph.c4Lab);
       expect(c4LabGraph.edges.length).toBe(2);
     });
 
@@ -100,28 +103,32 @@ describe('model', function() {
 
   describe('destinations', function() {
     it('returns eligible items', function() {
-      var id = '10cffdf2-901e-4072-8150-a059a836967d';
-      var dests = model.destinations(c4LabGraph, id);
-      expect(dests.length).toBe(4);
-      expect(_.pluck(dests, 'id')).not.toContain(id);
+      var dests = model.destinations(c4LabGraph, c4LabGraph.c4Lab.id);
+      expect(dests.length).toBe(3);
+      expect(_.pluck(dests, 'id')).not.toContain(c4LabGraph.c4Lab.id);
     });
 
     it('returns empty list with no input', function() {
       var dests = model.destinations(c4LabGraph, undefined);
       expect(dests.length).toBe(0);
     });
+
+    it('restricts types, actor-to-system', function() {
+      var dests = model.destinations(c4LabGraph, {id:123, type:'actor'});
+      expect(dests.length).toBe(3);
+      var types = _(dests).pluck('type').uniq().value();
+      expect(types).toEqual(['system']);
+    });
   });
 
   describe('edges', function() {
     it('can find by id', function() {
-      var edges = model.edges(c4LabGraph, '803dfe63-eb75-4720-8587-86313d48bed1');
+      var edges = model.edges(c4LabGraph, c4LabGraph.github.id);
       expect(edges.length).toBe(3);
     });
 
     it('can find by item', function() {
-      var github = model.findItem(c4LabGraph, '803dfe63-eb75-4720-8587-86313d48bed1');
-      var edges = model
-            .edges(c4LabGraph, github);
+      var edges = model.edges(c4LabGraph, c4LabGraph.github);
       expect(edges.length).toBe(3);
     });
 
