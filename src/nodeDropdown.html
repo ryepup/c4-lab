@@ -1,0 +1,23 @@
+<span uib-dropdown>
+  <span uib-dropdown-toggle>
+    <c4-lab-icon type="{{vm.iconType || vm.item.type}}"></c4-lab-icon>
+    {{vm.label || vm.item.name}}
+    <span class="caret"></span>
+  </span>
+  <ul class="uib-dropdown-menu">
+    <li>
+      <a href="#" ng-click="vm.addOrEdit()">
+        <span class="glyphicon glyphicon-edit"></span>
+        Edit
+      </a>
+    </li>
+    <li>
+      <a href="#" ng-click="vm.deleteItem()">
+        <span class="text-danger">
+          <span class="glyphicon glyphicon-remove"></span>
+          Delete
+        </span>
+      </a>
+    </li>
+  </ul>
+</span>

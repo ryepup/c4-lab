@@ -14,12 +14,19 @@
 
   <h3 class="btn-group">{{vm.graph.items.length}} nodes with {{vm.graph.edges.length}} connections</h3>
   <ol>
-    <li ng-repeat="item in vm.rootItems() track by item.id">
-      <div c4-lab-item item="item" graph="vm.graph" render-as-link="item.type === 'system'"
-           ng-click="vm.itemSelected({item: item})"></div>
-      <ol>
-        <li ng-repeat="child in vm.children(item) track by child.id"
-            c4-lab-item item="child" graph="vm.graph"></li>
+    <li ng-repeat="systemOrActor in vm.rootItems() track by systemOrActor.id"
+        ng-class="{'bg-info': vm.rootItem.id === systemOrActor.id}"
+        >
+      <div c4-lab-item item="systemOrActor" graph="vm.graph"
+           ng-click="vm.itemSelected({item: systemOrActor})"></div>
+      <ol ng-if="systemOrActor.type === 'system'">
+        <li ng-repeat="container in vm.children(systemOrActor) track by container.id">
+          <div c4-lab-item item="container" graph="vm.graph"></div>
+          <ol>
+            <li ng-repeat="component in vm.children(container) track by component.id"
+                c4-lab-item item="component" graph="vm.graph"></li>
+          </ol>
+        </li>
       </ol>
     </li>
   </ol>

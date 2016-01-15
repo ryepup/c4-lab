@@ -35,12 +35,12 @@ module.exports = function($window, $q) {
       });
   }
 
-  function toSVG(graph) {
-    return Viz(self.toDOT(graph), { format:"svg", engine:"dot" });
+  function toSVG(graph, rootItem) {
+    return Viz(self.toDOT(graph, rootItem), { format:"svg", engine:"dot" });
   }
 
-  function toPNG(graph) {
-    var svg = toSVG(graph),
+  function toPNG(graph, rootItem) {
+    var svg = toSVG(graph, rootItem),
         img = document.createElement("img")
     ;
     return $q(function(resolve, reject) {

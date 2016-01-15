@@ -4,8 +4,7 @@ var _ = require('lodash');
 module.exports = function(editors, model, hotkeys) {
   var vm = this;
 
-  vm.children = children;
-  vm.deleteItem = model.deleteItem.bind(model, vm.graph);
+  vm.children = model.children.bind(model, vm.graph);
   vm.rootItems = model.rootItems.bind(model, vm.graph);
   vm.addOptions = [
     makeAddOption('a', 'actor'),
@@ -15,11 +14,6 @@ module.exports = function(editors, model, hotkeys) {
   ];
 
   activate();
-
-  function children(item) {
-    return model.edges(vm.graph, item)
-      .concat(model.children(vm.graph, item));
-  }
 
   function activate() {
     vm.addOptions

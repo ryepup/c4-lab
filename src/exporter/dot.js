@@ -3,57 +3,75 @@ var _ = require('lodash'),
     Model = require('../model'),
     model = new Model(),
     itemDOTTemplate = _.template(require('./item.template.dot')),
+    containerDOTTemplate = _.template(require('./container.template.dot')),
     edgeDOTTemplate = _.template(require('./edge.template.dot')),
-    zoomedDOTTemplate = _.template(require('./zoomed.template.dot'))
+    zoomedDOTTemplate = _.template(require('./zoomed.template.dot')),
+    templates = {
+      actor: itemDOTTemplate,
+      system: itemDOTTemplate,
+      container: containerDOTTemplate
+    }
 
 ;
 
-function edgeDOT(edge, idMap) {
+function edgeDOT(graph, edge, idMap) {
   return edgeDOTTemplate({
     sourceId: idMap[edge.sourceId],
     destId: idMap[edge.destinationId],
-    description: sanitize(edge.description)
+    description: sanitize(model.edgeDescription(graph, edge))
   });
 }
 
 
 function itemDOT(item, id, desc) {
-  return itemDOTTemplate({
-    id: id,
-    name: item.name,
-    type: item.type,
-    description: desc || sanitize(item.description)
+  var vm = _.extend({}, item, {
+    description: desc || sanitize(item.description),
+    id: id
   });
+
+  return templates[item.type](vm);
 }
 
 function contextDOT(graph, lines) {
   var nodeId = 0, idMap = {};
 
-  model.rootItems(graph)
-    .map(function(item) {
+  _(model.rootItems(graph))
+    .forEach(function(item) {
       var id = idMap[item.id] = nodeId++;
       lines.push(itemDOT(item, id));
-    });
-
-  (graph.edges || [])
-    .map(function(item) {
-      lines.push(edgeDOT(item, idMap));
-    });
+    })
+    .map(model.edges.bind(model, graph))
+    .flatten()
+    .uniq('id')
+    .filter(function(edge) { return !edge.parentId; })
+    .forEach(function(item) { lines.push(edgeDOT(graph, item, idMap)); })
+    .value();
 }
 
 function zoomedDOT(graph, rootItem, lines) {
   var nodeId = 0,
       idMap = {},
-      edges = model.edges(graph, rootItem),
-      itemIds = _.chain(edges)
-        .map(function(edge) { return [edge.sourceId, edge.destinationId]; })
+      children = model.children(graph, rootItem),
+      childEdges = _(children)
+        .map(model.edges.bind(model, graph))
+        .uniq('id')
         .flatten()
-        .filter(function(id) { return id !== rootItem.id; })
-        .uniq()
         .value(),
+      edges = model.edges(graph, rootItem)
+        .filter(function(edge) {
+          return !_.any(childEdges, 'parentId', edge.id);
+        })
+        .concat(childEdges),
+      itemIds = _(edges)
+        .map(function(edge) { return [edge.sourceId, edge.destinationId]; })
+        .flatten().uniq().value(),
       nodes = graph.items
-        .filter(function(item) { return _.includes(itemIds, item.id);}),
-      children = model.children(graph, rootItem);
+        .filter(function(item) {
+          return item !== rootItem
+            && item.parentId !== rootItem.id
+            && _.includes(itemIds, item.id);
+        })
+;
 
   idMap[rootItem.id] = 'Root';
 
@@ -73,7 +91,7 @@ function zoomedDOT(graph, rootItem, lines) {
   });
 
   edges.map(function(edge) {
-    lines.push(edgeDOT(edge, idMap));
+    lines.push(edgeDOT(graph, edge, idMap));
   });
 
 }

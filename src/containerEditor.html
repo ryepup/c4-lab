@@ -5,8 +5,8 @@
       <div class="form-group">
         <label for="source">System</label>
         <select name="source" id="source" required class="form-control"
-                ng-model="vm.item.parentId"
-                ng-options="item.id as item.name for item in vm.systems"
+                ng-model="vm.item.parent"
+                ng-options="item.name for item in vm.systems track by item.id"
                 focus-if focus-delay="100"></select>
       </div>
       <div class="form-group">

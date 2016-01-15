@@ -9,49 +9,103 @@ module.exports = function() {
   self.edges = edges;
   self.findItem = function(graph, id) { return byId(graph.items, id); };
   self.deleteItem = deleteItem;
-  self.systems = _.partialRight(sources, 'system');
-  self.children = function(graph, item) {
-    return _.select(graph.items||[], 'parentId', item.id);
-  };
-  self.rootItems = function(graph) {
-    return _.select(graph.items, function(item) { return !item.parentId; });
-  };
+  self.systems = function(graph) {
+    return _.filter(graph.items || [], 'type', 'system'); };
+  self.children = children;
+  self.rootItems = rootItems;
   self.save = save;
+  self.isConnection = isConnection;
+  self.edgeDescription = edgeDescription;
+  self.outgoingEdges = outgoingEdges;
+
+  function outgoingEdges(graph, item) {
+    return _.filter(edges(graph, item), 'sourceId', item.id)
+      .filter(isOrphan);
+  }
+
+  function isOrphan(item) { return !item.parentId; }
+
+  function edgeDescription(graph, edgeOrId) {
+    if(!edgeOrId) throw new Error('must provide an edge or id');
+    var edge = byId(graph.edges, edgeOrId);
+    return edge.description || edgeDescription(graph, edge.parentId);
+  }
+
+  function rootItems(graph) {
+    return _.filter(graph.items || [], isOrphan);
+  }
+  function children(graph, parentOrId) {
+    var parentId = idFor(parentOrId);
+    return _(graph.items)
+      .concat(graph.edges)
+      .filter('parentId', parentId)
+      .value();
+  }
 
   function save(graph, type, item) {
     graph.items = graph.items || [];
     graph.edges = graph.edges || [];
 
     var addTo = graph.edges;
-    if(type && type !== 'connection'){
-      addTo = graph.items;
-      item.type = type;
-    }
-    else {
-      item.sourceId = item.source.id;
+    if(isConnection(type)){
+
+      if(isConnection(item.source.type)){
+        item.sourceId = item.source.sourceId;
+        item.parentId = item.source.id;
+      }else{
+        item.sourceId = item.source.id;
+        delete item.parentId;
+      }
+
       item.destinationId = item.destination.id;
       delete item.source;
       delete item.destination;
+    }
+    else {
+      addTo = graph.items;
+      item.type = type;
+      if(item.parent){
+        item.parentId = item.parent.id;
+        delete item.parent;
+      }
     }
     var result = findOrCreate(addTo, item);
     graph.lastModified = new Date();
     return result;
   }
 
-  function sources(graph, type) {
-    var items = graph.items || [];
-    return type ? _.select(items, 'type', type) : items;
+  function isConnection(type) {
+    return !type || type === 'connection';
+  }
+
+  function sources(graph) {
+    var kids = (graph.items || []).filter(function(item) { return item.parentId; }),
+        parentMap = _.groupBy(kids, 'parentId'),
+        edgesToParents = (graph.edges || [])
+          .filter(function(edge) { return _.has(parentMap, edge.destinationId); }),
+        siblings = _(parentMap)
+          .filter(function(kids, parentId) { return kids.length > 1; })
+          .map(function(kids, parentId) { return kids; })
+          .flatten()
+          .value()
+ ;
+
+    return rootItems(graph)
+      .concat(edgesToParents)
+      .concat(siblings);
   }
 
   function deleteItem(graph, item) {
-    if(item.type){
-      graph.items = _.reject(graph.items || [], 'id', item.id);
-      var edgesToDelete = edges(graph, item);
-      graph.edges = (graph.edges || [])
-        .filter(function(edge) { return !_.includes(edgesToDelete, edge); });
+    if(isConnection(item.type)){
+      graph.edges = _.reject(graph.edges, 'id', item.id);
+      _(graph.edges)
+        .filter('parentId', item.id)
+        .forEach(deleteItem.bind(null, graph))
+        .value();
     }
     else{
-      graph.edges = _.reject(graph.edges, 'id', item.id);
+      graph.items = _.reject(graph.items || [], 'id', item.id);
+      edges(graph, item).map(deleteItem.bind(null, graph));
     }
     graph.lastModified = new Date();
   }
@@ -67,26 +121,31 @@ module.exports = function() {
     });
   }
 
-  var eligibleTypes = {
-    actor: ['system'],
-    system: ['system', 'actor']
-  };
-
   function destinations(graph, sourceItemOrId) {
     if(!sourceItemOrId) return [];
 
-    var item = itemFor(graph, sourceItemOrId),
-        destTypes = eligibleTypes[item.type];
+    var item = byId(graph.items, sourceItemOrId),
+        edge = byId(graph.edges, sourceItemOrId);
 
-    return (graph.items || [])
-      .filter(function(candidate) {
-        return candidate.id !== item.id
-          && _.includes(destTypes, candidate.type);
-      });
+    return item
+      ? destinationsForItem(graph, item)
+      : children(graph, edge.destinationId);
 
-    return _(graph.items || [])
-      .filter('type', {type: destTypes})
-      .reject('id', item.id)
+  }
+
+  var eligibleTypes = {
+    actor: ['system'],
+    system: ['system', 'actor'],
+    container: ['system', 'actor', 'container']
+  };
+
+  function destinationsForItem(graph, item) {
+    var destTypes = eligibleTypes[item.type];
+
+    return _(graph.items)
+      .filter(function(candidate) { return candidate.id !== item.id; })
+      .filter(function(candidate) { return candidate.id !== item.parentId; })
+      .filter(function(candidate) { return _.includes(destTypes, candidate.type); })
       .value();
   }
 

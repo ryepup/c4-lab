@@ -1,7 +1,7 @@
 var sampleC4 = require('./exporter/c4-lab.json');
 
 // @ngInject
-module.exports = function(autoSave, exporter) {
+module.exports = function(autoSave, exporter, model) {
   var vm = this;
 
   vm.graph = autoSave.load()
@@ -13,7 +13,11 @@ module.exports = function(autoSave, exporter) {
   autoSave.saveEvery(vm.graph, 5000);
 
 
-  function itemSelected(item) { vm.rootItem = item; }
+  function itemSelected(item) {
+    if(model.children(vm.graph, item).length > 0){
+      vm.rootItem = item;
+    }
+  }
   function breadcrumbs() {
     if(!vm.rootItem) return [];
     return [vm.rootItem];

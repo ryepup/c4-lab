@@ -38,13 +38,29 @@ module.exports = function($uibModal, model) {
 
   function containerConfig(vm, graph, item) {
     vm.systems = model.systems(graph);
+    item.parent = model.findItem(graph, item.parentId);
   }
 
   function connectionConfig(vm, graph, item) {
     vm.sources = model.sources(graph);
     vm.destinations = model.destinations.bind(model, graph);
-    item.source = _.find(vm.sources, 'id', item.sourceId);
-    item.destination = _.find(vm.sources, 'id', item.destinationId);
+    vm.isDescriptionRequired = true;
+
+    item.source = _.find(vm.sources, 'id', item.parentId)
+      || _.find(vm.sources, 'id', item.sourceId);
+
+    item.destination = model.findItem(graph, item.destinationId);
+
+    vm.sourceName = function(source) {
+      if(source.type) return source.name;
+
+      return model.findItem(graph, source.sourceId).name + ' -> '
+        + source.description + ' -> '
+        + model.findItem(graph, source.destinationId).name;
+    };
+    vm.sourceSelected = function(source) {
+      vm.isDescriptionRequired = !model.isConnection(source.type);
+    };
   }
 
   function makeSettings(template, configFn) {
