@@ -1,9 +1,0 @@
-<ul class="breadcrumb">
-  <li>
-    <c4-lab-icon type="connection"></c4-lab-icon> {{vm.name}}
-  </li>
-  <li ng-repeat="e in vm.edges() track by e.id"
-      c4-lab-node-dropdown item="e" graph="vm.graph"
-      label="{{e.dest.name}}" icon-type="{{e.dest.type}}"
-      ></li>
-</ul>

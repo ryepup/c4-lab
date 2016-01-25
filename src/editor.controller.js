@@ -1,23 +1,27 @@
 var _ = require('lodash');
 
 // @ngInject
-module.exports = function(editors, model, hotkeys) {
+module.exports = function(hotkeys, $state) {
   var vm = this;
 
-  vm.children = model.children.bind(model, vm.graph);
-  vm.rootItems = model.rootItems.bind(model, vm.graph);
   vm.addOptions = [
     makeAddOption('a', 'actor'),
     makeAddOption('s', 'system'),
     makeAddOption('c', 'connection'),
     makeAddOption('n', 'container')
   ];
-
   activate();
 
   function activate() {
     vm.addOptions
       .map(hotkeys.add.bind(hotkeys));
+
+    if($state.is('add')){
+      vm.selectedItem = {type: $state.params.type};
+    }else if(vm.item){
+      vm.selectedItem = _.clone(vm.item);
+    }
+
   }
 
   function makeAddOption(keychord, type) {
@@ -25,7 +29,9 @@ module.exports = function(editors, model, hotkeys) {
       combo: keychord,
       type: type,
       description: 'New ' + type,
-      callback: function() { editors.openModal(type, vm.graph); }
+      callback: function() {
+        $state.go('add', {type: type, id: vm.item && vm.item.id});
+      }
     };
   }
 };

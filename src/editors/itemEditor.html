@@ -1,0 +1,13 @@
+<div>
+  <h3>Edit {{vm.item.type || 'Connection'}}</h3>
+  <form name="item">
+    <div ng-include="vm.fieldTemplate()"></div>
+  </form>
+  <div class="clearfix">
+    <button class="btn btn-primary pull-left" type="button" ng-click="vm.save()"
+            ng-disabled="item.$invalid">Save</button>
+    <button class="btn btn-link pull-left" type="button" ng-click="vm.cancel()">Cancel</button>
+    <button class="btn btn-danger pull-right" type="button"
+            ng-click="vm.deleteItem()">Delete</button>
+  </div>
+</div>

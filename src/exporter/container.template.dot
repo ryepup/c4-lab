@@ -1,4 +1,6 @@
   subgraph cluster${id} {
     label=<<B>${name}</B><BR/><FONT POINT-SIZE="12" COLOR="#666666"><I>&#171;${type}&#187;<BR/>${tech}</I></FONT>>
+    href="${href}"
+    tooltip=""
     g${id} [shape=plaintext fontsize=12 label="${description}"]
   }

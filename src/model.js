@@ -7,20 +7,44 @@ module.exports = function() {
   self.sources = sources;
   self.destinations = destinations;
   self.edges = edges;
-  self.findItem = function(graph, id) { return byId(graph.items, id); };
+  self.findItem = function(graph, id) {
+    return byId(graph.items, id)
+      || byId(graph.edges, id);
+  };
   self.deleteItem = deleteItem;
   self.systems = function(graph) {
-    return _.filter(graph.items || [], 'type', 'system'); };
+    return _.filter(graph.items || [], 'type', 'system');
+  };
   self.children = children;
   self.rootItems = rootItems;
   self.save = save;
   self.isConnection = isConnection;
   self.edgeDescription = edgeDescription;
   self.outgoingEdges = outgoingEdges;
+  self.nameFor = nameFor;
 
-  function outgoingEdges(graph, item) {
-    return _.filter(edges(graph, item), 'sourceId', item.id)
-      .filter(isOrphan);
+  function nameFor(graph, itemOrId) {
+
+    var id = idFor(itemOrId),
+        item = byId(graph.items, id),
+        edge = byId(graph.edges, id);
+
+    if(item){
+      return isOrphan(item) ? item.name
+        : nameFor(graph, item.parentId) + '.' + item.name;
+    }else if (edge){
+      return [ nameFor(graph, edge.sourceId),
+               edgeDescription(graph, edge),
+               nameFor(graph, edge.destinationId)
+             ].join(' -> ');
+    }
+    return null;
+  }
+
+  function outgoingEdges(graph, itemOrId) {
+    if(!itemOrId) return [];
+
+    return _.filter(edges(graph, itemOrId), 'sourceId', idFor(itemOrId));
   }
 
   function isOrphan(item) { return !item.parentId; }
@@ -48,18 +72,24 @@ module.exports = function() {
 
     var addTo = graph.edges;
     if(isConnection(type)){
-
+      delete item.parentId;
       if(isConnection(item.source.type)){
         item.sourceId = item.source.sourceId;
         item.parentId = item.source.id;
       }else{
         item.sourceId = item.source.id;
-        delete item.parentId;
       }
 
-      item.destinationId = item.destination.id;
+      if(isConnection(item.destination.type)){
+        item.destinationId = item.destination.destinationId;
+        item.parentId = item.destination.id;
+      }else{
+        item.destinationId = item.destination.id;
+      }
+
       delete item.source;
       delete item.destination;
+      item.type = 'connection';
     }
     else {
       addTo = graph.items;
@@ -74,25 +104,21 @@ module.exports = function() {
     return result;
   }
 
-  function isConnection(type) {
-    return !type || type === 'connection';
+  function isConnection(typeOrItem) {
+    if(!typeOrItem) return true;
+    if(_.isString(typeOrItem)) return typeOrItem === 'connection';
+    return isConnection(typeOrItem.type);
   }
 
   function sources(graph) {
     var kids = (graph.items || []).filter(function(item) { return item.parentId; }),
         parentMap = _.groupBy(kids, 'parentId'),
         edgesToParents = (graph.edges || [])
-          .filter(function(edge) { return _.has(parentMap, edge.destinationId); }),
-        siblings = _(parentMap)
-          .filter(function(kids, parentId) { return kids.length > 1; })
-          .map(function(kids, parentId) { return kids; })
-          .flatten()
-          .value()
- ;
+          .filter(function(edge) { return _.has(parentMap, edge.destinationId); });
 
     return rootItems(graph)
       .concat(edgesToParents)
-      .concat(siblings);
+      .concat(kids);
   }
 
   function deleteItem(graph, item) {
@@ -146,7 +172,8 @@ module.exports = function() {
       .filter(function(candidate) { return candidate.id !== item.id; })
       .filter(function(candidate) { return candidate.id !== item.parentId; })
       .filter(function(candidate) { return _.includes(destTypes, candidate.type); })
-      .value();
+      .value()
+      .concat(outgoingEdges(graph, item.parentId));
   }
 
   function findOrCreate(collection, item) {

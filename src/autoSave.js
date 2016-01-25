@@ -17,7 +17,7 @@ module.exports = function($window, $timeout, $interval, $log) {
       var json = exporter.toJson(graph);
       localStorage.setItem(key, json);
       self.lastSaved = new Date();
-      $log.debug('saved', json.length, 'bytes at', self.lastSaved);
+      $log.info('saved', json.length, 'bytes at', self.lastSaved);
     });
   }
 

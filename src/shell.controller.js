@@ -1,25 +1,19 @@
-var sampleC4 = require('./exporter/c4-lab.json');
 
 // @ngInject
-module.exports = function(autoSave, exporter, model) {
+module.exports = function(model) {
   var vm = this;
 
-  vm.graph = autoSave.load()
-    || exporter.fromJson(sampleC4);
-  vm.rootItem = null;
-  vm.itemSelected = itemSelected;
-  vm.breadcrumbs = breadcrumbs;
+  Object.defineProperty(vm, 'graph', { get: function() { return model.currentGraph; } });
+  vm.rootItem = findRootItem();
 
-  autoSave.saveEvery(vm.graph, 5000);
+  function findRootItem() {
+    if(!vm.item || model.isConnection(vm.item)) return null;
 
-
-  function itemSelected(item) {
-    if(model.children(vm.graph, item).length > 0){
-      vm.rootItem = item;
+    if(model.children(vm.graph, vm.item).length > 0){
+      return vm.item;
+    }else if(vm.item.parentId){
+      return model.findItem(vm.graph, vm.item.parentId);
     }
+    return null;
   }
-  function breadcrumbs() {
-    if(!vm.rootItem) return [];
-    return [vm.rootItem];
-  };
 };

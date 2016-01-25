@@ -42,14 +42,14 @@ describe('model', function() {
       expect(r.length).toBe(2);
     });
 
-    it('includes top-level connections when children exist, but ignores the single child', function() {
+    it('includes top-level connections when children exist', function() {
       var conn = model.save(graph, 'connection', {source: actor, destination: system}),
           kid = model.save(graph, 'container', {parentId: system.id});
 
       var r = model.sources(graph);
-      expect(r.length).toBe(3);
+      expect(r.length).toBe(4);
       expect(r).toContain(conn);
-      expect(r).not.toContain(kid);
+      expect(r).toContain(kid);
     });
 
     it('includes siblings', function() {
@@ -110,7 +110,20 @@ describe('model', function() {
       expect(graph.items.length).toBe(1);
     });
 
+    it('saves connections to connections', function() {
+      var actor = model.save(graph, 'system', {name:'actor'}),
+          root = model.save(graph, 'system', {name:'root'}),
+          child = model.save(graph, 'container', {name: 'child', parent: root}),
+          rootUsesActor = model.save(graph, 'connection',
+                                     {source:root, destination: actor, description: 'uses'});
 
+      var conn = model.save(graph, 'connection',
+                            {source: child, destination: rootUsesActor});
+
+      expect(conn.sourceId).toBe(child.id);
+      expect(conn.parentId).toBe(rootUsesActor.id);
+      expect(conn.destinationId).toBe(actor.id);
+    });
   });
 
   it('finds children', function() {
@@ -187,6 +200,14 @@ describe('model', function() {
       expect(dests).not.toContain(c4LabGraph.c4Lab);
       expect(dests).not.toContain(child);
     });
+    it('returns outgoing connections if given a child', function() {
+      var child = model.save(c4LabGraph, 'container', {parent: c4LabGraph.c4Lab }),
+          conn = model.save(c4LabGraph,'connection',
+                            {source:c4LabGraph.c4Lab, destination: c4LabGraph.github}),
+          dests = model.destinations(c4LabGraph, child);
+
+      expect(dests).toContain(conn);
+    });
   });
 
   describe('edges', function() {
@@ -204,6 +225,39 @@ describe('model', function() {
       var edges = model.edges(c4LabGraph);
       expect(edges).toBe(c4LabGraph.edges);
     });
+
+  });
+
+  describe('nameFor', function() {
+    var root, child, actor, rootUsesActor;
+    beforeEach(function() {
+      actor = model.save(graph, 'system', {name:'actor'});
+      root = model.save(graph, 'system', {name:'root'});
+      child = model.save(graph, 'container', {name: 'child', parent: root});
+      rootUsesActor = model.save(graph, 'connection',
+                                 {source:root, destination: actor, description: 'uses'});
+    });
+
+    it('supports item', function() {
+      expect(model.nameFor(graph, root)).toBe('root');
+    });
+
+    it('supports item by id', function() {
+      expect(model.nameFor(graph, root.id)).toBe('root');
+    });
+
+    it('supports children', function() {
+      expect(model.nameFor(graph, child)).toBe('root.child');
+    });
+
+    it('supports connections', function() {
+      expect(model.nameFor(graph, rootUsesActor)).toBe('root -> uses -> actor');
+    });
+
+    it('supports connections by id', function() {
+      expect(model.nameFor(graph, rootUsesActor.id)).toBe('root -> uses -> actor');
+    });
+
 
   });
 });

@@ -1,0 +1,22 @@
+<div class="form-group">
+  <label for="source">From</label>
+  <select name="source" id="source" required class="form-control"
+          ng-model="vm.item.source"
+          ng-change="vm.anchorSelected(vm.item.source)"
+          ng-options="item as vm.nameFor(item) for item in vm.sources track by item.id"
+          focus-if focus-delay="100"></select>
+</div>
+<div class="form-group">
+  <label for="destination">To</label>
+  <select name="destination" id="destination" required class="form-control"
+          ng-model="vm.item.destination"
+          ng-change="vm.anchorSelected(vm.item.destination)"
+          ng-options="item as vm.nameFor(item) for item in vm.destinations(vm.item.source) track by item.id"></select>
+</div>
+<div class="form-group">
+  <label for="description">Description</label>
+  <input type="text" name="description" id="description"
+         ng-required="vm.isDescriptionRequired"
+         class="form-control"
+         ng-model="vm.item.description">
+</div>

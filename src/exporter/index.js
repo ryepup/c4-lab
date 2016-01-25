@@ -1,14 +1,15 @@
 var Viz = require('viz.js'),
     json = require('./json'),
-    toDOT = require('./dot');
+    toDOT = require('./dot'),
+    _ = require('lodash');
 
 // @ngInject
-module.exports = function($window, $q) {
+module.exports = function($window, $q, $state) {
   var self = this,
       document = $window.document
   ;
 
-  self.toDOT = toDOT;
+  self.toDOT = toDOT.bind(null, hrefTo);
   self.toJson = json.toJson;
   self.fromJson = json.fromJson;
   self.toSVG = toSVG;
@@ -20,6 +21,10 @@ module.exports = function($window, $q) {
     makeFormat(self.toSVG, 'svg', 'image/svg+xml'),
     makeFormat(self.toPNG, 'png')
   ];
+
+  function hrefTo(item) {
+    return $state.href('edit', { id:item.id });
+  }
 
   function saveFile(graph, format) {
     $q.when(format.serializer(graph))

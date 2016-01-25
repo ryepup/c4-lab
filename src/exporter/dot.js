@@ -14,41 +14,47 @@ var _ = require('lodash'),
 
 ;
 
-function edgeDOT(graph, edge, idMap) {
+function edgeDOT(graph, edge, idMap, hrefTo) {
   return edgeDOTTemplate({
     sourceId: idMap[edge.sourceId],
     destId: idMap[edge.destinationId],
-    description: sanitize(model.edgeDescription(graph, edge))
+    description: sanitize(model.edgeDescription(graph, edge)),
+    href: hrefTo(edge)
   });
 }
 
 
-function itemDOT(item, id, desc) {
+function itemDOT(item, id, desc, hrefTo) {
   var vm = _.extend({}, item, {
     description: desc || sanitize(item.description),
-    id: id
-  });
+    id: id,
+    href: hrefTo(item)
+  }),
+      tpl = templates[item.type];
+  if(!tpl) {
+    throw new Error('No template for ' + item.type);
+  }
 
-  return templates[item.type](vm);
+  return tpl(vm);
 }
 
-function contextDOT(graph, lines) {
+function contextDOT(graph, lines, hrefTo) {
   var nodeId = 0, idMap = {};
 
   _(model.rootItems(graph))
     .forEach(function(item) {
       var id = idMap[item.id] = nodeId++;
-      lines.push(itemDOT(item, id));
+      lines.push(itemDOT(item, id, null, hrefTo));
     })
     .map(model.edges.bind(model, graph))
     .flatten()
     .uniq('id')
     .filter(function(edge) { return !edge.parentId; })
-    .forEach(function(item) { lines.push(edgeDOT(graph, item, idMap)); })
+    .forEach(function(item) { lines.push(edgeDOT(graph, item, idMap, hrefTo)); })
     .value();
 }
 
-function zoomedDOT(graph, rootItem, lines) {
+function zoomedDOT(graph, rootItem, lines, hrefTo) {
   var nodeId = 0,
       idMap = {},
       children = model.children(graph, rootItem),
@@ -71,27 +77,25 @@ function zoomedDOT(graph, rootItem, lines) {
             && item.parentId !== rootItem.id
             && _.includes(itemIds, item.id);
         })
-;
-
+  ;
   idMap[rootItem.id] = 'Root';
-
   lines.push(zoomedDOTTemplate({
     name: rootItem.name,
     description: sanitize(rootItem.description),
     children: children
       .map(function(item) {
         var id = idMap[item.id] = nodeId++;
-        return itemDOT(item, id);
+        return itemDOT(item, id, "", hrefTo);
       })
       .join('\n')
   }));
   nodes.map(function(item) {
     var id = idMap[item.id] = nodeId++;
-    lines.push(itemDOT(item, id, ""));
+    lines.push(itemDOT(item, id, "", hrefTo));
   });
 
   edges.map(function(edge) {
-    lines.push(edgeDOT(graph, edge, idMap));
+    lines.push(edgeDOT(graph, edge, idMap, hrefTo));
   });
 
 }
@@ -99,15 +103,15 @@ function zoomedDOT(graph, rootItem, lines) {
 /**
  * @return string serialized graph in graphviz DOT
  */
-function toDOT(graph, rootItem) {
+function toDOT(hrefTo, graph, rootItem) {
   var lines = ['digraph g {', '  compound=true'];
 
   if(graph.edges && graph.edges.length) {
     lines.push('edge[fontsize=12 fontcolor="#666666"]');
   }
 
-  if(rootItem) { zoomedDOT(graph, rootItem, lines); }
-  else { contextDOT(graph, lines); }
+  if(rootItem) { zoomedDOT(graph, rootItem, lines, hrefTo); }
+  else { contextDOT(graph, lines, hrefTo); }
 
   lines.push('}');
   return lines.join('\n');

@@ -1,14 +1,13 @@
-var EditorController = require('./editor.controller'),
-    Model = require('./model');
+var EditorController = require('./editor.controller')
+;
 
 describe('editor.controller', function() {
   var ctrl, mockEditors, model, mockHotkeys;
   beforeEach(function() {
-    mockEditors = jasmine.createSpyObj('mockEditors', ['openModal']);
-    mockEditors.openModal.and.returnValue(jasmine.createSpyObj('p', ['then']));
-    model = new Model();
+    mockState = jasmine.createSpyObj('$state', ['is', 'go']);
+    mockState.params = {};
     mockHotkeys = jasmine.createSpyObj('mockHotkeys', ['add']);
-    ctrl = new EditorController(mockEditors, model, mockHotkeys);
+    ctrl = new EditorController(mockHotkeys, mockState);
     ctrl.graph = {};
   });
 
@@ -25,8 +24,8 @@ describe('editor.controller', function() {
     it('opens modals', function() {
       ctrl.addOptions.map(function(opt) {
         opt.callback();
-        expect(mockEditors.openModal)
-          .toHaveBeenCalledWith(opt.type, ctrl.graph);
+        expect(mockState.go)
+          .toHaveBeenCalledWith('add', {type: opt.type, id: undefined});
       });
     });
   });
