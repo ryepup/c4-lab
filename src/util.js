@@ -1,5 +1,6 @@
 module.exports = {
-  component: component
+  component: component,
+  addProxyGetter: addProxyGetter
 };
 
 function component(template, controller, bindings) {
@@ -13,4 +14,10 @@ function component(template, controller, bindings) {
       scope: bindings || {}
     };
   };
+}
+
+function addProxyGetter(proxy, source, sourceField, proxyField) {
+  Object.defineProperty(proxy, proxyField || sourceField, {
+    get: function() { return source[sourceField]; }
+  });
 }
