@@ -2,7 +2,7 @@ var _ = require('lodash');
 var exporter = require('./exporter/json');
 
 // @ngInject
-module.exports = function($q) {
+module.exports = function($q, model) {
   var vm = this;
   vm.importJSON = importJSON;
 
@@ -12,7 +12,7 @@ module.exports = function($q) {
 
   function restoreGraph(json) {
     var g = exporter.fromJson(json);
-    _.assign(vm.graph, g);
+    _.assign(model.currentGraph, g);
   }
 
   function readAsText(file) {

@@ -1,11 +1,10 @@
 <div>
-  <div c4-lab-menu graph="vm.graph"></div>
+  <div c4-lab-menu></div>
 
   <h1><a ui-sref="home">{{vm.graph.title}}</a></h1>
 
   <div class="row">
-    <div class="col-md-4" c4-lab-editor
-         graph="vm.graph" root-item="vm.rootItem" item="vm.item"></div>
-    <div class="col-md-8" c4-lab-viewer graph="vm.graph" root-item="vm.rootItem"></div>
+    <div class="col-md-4" c4-lab-editor item="vm.item"></div>
+    <div class="col-md-8" c4-lab-viewer root-item="vm.rootItem"></div>
   </div>
 </div>

@@ -1,12 +1,12 @@
 // @ngInject
-module.exports = function(exporter, $sce) {
+module.exports = function(exporter, $sce, model) {
   var vm = this, lastRendered, lastRenderedId, svg = null;
   vm.toSVG = toSVG;
 
   function toSVG() {
     if(!shouldRender()) { return svg; }
-    svg = $sce.trustAsHtml(exporter.toSVG(vm.graph, vm.rootItem));
-    lastRendered = vm.graph.lastModified;
+    svg = $sce.trustAsHtml(exporter.toSVG(model.currentGraph, vm.rootItem));
+    lastRendered = model.currentGraph.lastModified;
     lastRenderedId = rootItemId();
     return svg;
   }
@@ -14,7 +14,7 @@ module.exports = function(exporter, $sce) {
   function shouldRender() {
     return svg === null
       || lastRenderedId !== rootItemId()
-      || lastRendered !== vm.graph.lastModified;
+      || lastRendered !== model.currentGraph.lastModified;
   }
 
   function rootItemId() {
