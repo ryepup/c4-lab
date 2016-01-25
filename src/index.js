@@ -10,12 +10,10 @@ require('ng-file-upload');
 
 require('./style.css');
 
-angular.module('c4-lab', ['ui.bootstrap', 'focus-if', 'cfp.hotkeys', 'ngFileUpload',
-                          'ui.router',
+angular.module('c4-lab', ['ui.bootstrap', 'ngFileUpload', 'ui.router',
                           require('./editors/index.js')])
   .directive('c4LabShell', component(require('./shell.html'), require('./shell.controller.js'),
                                      {item:'='}))
-  .directive('c4LabEditor', component(require('./editor.html'), require('./editor.controller.js'), { item:'='}))
   .directive('c4LabViewer', component(require('./viewer.html'), require('./viewer.controller.js'), { rootItem: '='}))
   .directive('c4LabIcon',
              component(require('./icon.html'), require('./icon.controller.js'), {type: '@'}))

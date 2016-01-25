@@ -4,10 +4,13 @@ var angular = require('angular'),
     component = util.component;
 ;
 
-angular.module(moduleName, ['focus-if', 'ui.router'])
-  .directive('c4LabItemEditor', component(require('./itemEditor.html'),
-                                          require('./itemEditor.controller.js'),
-                                         { item: '='}))
+angular.module(moduleName, ['focus-if', 'cfp.hotkeys', 'ui.router'])
+  .directive('c4LabItemEditor',
+             component(require('./itemEditor.html'), require('./itemEditor.controller.js'),
+                       { item: '='}))
+  .directive('c4LabEditor',
+             component(require('./editor.html'), require('./editor.controller.js'),
+                       { item:'='}))
   .run(loadTemplates);
 
 // @ngInject
