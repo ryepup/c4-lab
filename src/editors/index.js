@@ -1,5 +1,7 @@
 var angular = require('angular'),
-    moduleName = 'c4-lab.editors'
+    util = require('../util'),
+    moduleName = 'c4-lab.editors',
+    component = util.component;
 ;
 
 angular.module(moduleName, ['focus-if', 'ui.router'])
@@ -15,19 +17,5 @@ function loadTemplates($templateCache) {
   $templateCache.put('systemForm.html', require('./systemForm.html'));
   $templateCache.put('containerForm.html', require('./containerForm.html'));
 }
-
-function component(template, controller, bindings) {
-  return function() {
-    return {
-      restrict: 'EA',
-      template: template,
-      controller: controller || function(){},
-      controllerAs: 'vm',
-      bindToController: true,
-      scope: bindings || {}
-    };
-  };
-}
-
 
 module.exports = moduleName;

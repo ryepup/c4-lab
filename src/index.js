@@ -1,5 +1,7 @@
 var angular = require('angular'),
-    sampleC4 = require('./exporter/c4-lab.json');
+    sampleC4 = require('./exporter/c4-lab.json'),
+    util = require('./util'),
+    component = util.component;
 require('angular-ui-bootstrap');
 require('angular-ui-router');
 require('ng-focus-if');
@@ -7,21 +9,6 @@ require('angular-hotkeys');
 require('ng-file-upload');
 
 require('./style.css');
-
-
-function component(template, controller, bindings) {
-  return function() {
-    return {
-      restrict: 'EA',
-      template: template,
-      controller: controller || function(){},
-      controllerAs: 'vm',
-      bindToController: true,
-      scope: bindings || {}
-    };
-  };
-}
-
 
 angular.module('c4-lab', ['ui.bootstrap', 'focus-if', 'cfp.hotkeys', 'ngFileUpload',
                           'ui.router',
