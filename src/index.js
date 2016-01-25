@@ -36,5 +36,5 @@ function allowBlobsAndDataHrefs($compileProvider) {
 // @ngInject
 function main(autoSave, model, exporter) {
   model.currentGraph = autoSave.load() || exporter.fromJson(sampleC4);
-  autoSave.saveEvery(model.currentGraph, 5000);
+  autoSave.saveEvery(5000);
 }
