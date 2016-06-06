@@ -12,5 +12,7 @@
     Hit ? to see keyboard shortcuts.
   </p>
 
-  <div ng-if="vm.selectedItem" c4-lab-item-editor item="vm.selectedItem"></div>
+  <div ng-if="vm.selectedItem">
+    <c4-lab-item-editor item="vm.selectedItem"></c4-lab-item-editor>
+  </div>
 </div>

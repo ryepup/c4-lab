@@ -1,16 +1,20 @@
 const angular = require('angular'),
-      util = require('../util'),
-      moduleName = 'c4-lab.editors',
-      component = util.component;
+      moduleName = 'c4-lab.editors'
 ;
 
 angular.module(moduleName, ['focus-if', 'cfp.hotkeys', 'ui.router'])
-  .directive('c4LabItemEditor',
-             component(require('./itemEditor.html'), require('./itemEditor.controller.js'),
-                       { item: '='}))
-  .directive('c4LabEditor',
-             component(require('./editor.html'), require('./editor.controller.js'),
-                       { item:'='}))
+  .component('c4LabItemEditor', {
+    template: require('./itemEditor.html'),
+    controller: require('./itemEditor.controller.js'),
+    controllerAs: 'vm',
+    bindings: { item : '=' }
+  })
+  .component('c4LabEditor', {
+    template: require('./editor.html'),
+    controller: require('./editor.controller.js'),
+    controllerAs: 'vm',
+    bindings: { item : '=' }
+  })
   .run(loadTemplates);
 
 // @ngInject

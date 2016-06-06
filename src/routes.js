@@ -5,11 +5,11 @@ module.exports = function($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('home', {
       url:'/',
-      template: '<div c4-lab-shell></div>'
+      template: '<c4-lab-shell></c4-lab-shell>'
     })
     .state('edit', {
       url:'/:id',
-      template: '<div c4-lab-shell item="vm.item"></div>',
+      template: '<c4-lab-shell item="vm.item"></c4-lab-shell>',
       controller: function($stateParams, model) {
         this.item = model.findItem(model.currentGraph, $stateParams.id);
       },
@@ -17,13 +17,12 @@ module.exports = function($stateProvider, $urlRouterProvider) {
     })
     .state('add', {
       url:'/new/{type}s?{id}',
-      template: '<div c4-lab-shell item="vm.item"></div>',
+      template: '<c4-lab-shell item="vm.item"></c4-lab-shell>',
       controller: function($stateParams, model) {
         this.item = model.findItem(model.currentGraph, $stateParams.id);
         this.type = $stateParams.type;
       },
       controllerAs: 'vm'
-
     })
   ;
 };
