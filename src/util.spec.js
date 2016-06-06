@@ -1,9 +1,9 @@
-var util = require('./util'),
-    exporter = require('./exporter/json');
+const util = require('./util'),
+      exporter = require('./exporter/json');
 
 describe('util', function() {
   describe('addProxyGetter', function() {
-    var src, proxy;
+    let src, proxy;
     beforeEach(function() {
       src = {};
       proxy = {};
@@ -27,7 +27,7 @@ describe('util', function() {
     it('does not count towards exporting', function() {
       src.test = "1";
       util.addProxyGetter(proxy, src, 'test');
-      var json = exporter.toJson(proxy);
+      const json = exporter.toJson(proxy);
       expect(json).toBe("{}");
     });
 

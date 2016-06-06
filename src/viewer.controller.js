@@ -1,6 +1,7 @@
 // @ngInject
 module.exports = function(exporter, $sce, model) {
-  var vm = this, lastRendered, lastRenderedId, svg = null;
+  const vm = this;
+  let lastRendered, lastRenderedId, svg = null;
   vm.toSVG = toSVG;
 
   function toSVG() {

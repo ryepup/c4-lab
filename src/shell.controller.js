@@ -1,7 +1,7 @@
-var util = require('./util');
+const util = require('./util');
 // @ngInject
 module.exports = function(model) {
-  var vm = this;
+  const vm = this;
 
   util.addProxyGetter(vm, model, 'currentGraph', 'graph');
   vm.rootItem = findRootItem();

@@ -1,9 +1,9 @@
-var _ = require('lodash');
-var exporter = require('./exporter/json');
+const _ = require('lodash'),
+      exporter = require('./exporter/json');
 
 // @ngInject
 module.exports = function($q, model) {
-  var vm = this;
+  const vm = this;
   vm.importJSON = importJSON;
 
   function importJSON(files) {
@@ -11,14 +11,14 @@ module.exports = function($q, model) {
   }
 
   function restoreGraph(json) {
-    var g = exporter.fromJson(json);
+    const g = exporter.fromJson(json);
     _.assign(model.currentGraph, g);
   }
 
   function readAsText(file) {
-    var reader = new FileReader();
+    const reader = new FileReader();
     return $q(function(resolve, reject) {
-      reader.onload = function(loadEvt) { resolve(loadEvt.target.result); };
+      reader.onload = loadEvt => resolve(loadEvt.target.result);
       reader.onerror = reject;
       reader.readAsText(file);
     });

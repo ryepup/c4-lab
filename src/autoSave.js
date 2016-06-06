@@ -1,10 +1,10 @@
-var exporter = require('./exporter/json');
+const exporter = require('./exporter/json');
 
 // @ngInject
 module.exports = function($window, $timeout, $interval, $log, model) {
-  var self = this,
-      localStorage = $window.localStorage,
-      key = 'C4-LAB-ACTIVE-DOC'
+  const self = this,
+        localStorage = $window.localStorage,
+        key = 'C4-LAB-ACTIVE-DOC'
   ;
 
   self.load = load;
@@ -14,7 +14,7 @@ module.exports = function($window, $timeout, $interval, $log, model) {
   function load() { return exporter.fromJson(localStorage.getItem(key) || 'null'); }
   function save() {
     return $timeout(function() {
-      var json = exporter.toJson(model.currentGraph);
+      const json = exporter.toJson(model.currentGraph);
       localStorage.setItem(key, json);
       self.lastSaved = new Date();
       $log.info('saved', json.length, 'bytes at', self.lastSaved);

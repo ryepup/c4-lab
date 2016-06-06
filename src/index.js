@@ -1,7 +1,7 @@
-var angular = require('angular'),
-    sampleC4 = require('./exporter/c4-lab.json'),
-    util = require('./util'),
-    component = util.component;
+const angular = require('angular'),
+      sampleC4 = require('./exporter/c4-lab.json'),
+      util = require('./util'),
+      component = util.component;
 require('angular-ui-bootstrap');
 require('angular-ui-router');
 require('ng-focus-if');

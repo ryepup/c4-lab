@@ -1,8 +1,8 @@
-var _ = require('lodash');
+const _ = require('lodash');
 
 // @ngInject
 module.exports = function(hotkeys, $state) {
-  var vm = this;
+  const vm = this;
 
   vm.addOptions = [
     makeAddOption('a', 'actor'),
@@ -13,8 +13,7 @@ module.exports = function(hotkeys, $state) {
   activate();
 
   function activate() {
-    vm.addOptions
-      .map(hotkeys.add.bind(hotkeys));
+    vm.addOptions.map(opts => hotkeys.add(opts));
 
     if($state.is('add')){
       vm.selectedItem = {type: $state.params.type};
@@ -29,9 +28,7 @@ module.exports = function(hotkeys, $state) {
       combo: keychord,
       type: type,
       description: 'New ' + type,
-      callback: function() {
-        $state.go('add', {type: type, id: vm.item && vm.item.id});
-      }
+      callback: () => $state.go('add', {type: type, id: vm.item && vm.item.id})
     };
   }
 };

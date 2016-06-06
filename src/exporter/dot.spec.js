@@ -1,12 +1,12 @@
-var toDOT = require('./dot'),
-    Model = require('../model'),
-    empty = require('./empty.dot'),
-    simple = require('./simple.dot'),
-    twoActors = require('./two-actors.dot')
+const toDOT = require('./dot'),
+      Model = require('../model'),
+      empty = require('./empty.dot'),
+      simple = require('./simple.dot'),
+      twoActors = require('./two-actors.dot')
 ;
 
 describe('dot', function() {
-  var model = new Model(),
+  let model = new Model(),
       graph,
       hrefTo
   ;

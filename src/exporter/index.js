@@ -1,11 +1,11 @@
-var Viz = require('viz.js'),
-    json = require('./json'),
-    toDOT = require('./dot'),
-    _ = require('lodash');
+const Viz = require('viz.js'),
+      json = require('./json'),
+      toDOT = require('./dot'),
+      _ = require('lodash');
 
 // @ngInject
 module.exports = function($window, $q, $state) {
-  var self = this,
+  const self = this,
       document = $window.document
   ;
 
@@ -29,7 +29,7 @@ module.exports = function($window, $q, $state) {
   function saveFile(graph, format) {
     $q.when(format.serializer(graph))
       .then(function(content) {
-        var a = $window.document.createElement('a');
+        let a = $window.document.createElement('a');
         a.download = (graph.title || 'c4-graph') + '.' + format.extension;
         if(format.contentType){
           a.href = 'data:' + format.contentType + ',' + encodeURIComponent(content);
@@ -45,7 +45,7 @@ module.exports = function($window, $q, $state) {
   }
 
   function toPNG(graph, rootItem) {
-    var svg = toSVG(graph, rootItem),
+    let svg = toSVG(graph, rootItem),
         img = document.createElement("img")
     ;
     return $q(function(resolve, reject) {
@@ -55,7 +55,7 @@ module.exports = function($window, $q, $state) {
   }
 
   function getPNGDataURL(img) {
-    var canvas = document.createElement("canvas");
+    let canvas = document.createElement("canvas");
     canvas.width = img.width;
     canvas.height = img.height;
     canvas.getContext("2d")

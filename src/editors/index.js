@@ -1,7 +1,7 @@
-var angular = require('angular'),
-    util = require('../util'),
-    moduleName = 'c4-lab.editors',
-    component = util.component;
+const angular = require('angular'),
+      util = require('../util'),
+      moduleName = 'c4-lab.editors',
+      component = util.component;
 ;
 
 angular.module(moduleName, ['focus-if', 'cfp.hotkeys', 'ui.router'])

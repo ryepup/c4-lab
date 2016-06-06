@@ -1,8 +1,8 @@
-var _ = require('lodash');
+const _ = require('lodash');
 
 // @ngInject
 module.exports = function(model, $state, $log) {
-  var vm = this;
+  const vm = this;
   vm.fieldTemplate = fieldTemplate;
   vm.save = save;
   vm.deleteItem = deleteItem;
@@ -11,7 +11,7 @@ module.exports = function(model, $state, $log) {
   activate();
 
   function fieldTemplate() {
-    var type = vm.item.type || 'connection';
+    const type = vm.item.type || 'connection';
     return type + 'Form.html';
   }
 

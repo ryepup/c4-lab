@@ -1,8 +1,8 @@
-var uuid = require('uuid'),
+const uuid = require('uuid'),
     _ = require('lodash');
 
 module.exports = function() {
-  var self = this;
+  const self = this;
 
   self.sources = sources;
   self.destinations = destinations;
@@ -12,9 +12,7 @@ module.exports = function() {
       || byId(graph.edges, id);
   };
   self.deleteItem = deleteItem;
-  self.systems = function(graph) {
-    return _.filter(graph.items || [], 'type', 'system');
-  };
+  self.systems = graph => _.filter(graph.items || [], 'type', 'system');
   self.children = children;
   self.rootItems = rootItems;
   self.save = save;
@@ -25,7 +23,7 @@ module.exports = function() {
 
   function nameFor(graph, itemOrId) {
 
-    var id = idFor(itemOrId),
+    let id = idFor(itemOrId),
         item = byId(graph.items, id),
         edge = byId(graph.edges, id);
 
@@ -51,7 +49,7 @@ module.exports = function() {
 
   function edgeDescription(graph, edgeOrId) {
     if(!edgeOrId) throw new Error('must provide an edge or id');
-    var edge = byId(graph.edges, edgeOrId);
+    let edge = byId(graph.edges, edgeOrId);
     return edge.description || edgeDescription(graph, edge.parentId);
   }
 
@@ -59,7 +57,7 @@ module.exports = function() {
     return _.filter(graph.items || [], isOrphan);
   }
   function children(graph, parentOrId) {
-    var parentId = idFor(parentOrId);
+    let parentId = idFor(parentOrId);
     return _(graph.items)
       .concat(graph.edges)
       .filter('parentId', parentId)
@@ -70,7 +68,7 @@ module.exports = function() {
     graph.items = graph.items || [];
     graph.edges = graph.edges || [];
 
-    var addTo = graph.edges;
+    let addTo = graph.edges;
     if(isConnection(type)){
       delete item.parentId;
       if(isConnection(item.source.type)){
@@ -99,7 +97,7 @@ module.exports = function() {
         delete item.parent;
       }
     }
-    var result = findOrCreate(addTo, item);
+    let result = findOrCreate(addTo, item);
     graph.lastModified = new Date();
     return result;
   }
@@ -111,10 +109,10 @@ module.exports = function() {
   }
 
   function sources(graph) {
-    var kids = (graph.items || []).filter(function(item) { return item.parentId; }),
+    let kids = (graph.items || []).filter(item => item.parentId),
         parentMap = _.groupBy(kids, 'parentId'),
         edgesToParents = (graph.edges || [])
-          .filter(function(edge) { return _.has(parentMap, edge.destinationId); });
+          .filter(edge =>_.has(parentMap, edge.destinationId));
 
     return rootItems(graph)
       .concat(edgesToParents)
@@ -126,31 +124,30 @@ module.exports = function() {
       graph.edges = _.reject(graph.edges, 'id', item.id);
       _(graph.edges)
         .filter('parentId', item.id)
-        .forEach(deleteItem.bind(null, graph))
+        .forEach(x => deleteItem(graph, x))
         .value();
     }
     else{
       graph.items = _.reject(graph.items || [], 'id', item.id);
-      edges(graph, item).map(deleteItem.bind(null, graph));
+      edges(graph, item).map(x => deleteItem(graph, x));
     }
     graph.lastModified = new Date();
   }
 
   function edges(graph, itemOrId) {
-    var result = graph.edges || [],
+    let result = graph.edges || [],
         id = idFor(itemOrId);
 
     if(!id){ return result; }
 
-    return result.filter(function(edge) {
-      return edge.sourceId === id || edge.destinationId === id;
-    });
+    return result
+      .filter(edge => edge.sourceId === id || edge.destinationId === id);
   }
 
   function destinations(graph, sourceItemOrId) {
     if(!sourceItemOrId) return [];
 
-    var item = byId(graph.items, sourceItemOrId),
+    let item = byId(graph.items, sourceItemOrId),
         edge = byId(graph.edges, sourceItemOrId);
 
     return item
@@ -159,14 +156,14 @@ module.exports = function() {
 
   }
 
-  var eligibleTypes = {
+  const eligibleTypes = {
     actor: ['system'],
     system: ['system', 'actor'],
     container: ['system', 'actor', 'container']
   };
 
   function destinationsForItem(graph, item) {
-    var destTypes = eligibleTypes[item.type];
+    let destTypes = eligibleTypes[item.type];
 
     return _(graph.items)
       .filter(function(candidate) { return candidate.id !== item.id; })
@@ -177,7 +174,7 @@ module.exports = function() {
   }
 
   function findOrCreate(collection, item) {
-    var match = byId(collection, item.id);
+    let match = byId(collection, item.id);
     if(match){
       return _.assign(match, item);
     }else{
@@ -188,7 +185,7 @@ module.exports = function() {
   }
 
   function byId(collection, itemOrId) {
-    var id = idFor(itemOrId);
+    let id = idFor(itemOrId);
     return collection && id ? _.find(collection, 'id', id) : null;
   }
 

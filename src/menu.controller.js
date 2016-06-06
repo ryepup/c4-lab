@@ -1,9 +1,9 @@
-var _ = require('lodash'),
-    util = require('./util');
+const _ = require('lodash'),
+      util = require('./util');
 
 // @ngInject
 module.exports = function(autoSave, exporter, model) {
-  var vm = this,
+  const vm = this,
       jsonFormat = _.find(exporter.formats, 'extension', 'json');
 
   util.addProxyGetter(vm, autoSave, 'lastSaved');
