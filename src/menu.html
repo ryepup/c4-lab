@@ -18,7 +18,15 @@
 
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li><c4-lab-import></c4-lab-import></li>
+        <li>
+          <a href="#"
+             ngf-select="vm.importJSON($files)"
+             ngf-pattern="'.json'"
+             ngf-accept="'.json'">
+            <span class="glyphicon glyphicon-open-file"> </span>
+            Open
+          </a>
+        </li>
         <li>
           <a href="#" ng-click="vm.save()">
             <span class="glyphicon glyphicon-save-file"> </span>

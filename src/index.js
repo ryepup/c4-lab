@@ -35,11 +35,6 @@ angular.module('c4-lab', ['ui.bootstrap', 'ngFileUpload', 'ui.router',
     controller: require('./meta.controller.js'),
     controllerAs: 'vm'
   })
-  .component('c4LabImport', {
-    template: require('./import.html'),
-    controller: require('./import.controller.js'),
-    controllerAs: 'vm'
-  })
   .component('c4LabMenu', {
     template: require('./menu.html'),
     controller: require('./menu.controller.js'),
