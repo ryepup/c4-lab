@@ -1,0 +1,23 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "impliedStrict": true
+    },
+    "env":{
+        "commonjs": true,
+        "jasmine": true,
+        "browser": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "eqeqeq": "error",
+        "no-extra-parens": "error",
+        "arrow-spacing": "error",
+        "no-var": "error",
+        "prefer-const": "warn",
+        "max-len": "warn",
+        "no-alert": "error",
+        "no-eval": "error",
+        "camelcase": "error"
+    }
+}
