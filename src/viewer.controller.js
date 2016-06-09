@@ -19,6 +19,6 @@ module.exports = function(exporter, $sce, model) {
   }
 
   function rootItemId() {
-    return (vm.rootItem && vm.rootItem.id);
+    return vm.rootItem && vm.rootItem.id;
   }
 };

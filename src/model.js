@@ -23,9 +23,9 @@ module.exports = function() {
 
   function nameFor(graph, itemOrId) {
 
-    let id = idFor(itemOrId),
-        item = byId(graph.items, id),
-        edge = byId(graph.edges, id);
+    const id = idFor(itemOrId),
+          item = byId(graph.items, id),
+          edge = byId(graph.edges, id);
 
     if(item){
       return isOrphan(item) ? item.name
@@ -49,7 +49,7 @@ module.exports = function() {
 
   function edgeDescription(graph, edgeOrId) {
     if(!edgeOrId) throw new Error('must provide an edge or id');
-    let edge = byId(graph.edges, edgeOrId);
+    const edge = byId(graph.edges, edgeOrId);
     return edge.description || edgeDescription(graph, edge.parentId);
   }
 
@@ -57,7 +57,7 @@ module.exports = function() {
     return _.filter(graph.items || [], isOrphan);
   }
   function children(graph, parentOrId) {
-    let parentId = idFor(parentOrId);
+    const parentId = idFor(parentOrId);
     return _(graph.items)
       .concat(graph.edges)
       .filter('parentId', parentId)
@@ -97,7 +97,7 @@ module.exports = function() {
         delete item.parent;
       }
     }
-    let result = findOrCreate(addTo, item);
+    const result = findOrCreate(addTo, item);
     graph.lastModified = new Date();
     return result;
   }
@@ -109,10 +109,10 @@ module.exports = function() {
   }
 
   function sources(graph) {
-    let kids = (graph.items || []).filter(item => item.parentId),
-        parentMap = _.groupBy(kids, 'parentId'),
-        edgesToParents = (graph.edges || [])
-          .filter(edge =>_.has(parentMap, edge.destinationId));
+    const kids = (graph.items || []).filter(item => item.parentId),
+          parentMap = _.groupBy(kids, 'parentId'),
+          edgesToParents = (graph.edges || [])
+            .filter(edge => _.has(parentMap, edge.destinationId));
 
     return rootItems(graph)
       .concat(edgesToParents)
@@ -135,8 +135,8 @@ module.exports = function() {
   }
 
   function edges(graph, itemOrId) {
-    let result = graph.edges || [],
-        id = idFor(itemOrId);
+    const result = graph.edges || [],
+          id = idFor(itemOrId);
 
     if(!id){ return result; }
 
@@ -147,8 +147,8 @@ module.exports = function() {
   function destinations(graph, sourceItemOrId) {
     if(!sourceItemOrId) return [];
 
-    let item = byId(graph.items, sourceItemOrId),
-        edge = byId(graph.edges, sourceItemOrId);
+    const item = byId(graph.items, sourceItemOrId),
+          edge = byId(graph.edges, sourceItemOrId);
 
     return item
       ? destinationsForItem(graph, item)
@@ -163,18 +163,18 @@ module.exports = function() {
   };
 
   function destinationsForItem(graph, item) {
-    let destTypes = eligibleTypes[item.type];
+    const destTypes = eligibleTypes[item.type];
 
     return _(graph.items)
-      .filter(function(candidate) { return candidate.id !== item.id; })
-      .filter(function(candidate) { return candidate.id !== item.parentId; })
-      .filter(function(candidate) { return _.includes(destTypes, candidate.type); })
+      .filter(candidate => candidate.id !== item.id)
+      .filter(candidate => candidate.id !== item.parentId)
+      .filter(candidate => _.includes(destTypes, candidate.type))
       .value()
       .concat(outgoingEdges(graph, item.parentId));
   }
 
   function findOrCreate(collection, item) {
-    let match = byId(collection, item.id);
+    const match = byId(collection, item.id);
     if(match){
       return _.assign(match, item);
     }else{
@@ -185,19 +185,13 @@ module.exports = function() {
   }
 
   function byId(collection, itemOrId) {
-    let id = idFor(itemOrId);
+    const id = idFor(itemOrId);
     return collection && id ? _.find(collection, 'id', id) : null;
   }
 
   function idFor(itemOrId) {
     return _.isString(itemOrId)
       ? itemOrId
-      : (itemOrId && itemOrId.id);
-  }
-
-  function itemFor(graph, itemOrId) {
-    return _.isString(itemOrId)
-      ? byId(graph.items, itemOrId)
-      : itemOrId;
+      : itemOrId && itemOrId.id;
   }
 };

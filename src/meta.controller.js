@@ -1,5 +1,6 @@
 // @ngInject
 module.exports = function($state) {
+  /* global process */
   const vm = this;
   vm.version = process.env.npm_package_version;
   vm.build = process.env.TRAVIS_BUILD_NUMBER || 'SNAPSHOT';

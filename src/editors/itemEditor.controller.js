@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 // @ngInject
-module.exports = function(model, $state, $log) {
+module.exports = function(model, $state) {
   const vm = this;
   vm.fieldTemplate = fieldTemplate;
   vm.save = save;
@@ -55,9 +55,10 @@ module.exports = function(model, $state, $log) {
     vm.item.source = _.find(vm.sources, 'id', vm.item.parentId)
       || _.find(vm.sources, 'id', vm.item.sourceId);
 
-    vm.item.destination = model.findItem(model.currentGraph, vm.item.destinationId);
+    vm.item.destination = model
+      .findItem(model.currentGraph, vm.item.destinationId);
 
-    vm.anchorSelected = function(source) {
+    vm.anchorSelected = function() {
       vm.isDescriptionRequired = !(model.isConnection(vm.source)
                                    || model.isConnection(vm.destination));
     };

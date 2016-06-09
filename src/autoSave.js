@@ -11,7 +11,9 @@ module.exports = function($window, $timeout, $interval, $log, model) {
   self.save = save;
   self.saveEvery = saveEvery;
 
-  function load() { return exporter.fromJson(localStorage.getItem(key) || 'null'); }
+  function load() {
+    return exporter.fromJson(localStorage.getItem(key) || 'null');
+  }
   function save() {
     return $timeout(function() {
       const json = exporter.toJson(model.currentGraph);
@@ -26,7 +28,8 @@ module.exports = function($window, $timeout, $interval, $log, model) {
   }
 
   function saveIfModified() {
-    if(!self.lastSaved || model.currentGraph.lastModified > self.lastSaved){ save(); }
+    if(!self.lastSaved || model.currentGraph.lastModified > self.lastSaved){
+      save();
+    }
   }
-
 };

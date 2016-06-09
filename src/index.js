@@ -50,7 +50,8 @@ angular.module('c4-lab', ['ui.bootstrap', 'ngFileUpload', 'ui.router',
 
 // @ngInject
 function allowBlobsAndDataHrefs($compileProvider) {
-  $compileProvider.aHrefSanitizationWhitelist(/^(https?|ftp|mailto|blob|data):/i);
+  $compileProvider
+    .aHrefSanitizationWhitelist(/^(https?|ftp|mailto|blob|data):/i);
 }
 
 // @ngInject

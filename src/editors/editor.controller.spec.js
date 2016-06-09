@@ -2,7 +2,7 @@ const EditorController = require('./editor.controller')
 ;
 
 describe('editor.controller', function() {
-  let ctrl, mockEditors, model, mockHotkeys, mockState;
+  let ctrl, mockHotkeys, mockState;
   beforeEach(function() {
     mockState = jasmine.createSpyObj('$state', ['is', 'go']);
     mockState.params = {};

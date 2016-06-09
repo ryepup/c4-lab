@@ -2,7 +2,7 @@ const _ = require('lodash'),
       util = require('./util');
 
 // @ngInject
-module.exports = function(autoSave, exporter, model) {
+module.exports = function(autoSave, exporter, model, $q) {
   const vm = this,
       jsonFormat = _.find(exporter.formats, 'extension', 'json');
 

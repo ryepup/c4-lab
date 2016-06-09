@@ -39,11 +39,12 @@ function itemDOT(item, id, desc, hrefTo) {
 }
 
 function contextDOT(graph, lines, hrefTo) {
-  let nodeId = 0, idMap = {};
+  let nodeId = 0;
+  const idMap = {};
 
   _(model.rootItems(graph))
     .forEach(function(item) {
-      let id = idMap[item.id] = nodeId++;
+      const id = idMap[item.id] = nodeId++;
       lines.push(itemDOT(item, id, null, hrefTo));
     })
     .map(x => model.edges(graph, x))
@@ -55,27 +56,24 @@ function contextDOT(graph, lines, hrefTo) {
 }
 
 function zoomedDOT(graph, rootItem, lines, hrefTo) {
-  let nodeId = 0,
-      idMap = {},
-      children = model.children(graph, rootItem),
-      childEdges = _(children)
-        .map(x => model.edges(graph, x))
-        .uniq('id')
-        .flatten()
-        .value(),
-      edges = model.edges(graph, rootItem)
-        .filter(edge => !_.any(childEdges, 'parentId', edge.id))
-        .concat(childEdges),
-      itemIds = _(edges)
-        .map(edge => [edge.sourceId, edge.destinationId])
-        .flatten().uniq().value(),
-      nodes = graph.items
-        .filter(function(item) {
-          return item !== rootItem
-            && item.parentId !== rootItem.id
-            && _.includes(itemIds, item.id);
-        })
-  ;
+  const idMap = {},
+        children = model.children(graph, rootItem),
+        childEdges = _(children)
+          .map(x => model.edges(graph, x))
+          .uniq('id').flatten().value(),
+        edges = model.edges(graph, rootItem)
+          .filter(edge => !_.any(childEdges, 'parentId', edge.id))
+          .concat(childEdges),
+        itemIds = _(edges)
+          .map(edge => [edge.sourceId, edge.destinationId])
+          .flatten().uniq().value(),
+        nodes = graph.items
+          .filter(function(item) {
+            return item !== rootItem
+              && item.parentId !== rootItem.id
+              && _.includes(itemIds, item.id);
+          });
+  let nodeId = 0;
   idMap[rootItem.id] = 'Root';
 
   lines.push(zoomedDOTTemplate({
@@ -83,14 +81,14 @@ function zoomedDOT(graph, rootItem, lines, hrefTo) {
     description: sanitize(rootItem.description),
     children: children
       .map(function(item) {
-        let id = idMap[item.id] = nodeId++;
+        const id = idMap[item.id] = nodeId++;
         return itemDOT(item, id, "", hrefTo);
       })
       .join('\n')
   }));
 
   nodes.map(function(item) {
-    let id = idMap[item.id] = nodeId++;
+    const id = idMap[item.id] = nodeId++;
     lines.push(itemDOT(item, id, "", hrefTo));
   });
 
@@ -101,7 +99,7 @@ function zoomedDOT(graph, rootItem, lines, hrefTo) {
  * @return string serialized graph in graphviz DOT
  */
 function toDOT(hrefTo, graph, rootItem) {
-  let lines = ['digraph g {', '  compound=true'];
+  const lines = ['digraph g {', '  compound=true'];
 
   if(graph.edges && graph.edges.length) {
     lines.push('edge[fontsize=12 fontcolor="#666666"]');

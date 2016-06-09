@@ -6,13 +6,11 @@ const toDOT = require('./dot'),
 ;
 
 describe('dot', function() {
-  let model = new Model(),
-      graph,
-      hrefTo
-  ;
+  const model = new Model();
+  let graph, hrefTo;
 
   beforeEach(function() {
-    model.currentGraph = graph = { edges: [], items: []};
+    model.currentGraph = graph = { edges: [], items: [] };
     hrefTo = jasmine.createSpy();
   });
 

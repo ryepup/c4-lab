@@ -11,11 +11,11 @@ describe('model', function() {
   beforeEach(function() {
     model = new Model();
     graph = {};
-    c4LabGraph = exporter.fromJson(sampleC4);
-    c4LabGraph.github = model.findItem(c4LabGraph, '803dfe63-eb75-4720-8587-86313d48bed1');
-    c4LabGraph.c4Lab = model.findItem(c4LabGraph, '10cffdf2-901e-4072-8150-a059a836967d');
-    c4LabGraph.devs = model.findItem(c4LabGraph, 'b9815283-4bea-4124-afc7-018c347ea1a2');
-    c4LabGraph.c4Lab.UI = model.findItem(c4LabGraph, '119c4954-fb15-4b65-ad79-2945425991a6');
+    const c4 = c4LabGraph = exporter.fromJson(sampleC4);
+    c4.github = model.findItem(c4, '803dfe63-eb75-4720-8587-86313d48bed1');
+    c4.c4Lab = model.findItem(c4, '10cffdf2-901e-4072-8150-a059a836967d');
+    c4.devs = model.findItem(c4, 'b9815283-4bea-4124-afc7-018c347ea1a2');
+    c4.c4Lab.UI = model.findItem(c4, '119c4954-fb15-4b65-ad79-2945425991a6');
   });
 
   describe('sources', function() {
@@ -43,8 +43,9 @@ describe('model', function() {
     });
 
     it('includes top-level connections when children exist', function() {
-      let conn = model.save(graph, 'connection', {source: actor, destination: system}),
-          kid = model.save(graph, 'container', {parentId: system.id});
+      const conn = model.save(graph, 'connection',
+              {source: actor, destination: system}),
+            kid = model.save(graph, 'container', {parentId: system.id});
 
       const r = model.sources(graph);
       expect(r.length).toBe(4);
@@ -67,7 +68,7 @@ describe('model', function() {
     'actor system container component'.split(' ')
       .map(function(t) {
         it('handles `'+t+'` nodes', function() {
-          let item = {name: 'whatever'};
+          const item = {name: 'whatever'};
           model.save(graph, t, item);
           expect(item.id).toBeDefined();
           expect(item.type).toBe(t);
@@ -76,7 +77,7 @@ describe('model', function() {
       });
 
     it('handles connections', function() {
-      let item = {
+      const item = {
         name: 'whatever',
         source: {id:1, type:'system'},
         destination: {id: 2, type:'actor'}
@@ -93,7 +94,7 @@ describe('model', function() {
     });
 
     it('assumes no type means connection', function() {
-      let item = {name: 'whatever', source: {id:1}, destination: {id: 2}};
+      const item = {name: 'whatever', source: {id:1}, destination: {id: 2}};
 
       model.save(graph, undefined, item);
 
@@ -101,9 +102,9 @@ describe('model', function() {
     });
 
     it('updates an existing item by id', function() {
-      let actor = {name: 'foo'};
+      const actor = {name: 'foo'};
       model.save(graph, 'actor', actor);
-      let copy = _.clone(actor);
+      const copy = _.clone(actor);
       copy.name += 'asdf';
       model.save(graph, 'actor', copy);
       expect(actor).toEqual(copy);
@@ -111,14 +112,14 @@ describe('model', function() {
     });
 
     it('saves connections to connections', function() {
-      let actor = model.save(graph, 'system', {name:'actor'}),
-          root = model.save(graph, 'system', {name:'root'}),
-          child = model.save(graph, 'container', {name: 'child', parent: root}),
-          rootUsesActor = model.save(graph, 'connection',
-                                     {source:root, destination: actor, description: 'uses'});
-
-      let conn = model.save(graph, 'connection',
-                            {source: child, destination: rootUsesActor});
+      const actor = model.save(graph, 'system', { name: 'actor' }),
+            root = model.save(graph, 'system', { name: 'root' }),
+            child = model.save(graph, 'container',
+              { name: 'child', parent: root }),
+            rootUsesActor = model.save(graph, 'connection',
+              { source: root, destination: actor, description: 'uses' }),
+            conn = model.save(graph, 'connection',
+              { source: child, destination: rootUsesActor });
 
       expect(conn.sourceId).toBe(child.id);
       expect(conn.parentId).toBe(rootUsesActor.id);
@@ -127,9 +128,9 @@ describe('model', function() {
   });
 
   it('finds children', function() {
-    let system = {name: 'sys'};
+    const system = {name: 'sys'};
     model.save(graph, 'system', system);
-    let container = {name: 'foo', parentId: system.id};
+    const container = {name: 'foo', parentId: system.id};
     model.save(graph, 'container', container);
 
     expect(model.children(graph, system)).toEqual([container]);
@@ -137,7 +138,7 @@ describe('model', function() {
 
   describe('deleteItem', function() {
     it('removes the item', function() {
-      let actor = {name: 'test'};
+      const actor = {name: 'test'};
       model.save(graph, 'actor', actor);
       expect(graph.items.length).toBe(1);
       model.deleteItem(graph, actor);
@@ -145,7 +146,7 @@ describe('model', function() {
     });
 
     it('updates lastModified', function() {
-      let actor = {name: 'test'};
+      const actor = {name: 'test'};
       model.save(graph, 'actor', actor);
       delete graph.lastModified;
       model.deleteItem(graph, actor);
@@ -166,34 +167,35 @@ describe('model', function() {
 
   describe('destinations', function() {
     it('returns eligible items', function() {
-      let dests = model.destinations(c4LabGraph, c4LabGraph.c4Lab.id);
+      const dests = model.destinations(c4LabGraph, c4LabGraph.c4Lab.id);
       expect(dests.length).toBe(3);
       expect(_.pluck(dests, 'id')).not.toContain(c4LabGraph.c4Lab.id);
     });
 
     it('returns empty list with no input', function() {
-      let dests = model.destinations(c4LabGraph, undefined);
+      const dests = model.destinations(c4LabGraph, undefined);
       expect(dests.length).toBe(0);
     });
 
     it('restricts types, actor-to-system', function() {
-      let dests = model.destinations(c4LabGraph, c4LabGraph.devs);
+      const dests = model.destinations(c4LabGraph, c4LabGraph.devs);
       expect(dests.length).toBe(3);
-      let types = _(dests).pluck('type').uniq().value();
+      const types = _(dests).pluck('type').uniq().value();
       expect(types).toEqual(['system']);
     });
 
     it('returns children if given a connection', function() {
-      let conn = model.save(c4LabGraph,'connection',
-                            {source:c4LabGraph.github, destination: c4LabGraph.c4Lab}),
-          dests = model.destinations(c4LabGraph, conn);
+      const conn = model.save(c4LabGraph,'connection',
+              { source: c4LabGraph.github, destination: c4LabGraph.c4Lab }),
+            dests = model.destinations(c4LabGraph, conn);
 
       expect(dests).toEqual([c4LabGraph.c4Lab.UI]);
     });
 
     it('returns siblings if given a child', function() {
-      let child = model.save(c4LabGraph, 'container', {parent: c4LabGraph.c4Lab }),
-          dests = model.destinations(c4LabGraph, child);
+      const child = model.save(c4LabGraph, 'container',
+              {parent: c4LabGraph.c4Lab }),
+            dests = model.destinations(c4LabGraph, child);
 
       expect(dests.length).toBe(4);
       expect(dests).toContain(c4LabGraph.c4Lab.UI);
@@ -201,10 +203,11 @@ describe('model', function() {
       expect(dests).not.toContain(child);
     });
     it('returns outgoing connections if given a child', function() {
-      let child = model.save(c4LabGraph, 'container', {parent: c4LabGraph.c4Lab }),
-          conn = model.save(c4LabGraph,'connection',
-                            {source:c4LabGraph.c4Lab, destination: c4LabGraph.github}),
-          dests = model.destinations(c4LabGraph, child);
+      const child = model.save(c4LabGraph, 'container',
+              {parent: c4LabGraph.c4Lab }),
+            conn = model.save(c4LabGraph,'connection',
+              {source:c4LabGraph.c4Lab, destination: c4LabGraph.github}),
+            dests = model.destinations(c4LabGraph, child);
 
       expect(dests).toContain(conn);
     });
@@ -212,17 +215,17 @@ describe('model', function() {
 
   describe('edges', function() {
     it('can find by id', function() {
-      let edges = model.edges(c4LabGraph, c4LabGraph.github.id);
+      const edges = model.edges(c4LabGraph, c4LabGraph.github.id);
       expect(edges.length).toBe(3);
     });
 
     it('can find by item', function() {
-      let edges = model.edges(c4LabGraph, c4LabGraph.github);
+      const edges = model.edges(c4LabGraph, c4LabGraph.github);
       expect(edges.length).toBe(3);
     });
 
     it('returns all if no criteria is passed', function() {
-      let edges = model.edges(c4LabGraph);
+      const edges = model.edges(c4LabGraph);
       expect(edges).toBe(c4LabGraph.edges);
     });
 
@@ -235,7 +238,7 @@ describe('model', function() {
       root = model.save(graph, 'system', {name:'root'});
       child = model.save(graph, 'container', {name: 'child', parent: root});
       rootUsesActor = model.save(graph, 'connection',
-                                 {source:root, destination: actor, description: 'uses'});
+        {source:root, destination: actor, description: 'uses'});
     });
 
     it('supports item', function() {
@@ -251,13 +254,13 @@ describe('model', function() {
     });
 
     it('supports connections', function() {
-      expect(model.nameFor(graph, rootUsesActor)).toBe('root -> uses -> actor');
+      expect(model.nameFor(graph, rootUsesActor))
+        .toBe('root -> uses -> actor');
     });
 
     it('supports connections by id', function() {
-      expect(model.nameFor(graph, rootUsesActor.id)).toBe('root -> uses -> actor');
+      expect(model.nameFor(graph, rootUsesActor.id))
+        .toBe('root -> uses -> actor');
     });
-
-
   });
 });

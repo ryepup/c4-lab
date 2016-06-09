@@ -13,7 +13,7 @@ beforeEach(function() {
       return {
         compare: function(actual, expected) {
           return {
-            pass: actual && (actual.trim() === expected.trim())
+            pass: actual && actual.trim() === expected.trim()
           };
         }
       };
