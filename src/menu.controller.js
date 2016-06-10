@@ -2,7 +2,7 @@ const _ = require('lodash'),
       util = require('./util');
 
 // @ngInject
-module.exports = function(autoSave, exporter, model, $q) {
+module.exports = function(autoSave, exporter, model, $q, $window) {
   const vm = this,
       jsonFormat = _.find(exporter.formats, 'extension', 'json');
 
@@ -13,6 +13,7 @@ module.exports = function(autoSave, exporter, model, $q) {
   vm.saveToStorage = autoSave.save.bind(autoSave, model.currentGraph);
   vm.save = save;
   vm.importJSON = importJSON;
+  vm.reset = reset;
 
   function save(format) {
     exporter.saveFile(model.currentGraph, format || jsonFormat);
@@ -33,5 +34,11 @@ module.exports = function(autoSave, exporter, model, $q) {
       reader.onerror = reject;
       reader.readAsText(file);
     });
+  }
+
+  function reset(){
+    if($window.confirm('Are you sure?')){
+      model.load(model.emptyGraph);
+    }
   }
 };

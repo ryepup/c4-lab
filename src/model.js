@@ -21,6 +21,7 @@ module.exports = function() {
   self.outgoingEdges = outgoingEdges;
   self.nameFor = nameFor;
   self.load = load;
+  self.emptyGraph = {items:[], title:'untitled', edges:[]};
 
   function load(g){
     _.assign(self.currentGraph, g);

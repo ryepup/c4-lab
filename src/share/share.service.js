@@ -11,8 +11,8 @@ module.exports = function (model, exporter, $uibModal) {
         model.load(graph);
     };
 
-    self.compressGraph = function () {
-        const json = exporter.toJson(model.currentGraph);
+    self.compressGraph = function (graph) {
+        const json = exporter.toJson(graph || model.currentGraph);
         return lz.compressToEncodedURIComponent(json);
     };
 

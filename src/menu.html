@@ -19,6 +19,12 @@
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+          <a ng-click="vm.reset()" href="#">
+            <span class="glyphicon glyphicon-file"> </span>
+            New
+          </a>
+        </li>
+        <li>
           <a href="#"
              ngf-select="vm.importJSON($files)"
              ngf-pattern="'.json'"
@@ -40,7 +46,7 @@
         </li>
         <li>
           <a ui-sref="share.modal()">
-            <span class="glyphicon glyphicon-link"> </span>
+            <span class="glyphicon glyphicon-duplicate"> </span>
             Share
           </a>
         </li>
