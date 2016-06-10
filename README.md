@@ -16,6 +16,8 @@ Containers, Components, and Classes). See
 [C4]: http://www.codingthearchitecture.com/2014/08/24/c4_model_poster.html
 [Visualising Software Architecture]: https://leanpub.com/visualising-software-architecture
 
+The latest version is deployed at https://ryepup.github.io/c4-lab
+
 
 ## Getting started
 
