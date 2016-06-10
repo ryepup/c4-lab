@@ -27,12 +27,6 @@
             Open
           </a>
         </li>
-        <li>
-          <a href="#" ng-click="vm.save()">
-            <span class="glyphicon glyphicon-save-file"> </span>
-            Save
-          </a>
-        </li>
         <li class="dropdown" uib-dropdown>
           <a href="#" uib-dropdown-toggle>
             <span class="glyphicon glyphicon-picture"> </span>
@@ -43,7 +37,19 @@
             <a ng-click="vm.save(format)" href="#">{{format.extension}}</a>
           </li>
         </ul>
-
+        </li>
+        <li>
+          <a ui-sref="share.modal()">
+            <span class="glyphicon glyphicon-link"> </span>
+            Share
+          </a>
+        </li>
+        <li>
+          <a href="#" ng-click="vm.save()">
+            <span class="glyphicon glyphicon-save-file"> </span>
+            Save
+          </a>
+        </li>
         </li>
         <li ng-show="vm.lastSaved">
           <p class="navbar-text">
@@ -52,6 +58,5 @@
         </li>
       </ul>
     </div>
-
   </div>
 </nav>

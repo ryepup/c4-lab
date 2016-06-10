@@ -20,6 +20,11 @@ module.exports = function() {
   self.edgeDescription = edgeDescription;
   self.outgoingEdges = outgoingEdges;
   self.nameFor = nameFor;
+  self.load = load;
+
+  function load(g){
+    _.assign(self.currentGraph, g);
+  }
 
   function nameFor(graph, itemOrId) {
 

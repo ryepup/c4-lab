@@ -18,14 +18,12 @@ module.exports = function(autoSave, exporter, model, $q) {
     exporter.saveFile(model.currentGraph, format || jsonFormat);
   }
 
-
   function importJSON(files) {
     readAsText(files[0]).then(restoreGraph);
   }
 
   function restoreGraph(json) {
-    const g = exporter.fromJson(json);
-    _.assign(model.currentGraph, g);
+    model.load(exporter.fromJson(json));
   }
 
   function readAsText(file) {

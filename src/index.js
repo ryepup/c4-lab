@@ -11,7 +11,8 @@ require('ng-file-upload');
 require('./style.css');
 
 angular.module('c4-lab', ['ui.bootstrap', 'ngFileUpload', 'ui.router',
-                          require('./editors/index.js')])
+                          require('./editors'),
+                          require('./share')])
   .component('c4LabShell', {
     template: require('./shell.html'),
     controller: require('./shell.controller.js'),
