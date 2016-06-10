@@ -21,7 +21,7 @@ describe('editor.controller', function() {
       expect(ctrl.addOptions.length).toBe(4);
     });
 
-    it('opens modals', function() {
+    it('changes url when selected', function() {
       ctrl.addOptions.map(function(opt) {
         opt.callback();
         expect(mockState.go)
