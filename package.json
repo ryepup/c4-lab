@@ -13,7 +13,7 @@
     "build": "mkdir -p dist && browserify -g [uglifyify --ignore '**/node_modules/viz.js/*'] src/index.js -d | exorcist dist/bundle.js.map > dist/bundle.js && cp src/index.html dist/",
     "serve": "live-server src",
     "watch": "watchify src/index.js -o 'node_modules/.bin/exorcist src/bundle.js.map > src/bundle.js' -d",
-    "start": "parallelshell 'npm run watch -s' 'npm run serve -s' 'npm run test:watch'"
+    "start": "npm-run-all --parallel 'watch -s' 'serve -s' 'test:watch'"
   },
   "keywords": [
     "diagrams",
@@ -54,7 +54,7 @@
     "karma-jasmine": "^1.1.0",
     "karma-phantomjs-launcher": "^1.0.2",
     "live-server": "^1.1.0",
-    "parallelshell": "^2.0.0",
+    "npm-run-all": "^4.0.0",
     "phantomjs-prebuilt": "^2.1.14",
     "stringify": "^5.1.0",
     "uglifyify": "^3.0.1",
