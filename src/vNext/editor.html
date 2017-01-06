@@ -1,1 +1,5 @@
-<ui-codemirror ui-codemirror-opts="$ctrl.editorOptions" ng-model="$ctrl.text"></ui-codemirror>
+<div>
+    <ui-codemirror ui-codemirror-opts="$ctrl.editorOptions" ng-model="$ctrl.text" ng-change="$ctrl.parseIt()"></ui-codemirror>
+    <hr/>
+    <pre>{{$ctrl.model|json}}</pre>
+</div>

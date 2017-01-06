@@ -6,6 +6,7 @@ import '../../node_modules/codemirror/theme/elegant.css'
 import template from './editor.html'
 import sample from './c4lab.sexp'
 import CodeMirror from 'codemirror'
+import {parse} from './parse'
 
 export class EditorController{
     constructor(){
@@ -17,6 +18,10 @@ export class EditorController{
             autoCloseBrackets: true
         }
         this.text = sample
+    }
+
+    parseIt(){
+        this.model = parse(this.text)
     }
 }
 
