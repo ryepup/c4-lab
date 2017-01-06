@@ -13,6 +13,7 @@ module.exports = function(config) {
       debug: true,
       noParse: ['viz.js'],
       transform:[
+        'babelify',
         ['browserify-istanbul', {
           ignore: '**/node_modules/** **/*.spec.js **/*.dot **/*.html **/*.css **/test-setup.js'
             .split(' ')

@@ -1,7 +1,8 @@
 {
     "parserOptions": {
         "ecmaVersion": 6,
-        "impliedStrict": true
+        "impliedStrict": true,
+        "sourceType": "module"
     },
     "env":{
         "commonjs": true,

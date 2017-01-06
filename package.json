@@ -62,6 +62,7 @@
   },
   "browserify": {
     "transform": [
+      "babelify",
       "browserify-css",
       [
         "stringify",
@@ -76,14 +77,6 @@
       ],
       "envify",
       "browserify-ngannotate",
-      [
-        "babelify",
-        {
-          "presets": [
-            "es2015"
-          ]
-        }
-      ],
       [
         "uglifyify",
         {
