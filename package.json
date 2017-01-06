@@ -26,7 +26,9 @@
     "angular": "^1.5.6",
     "angular-hotkeys": "^1.6.0",
     "angular-ui-bootstrap": "^0.14.3",
+    "angular-ui-codemirror": "^0.3.0",
     "angular-ui-router": "^1.0.0-alpha0",
+    "codemirror": "^5.22.0",
     "lodash": "^3.10.1",
     "lz-string": "^1.4.4",
     "ng-file-upload": "^12.2.13",
@@ -71,7 +73,8 @@
             ".txt",
             ".json",
             ".dot",
-            ".html"
+            ".html",
+            ".sexp"
           ]
         }
       ],

@@ -15,7 +15,7 @@ module.exports = function(config) {
       transform:[
         'babelify',
         ['browserify-istanbul', {
-          ignore: '**/node_modules/** **/*.spec.js **/*.dot **/*.html **/*.css **/test-setup.js'
+          ignore: '**/node_modules/** **/*.spec.js **/*.dot **/*.html **/*.css **/test-setup.js **/*.sexp'
             .split(' ')
         }]
       ]
