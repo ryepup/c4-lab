@@ -1,3 +1,5 @@
+import vNext from './vNext';
+
 const angular = require('angular'),
       sampleC4 = require('./exporter/c4-lab.json')
 ;
@@ -12,7 +14,8 @@ require('./style.css');
 
 angular.module('c4-lab', ['ui.bootstrap', 'ngFileUpload', 'ui.router',
                           require('./editors'),
-                          require('./share')])
+                          require('./share'),
+                          vNext])
   .component('c4LabShell', {
     template: require('./shell.html'),
     controller: require('./shell.controller.js'),
