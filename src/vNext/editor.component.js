@@ -9,7 +9,9 @@ import { parse, SyntaxError } from './parse'
 
 export class EditorController {
 
-    constructor() {
+    // @ngInject
+    constructor($log) {
+        this.log = $log
         this.editorOptions = {
             lineNumbers: true,
             mode: "commonlisp",
@@ -32,6 +34,7 @@ export class EditorController {
             this.ngModel.$setViewValue(parsed);
             this.syntaxIsValid = true
         } catch (e) {
+            this.log.error(e)
             if (e instanceof SyntaxError) {
                 this.syntaxIsValid = false;
             }

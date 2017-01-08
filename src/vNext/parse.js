@@ -1,6 +1,5 @@
 import SParse from 's-expression'
-import uuid from 'uuid'
-
+import md5 from 'md5'
 
 // TODO: DEAR GOD TESTS
 class Parser {
@@ -18,8 +17,19 @@ class Parser {
             throw tokens
         }
         this.buildIR(tokens)
-        this.edges.map(e => e.destinationId = this.pathMap[e.to].id)
-        return { edges: this.edges, items: this.items }
+        for (const e of this.edges) {
+            this.postProcessEdge(e)
+        }
+
+        return {
+            edges: this.edges,
+            items: this.items,
+            roots: this.items
+                .filter(x => !x.parentId)
+                .map(x => x.id),
+            idMap: this.idMap,
+            pathMap: this.pathMap
+        }
     }
 
     buildIR(tokens, parent) {
@@ -32,37 +42,40 @@ class Parser {
             ? this[type](rest, parent)
             : this.item(rest, parent);
 
-        return Object.assign(node, { type: type.toLowerCase() });
+        if(/system|container/i.test(type)) node.canExpand = true
 
+        return Object.assign(node, { type: type.toLowerCase() });
     }
 
     item([opts, ...children], parent) {
         const [name, ...kwargs] = opts
+        const path = this.pathToNode(name, parent)
         const node = {
             name,
-            id: uuid.v4(),
-            parentId: parent && parent.id
+            id: md5(path),
+            path
         }
-        node.path = this.pathToNode(node)
-        this.idMap[node.id] = this.pathMap[node.path] = node
+        if(parent) node.parentId = parent.id
+        this.idMap[node.id] = node
+        this.pathMap[node.path] = node.id
         Object.assign(node, this.parseKeywordArgs(kwargs, /description|tech/))
         this.items.push(node)
-        this.buildIR(children, node)
+        node.children = this.buildIR(children, node)
         return node;
     }
 
     edge(input, parent) {
         const edge = Object.assign(
-            { sourceId: parent.id, id: uuid.v4() },
+            { sourceId: parent.id },
             this.parseKeywordArgs(input, /description|to|tech/))
         this.edges.push(edge)
         return edge
     }
 
-    pathToNode(node) {
-        return node.parentId
-            ? this.idMap[node.parentId].path + '/' + node.name
-            : node.name
+    pathToNode(name, parent) {
+        return parent
+            ? this.idMap[parent.id].path + '/' + name
+            : name
     }
 
     parseKeywordArgs(kwargs, allowed = /.*/) {
@@ -74,6 +87,11 @@ class Parser {
         return Object.assign(
             allowed.test(key) ? { [key]: value } : {},
             this.parseKeywordArgs(rest, allowed));
+    }
+
+    postProcessEdge(edge) {
+        edge.destinationId = this.pathMap[edge.to]
+        edge.id = md5(edge.sourceId + edge.destinationId)
     }
 }
 
