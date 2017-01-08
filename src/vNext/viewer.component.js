@@ -1,4 +1,5 @@
 export class ViewerController {
+
     // @ngInject
     constructor($sce, exporter, $log) {
         this.log = $log
@@ -12,6 +13,7 @@ export class ViewerController {
     $onChanges(changesObj) {
         if(!this.graph) return;
         this.log.debug('changes', changesObj)
+        // TODO: convert to a format favored by the exporter
         this.svg = this.toSVG(this.graph)
     }
 

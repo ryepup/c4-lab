@@ -1,4 +1,4 @@
-import tokenize from 's-expression'
+import SParse from 's-expression'
 import uuid from 'uuid'
 
 
@@ -13,7 +13,11 @@ class Parser {
     }
 
     parse(text) {
-        this.buildIR(tokenize('(' + text + ')'));
+        const tokens = SParse('(' + text + ')')
+        if (tokens instanceof SParse.SyntaxError) {
+            throw tokens
+        }
+        this.buildIR(tokens)
         this.edges.map(e => e.destinationId = this.pathMap[e.to].id)
         return { edges: this.edges, items: this.items }
     }
@@ -73,4 +77,5 @@ class Parser {
     }
 }
 
-export const parse = text => new Parser().parse(text);
+export const parse = text => new Parser().parse(text)
+export const SyntaxError = SParse.SyntaxError

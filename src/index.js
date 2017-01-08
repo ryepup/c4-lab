@@ -1,4 +1,5 @@
-import vNext from './vNext';
+import vNext from './vNext'
+import 'babel-polyfill'
 
 const angular = require('angular'),
       sampleC4 = require('./exporter/c4-lab.json')

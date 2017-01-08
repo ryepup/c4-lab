@@ -5,7 +5,7 @@ import '../../node_modules/codemirror/lib/codemirror.css'
 import '../../node_modules/codemirror/theme/elegant.css'
 import template from './editor.html'
 import CodeMirror from 'codemirror'
-import { parse } from './parse'
+import { parse, SyntaxError } from './parse'
 
 export class EditorController {
 
@@ -25,10 +25,17 @@ export class EditorController {
 
     parse(text) {
         this.text = text;
-        // TODO: parse out a more general AST, not something customized for the
-        // viewer
-        const parsed = parse(text);
-        this.ngModel.$setViewValue(parsed);
+        try {
+            // TODO: parse out a more general AST, not something customized for the
+            // viewer
+            const parsed = parse(text);
+            this.ngModel.$setViewValue(parsed);
+            this.syntaxIsValid = true
+        } catch (e) {
+            if (e instanceof SyntaxError) {
+                this.syntaxIsValid = false;
+            }
+        }
     }
 }
 
