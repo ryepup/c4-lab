@@ -2,8 +2,10 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
-            <c4-lab-vnext-editor></c4-lab-vnext-editor>
+            <c4-lab-vnext-editor ng-model="$ctrl.graph" initial-text="$ctrl.initialText"></c4-lab-vnext-editor>
         </div>
-        <div class="col-md-6">GRAPH</div>
+        <div class="col-md-6">
+            <c4-lab-vnext-viewer graph="$ctrl.graph"></c4-lab-vnext-viewer>
+        </div>
     </div>
 </div>

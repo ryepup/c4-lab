@@ -4,12 +4,12 @@ import 'codemirror/addon/edit/closebrackets'
 import '../../node_modules/codemirror/lib/codemirror.css'
 import '../../node_modules/codemirror/theme/elegant.css'
 import template from './editor.html'
-import sample from './c4lab.sexp'
 import CodeMirror from 'codemirror'
-import {parse} from './parse'
+import { parse } from './parse'
 
-export class EditorController{
-    constructor(){
+export class EditorController {
+
+    constructor() {
         this.editorOptions = {
             lineNumbers: true,
             mode: "commonlisp",
@@ -17,22 +17,36 @@ export class EditorController{
             matchBrackets: true,
             autoCloseBrackets: true
         }
-        this.text = sample
     }
 
-    parseIt(){
-        this.model = parse(this.text)
+    $onInit() {
+        this.parse(this.initialText);
+    }
+
+    parse(text) {
+        this.text = text;
+        // TODO: parse out a more general AST, not something customized for the
+        // viewer
+        const parsed = parse(text);
+        this.ngModel.$setViewValue(parsed);
     }
 }
 
 export const name = "c4LabVnextEditor"
 export const options = {
+    require: {
+        ngModel: '^'
+    },
     template: template,
-    controller: EditorController
+    // TODO: use a custom validator tied to the parser
+    controller: EditorController,
+    bindings: {
+        initialText: '<'
+    }
 }
 
 // @ngInject
-export function install($window, $log){
+export function install($window, $log) {
     $log.debug('installing codemirror')
     $window.CodeMirror = CodeMirror;
 }
