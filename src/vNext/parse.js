@@ -42,7 +42,10 @@ class Parser {
             ? this[type](rest, parent)
             : this.item(rest, parent);
 
-        if(/system|container/i.test(type)) node.canExpand = true
+        if (/system|container/i.test(type)
+            && node.children.some(x => x.type !== 'edge')) {
+            node.canExpand = true
+        }
 
         return Object.assign(node, { type: type.toLowerCase() });
     }
@@ -55,7 +58,7 @@ class Parser {
             id: md5(path),
             path
         }
-        if(parent) node.parentId = parent.id
+        if (parent) node.parentId = parent.id
         this.idMap[node.id] = node
         this.pathMap[node.path] = node.id
         Object.assign(node, this.parseKeywordArgs(kwargs, /description|tech/))

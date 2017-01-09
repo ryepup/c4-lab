@@ -13,7 +13,6 @@ describe('parse.js', () => {
                 id: 'acbd18db4cc2f85cedef654fccc4a4d8',
                 path: "foo",
                 type: 'system',
-                canExpand: true,
                 children: []
             };
 
@@ -35,7 +34,6 @@ describe('parse.js', () => {
                 path: 'foo/bar',
                 parentId: 'acbd18db4cc2f85cedef654fccc4a4d8',
                 type: 'container',
-                canExpand: true,
                 children: []
             }
             const parent = {
@@ -64,7 +62,6 @@ describe('parse.js', () => {
                 id: '28e3d688a3c077b887921cea3fb1dbc7',
                 path: 'dst',
                 type: 'system',
-                canExpand: true,
                 children: []
             }
             const edge = {
@@ -79,7 +76,6 @@ describe('parse.js', () => {
                 id: '25d902c24283ab8cfbac54dfa101ad31',
                 path: 'src',
                 type: 'system',
-                canExpand: true,
                 children: [edge]
             }
 

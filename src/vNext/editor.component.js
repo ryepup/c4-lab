@@ -33,6 +33,7 @@ export class EditorController {
             const parsed = parse(text);
             this.ngModel.$setViewValue(parsed);
             this.syntaxIsValid = true
+            if (this.onParse) { this.onParse() }
         } catch (e) {
             this.log.error(e)
             if (e instanceof SyntaxError) {
@@ -51,7 +52,8 @@ export const options = {
     // TODO: use a custom validator tied to the parser
     controller: EditorController,
     bindings: {
-        initialText: '<'
+        initialText: '<',
+        onParse: '&'
     }
 }
 

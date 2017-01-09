@@ -2,10 +2,22 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
-            <c4-lab-vnext-editor ng-model="$ctrl.graph" initial-text="$ctrl.initialText"></c4-lab-vnext-editor>
+            <c4-lab-vnext-editor ng-model="$ctrl.graph" initial-text="$ctrl.initialText" on-parse="$ctrl.onParse()"></c4-lab-vnext-editor>
         </div>
         <div class="col-md-6">
-            <c4-lab-vnext-viewer graph="$ctrl.graph"></c4-lab-vnext-viewer>
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="zoomableNodes">Zoom to node</label>
+                    <select name="zoomableNodes" class="form-control" ng-model="$ctrl.selectedRoot">
+                        <option ng-value="null">--none--</option>
+                        <option ng-repeat="node in $ctrl.expandableNodes track by node.id"
+                            value="{{node.id}}">{{node.path}}</option>
+                    </select>
+                </div>
+            </form>
+
+            <c4-lab-vnext-viewer graph="$ctrl.graph" root-node="$ctrl.selectedRoot">
+            </c4-lab-vnext-viewer>
         </div>
     </div>
 </div>
