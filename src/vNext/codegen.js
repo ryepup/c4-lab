@@ -1,3 +1,6 @@
+import Viz from 'viz.js'
+import lz from 'lz-string';
+
 /**
  * resolve any links into a exporter-friendly format
  */
@@ -36,7 +39,24 @@ export const prepareForRendering = (graph, zoomNodeId) => {
 
 
     return {
-        items: visibleIds.map(x => Object.assign({}, graph.idMap[x], { children: null })),
+        items: visibleIds
+            .map(x => Object.assign({}, graph.idMap[x], { children: null })),
         edges: visibleEdges
     };
 }
+
+/**
+ * convert a graph from DOT text to SVG
+ */
+export const toSvg = dot => Viz(dot, { format: "svg", engine: "dot" })
+
+/**
+ * convert a text representation to an URI-encoded representation
+ */
+export const uriEncode = text => lz.compressToEncodedURIComponent(text)
+
+/**
+ * convert an URI-encoded representation to a text representation
+ */
+export const uriDecode = uriData =>
+    lz.decompressFromEncodedURIComponent(uriData)

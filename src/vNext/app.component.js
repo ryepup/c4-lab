@@ -18,6 +18,7 @@ export class AppController {
 
     onParse(text) {
         this.log.debug('onParse')
+        this.text = text
         this.expandableNodes = this.graph.items
             .filter(x => x.canExpand)
             .sort(x => x.path)

@@ -1,4 +1,4 @@
-import { toSvg } from './renderer'
+import { toSvg } from './codegen'
 
 export class ViewerController {
 

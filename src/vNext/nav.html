@@ -1,11 +1,31 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
-    <div class="navbar-header">
-        <a class="navbar-brand" href="#">C4 Lab</a>
-    </div>
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">C4 Lab</a>
+        </div>
 
-    <p class="navbar-text navbar-right" style="padding-right:1em;">
-        <c4-lab-meta></c4-lab-meta>
-    </p>
+        <p class="navbar-text navbar-right c4lab-meta">
+            <c4-lab-meta></c4-lab-meta>
+        </p>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a popover-placement="bottom"
+                    uib-popover-template="'_share.html'">
+                        <span class="glyphicon glyphicon-duplicate"> </span> Share
+                    </a>
+                </li>
+            </ul>
+        </div>
+
     </div>
 </nav>
+
+<script type="text/ng-template" id="_share.html">
+    <div style="width:10em;">
+        <a ng-href="{{$ctrl.href()}}" target="_blank">
+            <span class="glyphicon glyphicon-new-window" > </span>
+            Link to this page</a>
+    </div>
+</script>
