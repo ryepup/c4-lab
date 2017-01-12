@@ -1,6 +1,5 @@
 import { prepareForRendering } from './codegen'
-import { parse } from './parse'
-import md5 from 'md5'
+import { parse, pathToId } from './parse'
 
 describe('codegen', () => {
     describe('prepareForRendering', () => {
@@ -17,9 +16,9 @@ describe('codegen', () => {
             expect(prepared.items.length).toEqual(2)
             expect(prepared.edges.length).toEqual(1)
             const edge = prepared.edges[0];
-            expect(edge.sourceId).toBe(md5('src'))
+            expect(edge.sourceId).toBe(pathToId('src'))
             expect(edge.implicit).toBe(true)
-            expect(edge.destinationId).toBe(md5('dst'))
+            expect(edge.destinationId).toBe(pathToId('dst'))
 
         })
 
@@ -30,7 +29,7 @@ describe('codegen', () => {
                         (edge :to "dst")))
                 (system ("dst"))`)
 
-            const prepared = prepareForRendering(graph, md5("src"))
+            const prepared = prepareForRendering(graph, pathToId("src"))
 
             expect(prepared.items.length).toEqual(3)
         })

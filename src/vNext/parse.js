@@ -1,6 +1,8 @@
 import SParse from 's-expression'
 import md5 from 'md5'
 
+export const pathToId = md5
+
 // TODO: DEAR GOD TESTS
 class Parser {
 
@@ -55,7 +57,7 @@ class Parser {
         const path = this.pathToNode(name, parent).toString()
         const node = {
             name: name.toString(),
-            id: md5(path),
+            id: pathToId(path),
             path
         }
         if (parent) node.parentId = parent.id
@@ -94,7 +96,7 @@ class Parser {
 
     postProcessEdge(edge) {
         edge.destinationId = this.pathMap[edge.to]
-        edge.id = md5(edge.sourceId + edge.destinationId)
+        edge.id = pathToId(edge.sourceId + edge.destinationId)
         edge.sourceParentIds = this.findParentIds(edge.sourceId)
         edge.destinationParentIds = this.findParentIds(edge.destinationId)
     }

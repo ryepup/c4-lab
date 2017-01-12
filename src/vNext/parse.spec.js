@@ -1,6 +1,4 @@
-import _ from 'lodash'
-import { parse, SyntaxError } from './parse'
-import md5 from 'md5'
+import { parse, SyntaxError, pathToId } from './parse'
 
 describe('parse.js', () => {
 
@@ -113,8 +111,8 @@ describe('parse.js', () => {
 
             const edge = result.edges[0]
 
-            expect(edge.sourceId).toBe(md5("src/inner"))
-            expect(edge.sourceParentIds).toEqual([md5("src")])
+            expect(edge.sourceId).toBe(pathToId("src/inner"))
+            expect(edge.sourceParentIds).toEqual([pathToId("src")])
         })
 
         it('parses edges that link deeply systems', () => {
@@ -127,10 +125,10 @@ describe('parse.js', () => {
 
             const edge = result.edges[0]
 
-            expect(edge.sourceId).toBe(md5("src/inner"))
-            expect(edge.sourceParentIds).toEqual([md5("src")])
-            expect(edge.destinationId).toBe(md5("dst/inner"))
-            expect(edge.destinationParentIds).toEqual([md5("dst")])
+            expect(edge.sourceId).toBe(pathToId("src/inner"))
+            expect(edge.sourceParentIds).toEqual([pathToId("src")])
+            expect(edge.destinationId).toBe(pathToId("dst/inner"))
+            expect(edge.destinationParentIds).toEqual([pathToId("dst")])
         })
     })
 })
