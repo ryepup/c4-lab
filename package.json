@@ -10,7 +10,7 @@
     "test": "karma start karma.conf.js --single-run",
     "test:watch": "karma start karma.conf.js",
     "codeclimate": "CODECLIMATE_REPO_TOKEN=$npm_package_config_codeclimate_token codeclimate-test-reporter < reports/lcov.info",
-    "build": "mkdir -p dist && browserify -g [uglifyify --ignore '**/node_modules/viz.js/*'] src/index.js -d | exorcist dist/bundle.js.map > dist/bundle.js && cp src/index.html dist/",
+    "build": "mkdir -p dist && browserify src/index.js -d | exorcist dist/bundle.js.map > dist/bundle.js && cp src/index.html dist/",
     "serve": "live-server src",
     "watch": "watchify src/index.js -o 'node_modules/.bin/exorcist src/bundle.js.map > src/bundle.js' -d",
     "start": "npm-run-all --parallel 'watch -s' 'serve -s' 'test:watch'"
