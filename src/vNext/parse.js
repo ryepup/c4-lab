@@ -52,9 +52,9 @@ class Parser {
 
     item([opts, ...children], parent) {
         const [name, ...kwargs] = opts
-        const path = this.pathToNode(name, parent)
+        const path = this.pathToNode(name, parent).toString()
         const node = {
-            name,
+            name: name.toString(),
             id: md5(path),
             path
         }
@@ -88,7 +88,7 @@ class Parser {
         const key = keyword.substring(1).toLowerCase();
 
         return Object.assign(
-            allowed.test(key) ? { [key]: value } : {},
+            allowed.test(key) ? { [key]: value.toString() } : {},
             this.parseKeywordArgs(rest, allowed));
     }
 

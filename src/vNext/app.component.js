@@ -31,6 +31,7 @@ export class AppController {
     }
 
     recalculate() {
+        this.log.debug('recalculate', this.graph)
         this.preparedGraph = prepareForRendering(this.graph, this.selectedRoot)
         this.dot = dotExporter(
             () => null,
