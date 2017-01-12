@@ -2,22 +2,33 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
-            <c4-lab-vnext-editor ng-model="$ctrl.graph" initial-text="$ctrl.initialText" on-parse="$ctrl.onParse()"></c4-lab-vnext-editor>
+            <c4-lab-vnext-editor ng-model="$ctrl.graph" initial-text="$ctrl.initialText" on-parse="$ctrl.onParse(text)"></c4-lab-vnext-editor>
         </div>
         <div class="col-md-6">
             <form class="form-inline">
                 <div class="form-group">
                     <label for="zoomableNodes">Zoom to node</label>
-                    <select name="zoomableNodes" class="form-control" ng-model="$ctrl.selectedRoot">
+                    <select name="zoomableNodes" class="form-control" ng-model="$ctrl.selectedRoot" ng-change="$ctrl.onZoom()">
                         <option ng-value="null">--none--</option>
                         <option ng-repeat="node in $ctrl.expandableNodes track by node.id"
                             value="{{node.id}}">{{node.path}}</option>
                     </select>
                 </div>
             </form>
-
-            <c4-lab-vnext-viewer graph="$ctrl.graph" root-node="$ctrl.selectedRoot">
-            </c4-lab-vnext-viewer>
+            <uib-tabset>
+                <uib-tab heading="Image">
+                    <c4-lab-vnext-viewer dot="$ctrl.dot">
+                    </c4-lab-vnext-viewer>
+                </uib-tab>
+                <uib-tab heading="dot">
+                    <!-- TODO: a disabled text area -->
+                    <pre>{{$ctrl.dot}}</pre>
+                </uib-tab>
+                <uib-tab heading="json">
+                    <!-- TODO: a disabled text area -->
+                    <pre>{{$ctrl.preparedGraph | json}}</pre>
+                </uib-tab>
+            </uib-tabset>
         </div>
     </div>
 </div>

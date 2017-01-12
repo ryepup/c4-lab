@@ -28,12 +28,10 @@ export class EditorController {
     parse(text) {
         this.text = text;
         try {
-            // TODO: parse out a more general AST, not something customized for the
-            // viewer
             const parsed = parse(text);
             this.ngModel.$setViewValue(parsed);
             this.syntaxIsValid = true
-            if (this.onParse) { this.onParse() }
+            if (this.onParse) { this.onParse({text}) }
         } catch (e) {
             this.log.error(e)
             if (e instanceof SyntaxError) {

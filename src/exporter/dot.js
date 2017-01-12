@@ -19,7 +19,8 @@ function edgeDOT(graph, edge, idMap, hrefTo) {
     sourceId: idMap[edge.sourceId],
     destId: idMap[edge.destinationId],
     description: sanitize(model.edgeDescription(graph, edge)),
-    href: hrefTo(edge)
+    href: hrefTo(edge),
+    style: edge.implicit ? 'dashed' : 'solid'
   });
 }
 
@@ -60,7 +61,7 @@ function zoomedDOT(graph, rootItem, lines, hrefTo) {
         children = model.children(graph, rootItem),
         childEdges = _(children)
           .map(x => model.edges(graph, x))
-          .uniq('id').flatten().value(),
+          .flatten().uniq('id').value(),
         edges = model.edges(graph, rootItem)
           .filter(edge => !_.any(childEdges, 'parentId', edge.id))
           .concat(childEdges),
@@ -102,7 +103,7 @@ function toDOT(hrefTo, graph, rootItem) {
   const lines = ['digraph g {', '  compound=true'];
 
   if(graph.edges && graph.edges.length) {
-    lines.push('edge[fontsize=12 fontcolor="#666666"]');
+    lines.push('  edge[fontsize=12 fontcolor="#666666"]');
   }
 
   if(rootItem) { zoomedDOT(graph, rootItem, lines, hrefTo); }

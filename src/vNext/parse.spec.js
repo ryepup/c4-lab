@@ -1,6 +1,9 @@
+import _ from 'lodash'
 import { parse, SyntaxError } from './parse'
+import md5 from 'md5'
 
 describe('parse.js', () => {
+
     describe('parse', () => {
         it('throws an error with bad input', () => {
             expect(() => parse('(invalid sexp'))
@@ -66,8 +69,10 @@ describe('parse.js', () => {
             }
             const edge = {
                 sourceId: '25d902c24283ab8cfbac54dfa101ad31',
+                sourceParentIds: [],
                 to: 'dst',
                 destinationId: '28e3d688a3c077b887921cea3fb1dbc7',
+                destinationParentIds: [],
                 id: 'd94863d3bcf763a82a9bad80c6fa6323',
                 type: 'edge'
             }
@@ -97,6 +102,35 @@ describe('parse.js', () => {
                     [src.path]: src.id
                 }
             })
+        })
+
+        it('parses edges that cross systems', () => {
+            const result = parse(`
+                (system ("src")
+                  (container ("inner")
+                    (edge :to "dst")))
+                (system ("dst"))`)
+
+            const edge = result.edges[0]
+
+            expect(edge.sourceId).toBe(md5("src/inner"))
+            expect(edge.sourceParentIds).toEqual([md5("src")])
+        })
+
+        it('parses edges that link deeply systems', () => {
+            const result = parse(`
+                (system ("src")
+                    (container ("inner")
+                        (edge :to "dst/inner")))
+                (system ("dst")
+                    (container ("inner")))`)
+
+            const edge = result.edges[0]
+
+            expect(edge.sourceId).toBe(md5("src/inner"))
+            expect(edge.sourceParentIds).toEqual([md5("src")])
+            expect(edge.destinationId).toBe(md5("dst/inner"))
+            expect(edge.destinationParentIds).toEqual([md5("dst")])
         })
     })
 })

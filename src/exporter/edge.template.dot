@@ -1,1 +1,1 @@
-  g${sourceId} -> g${destId} [label="${description}" ltail=cluster${sourceId} lhead=cluster${destId} href="${href}" tooltip=""]
+  g${sourceId} -> g${destId} [label="${description}" ltail=cluster${sourceId} lhead=cluster${destId} href="${href}" style="${style}"]

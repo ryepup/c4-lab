@@ -3,7 +3,7 @@
     <ui-codemirror
         ui-codemirror-opts="$ctrl.editorOptions"
         ng-model="$ctrl.text"
-        ng-model-options="{ debounce: 200 }"
+        ng-model-options="{ debounce: 500 }"
         ng-change="$ctrl.parse($ctrl.text)">
     </ui-codemirror>
 </div>

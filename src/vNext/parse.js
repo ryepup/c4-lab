@@ -95,6 +95,16 @@ class Parser {
     postProcessEdge(edge) {
         edge.destinationId = this.pathMap[edge.to]
         edge.id = md5(edge.sourceId + edge.destinationId)
+        edge.sourceParentIds = this.findParentIds(edge.sourceId)
+        edge.destinationParentIds = this.findParentIds(edge.destinationId)
+    }
+
+    findParentIds(id){
+        const node = this.idMap[id];
+        if(! node.parentId) return [];
+
+        return [node.parentId]
+            .concat(this.findParentIds(node.parentId))
     }
 }
 
