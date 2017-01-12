@@ -14,33 +14,34 @@ export const prepareForRendering = (graph, zoomNodeId) => {
         : graph.roots
 
     const isIdVisible = x => visibleIds.includes(x)
-    const ensureBothEndsAreVisible = edge => {
-        const srcVisible = isIdVisible(edge.sourceId)
-        const dstVisible = isIdVisible(edge.destinationId)
-        if (srcVisible && dstVisible) {
-            return edge;
-        } else if (!srcVisible) {
-            return Object.assign({}, edge, {
-                sourceId: edge.sourceParentIds.find(isIdVisible),
-                implicit: true
-            })
-        } else if (!dstVisible) {
-            return Object.assign({}, edge, {
-                destinationId: edge.destinationParentIds.find(isIdVisible),
-                implicit: true
-            })
-        } else {
-            throw new Error('how!?')
+    const toGraphableEdge = edge => {
+        const srcOk = isIdVisible(edge.sourceId)
+        const dstOk = isIdVisible(edge.destinationId)
+
+        const {type, id, description} = edge;
+
+        return {
+            type, id, description,
+            sourceId: srcOk
+                ? edge.sourceId
+                : edge.sourceParentIds.find(isIdVisible),
+            destinationId: dstOk
+                ? edge.destinationId
+                : edge.destinationParentIds.find(isIdVisible),
+            implicit: !(srcOk && dstOk)
         }
     }
     const visibleEdges = graph.edges
         .filter(x => isIdVisible(x.sourceId) || isIdVisible(x.destinationId))
-        .map(ensureBothEndsAreVisible)
+        .map(toGraphableEdge)
 
+    const toGraphableItem = id => {
+        const {type, name, description, tech, parentId} = graph.idMap[id]
+        return { type, id, name, description, tech, parentId }
+    }
 
     return {
-        items: visibleIds
-            .map(x => Object.assign({}, graph.idMap[x], { children: null })),
+        items: visibleIds.map(toGraphableItem),
         edges: visibleEdges
     };
 }
