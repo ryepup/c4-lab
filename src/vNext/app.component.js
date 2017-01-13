@@ -3,13 +3,17 @@ import sample from './c4lab.sexp'
 import { Storage } from './storage'
 import dotExporter from '../exporter/dot'
 import { prepareForRendering } from './codegen'
+import { Exporter, formats } from './exporter'
 
 export class AppController {
 
     constructor($log, $window) {
         this.log = $log
+        this.$window = $window
         this.selectedRoot = null
         this.storage = new Storage($window.localStorage)
+        this.exporter = new Exporter($window.document)
+        this.exportFormats = formats
     }
 
     $onInit() {
@@ -39,6 +43,11 @@ export class AppController {
             this.preparedGraph,
             this.graph.idMap[this.selectedRoot])
     }
+
+    onExport(format) {
+        this.exporter.export(format, 'c4lab-graph', this.text, this.dot)
+    }
+
 }
 
 export const name = "c4LabVnextApp"

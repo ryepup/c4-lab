@@ -14,6 +14,11 @@ class NavController {
             { absolute: true });
     }
 
+    export(event, format) {
+        event.preventDefault()
+        this.onExport({ format })
+    }
+
 }
 
 export const name = "c4LabVnextNav"
@@ -21,7 +26,9 @@ export const options = {
     template: template,
     controller: NavController,
     bindings: {
-        text: '<'
+        text: '<',
+        exportFormats: '<',
+        onExport: '&'
     }
 
 }

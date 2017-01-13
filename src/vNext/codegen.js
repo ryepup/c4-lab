@@ -61,3 +61,22 @@ export const uriEncode = text => lz.compressToEncodedURIComponent(text)
  */
 export const uriDecode = uriData =>
     lz.decompressFromEncodedURIComponent(uriData)
+
+export const toPngDataUri = (dot, createElement) => {
+    const svg = toSvg(dot)
+    const img = createElement('img')
+    const canvas = createElement('canvas')
+
+    const imageLoaded = resolve => {
+        canvas.width = img.width
+        canvas.height = img.height
+        canvas.getContext("2d").drawImage(img, 0, 0)
+        const dataUrl = canvas.toDataURL("image/png")
+        resolve(dataUrl)
+    }
+
+    return new Promise(resolve => {
+        img.onload = () => { imageLoaded(resolve) }
+        img.setAttribute("src", "data:image/svg+xml," + encodeURIComponent(svg))
+    })
+}
