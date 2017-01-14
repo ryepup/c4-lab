@@ -10,7 +10,7 @@ class NavController {
     }
 
     href() {
-        return this.$state.href('vNext.load',
+        return this.$state.href('load',
             { data: uriEncode(this.text) },
             { absolute: true });
     }

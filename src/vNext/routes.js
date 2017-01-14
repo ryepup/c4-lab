@@ -1,25 +1,21 @@
 import { uriDecode } from './codegen'
 import { Storage } from './storage'
 
-function configureRoutes($stateProvider) {
+function configureRoutes($stateProvider, $urlRouterProvider) {
   "ngInject"
+  $urlRouterProvider.otherwise('/');
   $stateProvider
-    .state('vNext', {
-      url: '/v-next',
-      abstract: true,
-      template: '<ui-view />'
-    })
-    .state('vNext.home', {
+    .state('home', {
       url: '/',
       template: '<c4-lab-vnext-app />'
     })
-    .state('vNext.load', {
+    .state('load', {
       url: '/load/{data}',
       onEnter: function ($window, $stateParams, $state) {
         const storage = new Storage($window.localStorage)
         const text = uriDecode($stateParams.data)
         storage.save(text)
-        $state.go('vNext.home')
+        $state.go('home')
       }
     })
 }

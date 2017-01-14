@@ -51,7 +51,7 @@ export class AppController {
 
     onImport(text) {
         this.storage.save(text)
-        this.$state.go('vNext.home', {}, { reload: true })
+        this.$state.go('home', {}, { reload: true })
     }
 }
 
