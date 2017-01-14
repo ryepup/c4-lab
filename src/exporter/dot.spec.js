@@ -1,31 +1,31 @@
-const toDOT = require('./dot'),
-      Model = require('../model'),
-      empty = require('./empty.dot'),
-      simple = require('./simple.dot'),
-      twoActors = require('./two-actors.dot')
-;
+import { parse } from '../vNext/parse'
+import { prepareForRendering } from '../vNext/codegen'
+import toDOT from './dot'
+import empty from './empty.dot'
+import simple from './simple.dot'
+import twoActors from './two-actors.dot'
 
-describe('dot', function() {
-  const model = new Model();
-  let graph, hrefTo;
 
-  beforeEach(function() {
-    model.currentGraph = graph = { edges: [], items: [] };
-    hrefTo = jasmine.createSpy();
-  });
+const buildGraph = text => prepareForRendering(parse(text))
+const hrefTo = () => { };
 
-  it('renders empty graph', function() {
+describe('dot', () => {
+
+  it('renders empty graph', () => {
+    const graph = buildGraph(``)
+
     expect(toDOT(hrefTo, graph)).toEqualTrimmed(empty);
   });
 
-  it('renders one actor', function() {
-    model.save(graph, 'actor', {name: 'foo', id: 1});
+  it('renders one actor', () => {
+    const graph = buildGraph(`(actor ("foo"))`)
+
     expect(toDOT(hrefTo, graph)).toEqualTrimmed(simple);
   });
 
-  it('renders two actors', function() {
-    model.save(graph, 'actor', {name: 'foo', id: 1});
-    model.save(graph, 'actor', {name: 'bar', id: 2});
+  it('renders two actors', () => {
+    const graph = buildGraph(`(actor ("foo"))(actor ("bar"))`)
+
     expect(toDOT(hrefTo, graph)).toEqualTrimmed(twoActors);
   });
 

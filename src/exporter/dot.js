@@ -1,7 +1,7 @@
+import * as model from './graph'
+
 const _ = require('lodash'),
       wordwrap = require('wordwrap')(30),
-      Model = require('../model'),
-      model = new Model(),
       itemDOTTemplate = _.template(require('./item.template.dot')),
       containerDOTTemplate = _.template(require('./container.template.dot')),
       edgeDOTTemplate = _.template(require('./edge.template.dot')),
