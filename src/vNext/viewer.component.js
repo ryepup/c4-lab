@@ -13,7 +13,7 @@ export class ViewerController {
     }
 }
 
-export const name = "c4LabVnextViewer"
+export const name = "c4LabViewer"
 export const options = {
     template: '<div ng-bind-html="$ctrl.svg"></div>',
     controller: ViewerController,

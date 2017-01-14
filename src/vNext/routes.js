@@ -7,7 +7,7 @@ function configureRoutes($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('home', {
       url: '/',
-      template: '<c4-lab-vnext-app />'
+      template: '<c4-lab-app />'
     })
     .state('load', {
       url: '/load/{data}',

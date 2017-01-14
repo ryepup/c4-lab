@@ -55,7 +55,7 @@ export class AppController {
     }
 }
 
-export const name = "c4LabVnextApp"
+export const name = "c4LabApp"
 export const options = {
     template: template,
     controller: AppController

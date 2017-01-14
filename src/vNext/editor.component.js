@@ -42,7 +42,7 @@ export class EditorController {
     }
 }
 
-export const name = "c4LabVnextEditor"
+export const name = "c4LabEditor"
 export const options = {
     require: {
         ngModel: '^'

@@ -28,7 +28,7 @@ class NavController {
 
 }
 
-export const name = "c4LabVnextNav"
+export const name = "c4LabNav"
 export const options = {
     template: template,
     controller: NavController,

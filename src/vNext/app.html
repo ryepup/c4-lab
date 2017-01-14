@@ -1,8 +1,8 @@
-<c4-lab-vnext-nav text="$ctrl.text" on-export="$ctrl.onExport(format)" export-formats="$ctrl.exportFormats" on-import="$ctrl.onImport(text)"></c4-lab-vnext-nav>
+<c4-lab-nav text="$ctrl.text" on-export="$ctrl.onExport(format)" export-formats="$ctrl.exportFormats" on-import="$ctrl.onImport(text)"></c4-lab-nav>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
-            <c4-lab-vnext-editor ng-model="$ctrl.graph" initial-text="$ctrl.initialText" on-parse="$ctrl.onParse(text)"></c4-lab-vnext-editor>
+            <c4-lab-editor ng-model="$ctrl.graph" initial-text="$ctrl.initialText" on-parse="$ctrl.onParse(text)"></c4-lab-editor>
         </div>
         <div class="col-md-6">
             <form class="form-inline">
@@ -17,8 +17,8 @@
             </form>
             <uib-tabset>
                 <uib-tab heading="svg">
-                    <c4-lab-vnext-viewer dot="$ctrl.dot">
-                    </c4-lab-vnext-viewer>
+                    <c4-lab-viewer dot="$ctrl.dot">
+                    </c4-lab-viewer>
                 </uib-tab>
                 <uib-tab heading="dot">
                     <p>This is for debugging purposes</p>
