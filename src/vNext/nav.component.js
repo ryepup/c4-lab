@@ -14,9 +14,12 @@ class NavController {
             { absolute: true });
     }
 
-    export(event, format) {
-        event.preventDefault()
+    export(format) {
         this.onExport({ format })
+    }
+
+    import(files) {
+        if(files) this.onImport({ file: files[0] })
     }
 
 }
@@ -28,7 +31,8 @@ export const options = {
     bindings: {
         text: '<',
         exportFormats: '<',
-        onExport: '&'
+        onExport: '&',
+        onImport: '&'
     }
 
 }

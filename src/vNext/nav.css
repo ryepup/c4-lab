@@ -1,3 +1,7 @@
-.c4lab-meta{
+.c4lab-meta {
     padding-right: 1em;
+}
+
+.navbar a {
+    cursor: pointer;
 }

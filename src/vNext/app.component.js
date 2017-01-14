@@ -4,12 +4,14 @@ import { Storage } from './storage'
 import dotExporter from '../exporter/dot'
 import { prepareForRendering } from './codegen'
 import { Exporter, formats } from './exporter'
+import { readAllText } from './importer'
 
 export class AppController {
 
-    constructor($log, $window) {
+    constructor($log, $window, $state) {
         this.log = $log
         this.$window = $window
+        this.$state = $state
         this.selectedRoot = null
         this.storage = new Storage($window.localStorage)
         this.exporter = new Exporter($window.document)
@@ -48,6 +50,11 @@ export class AppController {
         this.exporter.export(format, 'c4lab-graph', this.text, this.dot)
     }
 
+    onImport(file) {
+        readAllText(file)
+            .then(text => this.storage.save(text))
+            .then(() => this.$state.go('vNext.home', {}, { reload: true }))
+    }
 }
 
 export const name = "c4LabVnextApp"

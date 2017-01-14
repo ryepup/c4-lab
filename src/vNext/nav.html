@@ -15,13 +15,18 @@
                         <span class="glyphicon glyphicon-duplicate"> </span> Share
                     </a>
                 </li>
+                <li>
+                    <a ngf-select="$ctrl.import($files)" ngf-pattern="'.sexp'" ngf-accept="'.sexp'">
+                        <span class="glyphicon glyphicon-open-file"> </span> Import
+                    </a>
+                </li>
                 <li class="dropdown" uib-dropdown>
-                    <a href="#" uib-dropdown-toggle>
+                    <a uib-dropdown-toggle>
                         <span class="glyphicon glyphicon-picture"> </span> Export <span class="caret"></span>
                     </a>
                     <ul class="uib-dropdown-menu">
                         <li ng-repeat="format in $ctrl.exportFormats">
-                            <a ng-click="$ctrl.export($event, format)" href="#">{{format}}</a>
+                            <a ng-click="$ctrl.export($event, format)">{{format}}</a>
                         </li>
                     </ul>
                 </li>
