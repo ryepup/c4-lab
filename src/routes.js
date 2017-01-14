@@ -1,5 +1,5 @@
-import { uriDecode } from './codegen'
-import { Storage } from './storage'
+import { uriDecode } from './core/codegen'
+import { Storage } from './core/storage'
 
 function configureRoutes($stateProvider, $urlRouterProvider) {
   "ngInject"

@@ -1,13 +1,14 @@
 import template from './app.html'
 import sample from './c4lab.sexp'
-import { Storage } from './storage'
 import dotExporter from '../exporter/dot'
-import { prepareForRendering } from './codegen'
-import { Exporter, formats } from './exporter'
+
+import { Storage } from '../core/storage'
+import { prepareForRendering, toSvg } from '../core/codegen'
+import { Exporter, formats } from '../core/exporter'
 
 export class AppController {
 
-    constructor($log, $window, $state) {
+    constructor($log, $window, $state, $sce) {
         this.log = $log
         this.$window = $window
         this.$state = $state
@@ -15,6 +16,7 @@ export class AppController {
         this.storage = new Storage($window.localStorage)
         this.exporter = new Exporter($window.document)
         this.exportFormats = formats
+        this.toSvg = dot => $sce.trustAsHtml(toSvg(dot))
     }
 
     $onInit() {
@@ -43,6 +45,7 @@ export class AppController {
             () => null,
             this.preparedGraph,
             this.graph.idMap[this.selectedRoot])
+        this.svg = this.toSvg(this.dot)
     }
 
     onExport(format) {

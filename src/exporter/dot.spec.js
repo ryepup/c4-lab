@@ -1,5 +1,5 @@
-import { parse } from '../vNext/parse'
-import { prepareForRendering } from '../vNext/codegen'
+import { parse } from '../core/parse'
+import { prepareForRendering } from '../core/codegen'
 import toDOT from './dot'
 import empty from './empty.dot'
 import simple from './simple.dot'

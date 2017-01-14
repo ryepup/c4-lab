@@ -4,8 +4,8 @@ describe('editor.component.js', () => {
     let $ctrl, ngModel;
 
     beforeEach(inject(function ($componentController) {
-        ngModel = jasmine.createSpyObj('ngModelk', ['$setViewValue'])
-        $ctrl = $componentController(editor.name, {}, {ngModel:ngModel})
+        ngModel = jasmine.createSpyObj('ngModel', ['$setViewValue'])
+        $ctrl = $componentController(editor.name, {}, { ngModel })
     }))
 
     describe('syntaxIsValid', () => {

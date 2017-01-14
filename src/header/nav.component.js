@@ -1,6 +1,6 @@
 import template from './nav.html'
 import './nav.css'
-import { uriEncode } from './codegen'
+import { uriEncode } from '../core/codegen'
 import { readAllText } from './importer'
 
 class NavController {

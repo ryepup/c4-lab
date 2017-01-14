@@ -3,9 +3,10 @@ import 'codemirror/addon/edit/matchbrackets'
 import 'codemirror/addon/edit/closebrackets'
 import '../../node_modules/codemirror/lib/codemirror.css'
 import '../../node_modules/codemirror/theme/elegant.css'
-import template from './editor.html'
 import CodeMirror from 'codemirror'
-import { parse, SyntaxError } from './parse'
+
+import template from './editor.html'
+import { parse, SyntaxError } from '../core/parse'
 import './editor.css'
 
 export class EditorController {
