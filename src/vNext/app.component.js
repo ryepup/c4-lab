@@ -4,7 +4,6 @@ import { Storage } from './storage'
 import dotExporter from '../exporter/dot'
 import { prepareForRendering } from './codegen'
 import { Exporter, formats } from './exporter'
-import { readAllText } from './importer'
 
 export class AppController {
 
@@ -50,10 +49,9 @@ export class AppController {
         this.exporter.export(format, 'c4lab-graph', this.text, this.dot)
     }
 
-    onImport(file) {
-        readAllText(file)
-            .then(text => this.storage.save(text))
-            .then(() => this.$state.go('vNext.home', {}, { reload: true }))
+    onImport(text) {
+        this.storage.save(text)
+        this.$state.go('vNext.home', {}, { reload: true })
     }
 }
 

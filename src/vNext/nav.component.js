@@ -1,6 +1,7 @@
 import template from './nav.html'
 import './nav.css'
 import { uriEncode } from './codegen'
+import { readAllText } from './importer'
 
 class NavController {
     constructor($state) {
@@ -19,7 +20,10 @@ class NavController {
     }
 
     import(files) {
-        if(files) this.onImport({ file: files[0] })
+        if (files) {
+            readAllText(files[0])
+                .then(text => this.onImport({ text }))
+        }
     }
 
 }
