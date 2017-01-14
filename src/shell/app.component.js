@@ -2,9 +2,7 @@ import template from './app.html'
 import sample from './c4lab.sexp'
 import dotExporter from '../exporter/dot'
 
-import { Storage } from '../core/storage'
-import { prepareForRendering, toSvg } from '../core/codegen'
-import { Exporter, formats } from '../core/exporter'
+import { Storage, prepareForRendering, toSvg, Exporter, formats } from '../core'
 
 export class AppController {
 

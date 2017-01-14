@@ -6,7 +6,7 @@ import '../../node_modules/codemirror/theme/elegant.css'
 import CodeMirror from 'codemirror'
 
 import template from './editor.html'
-import { parse, SyntaxError } from '../core/parse'
+import { parse, SyntaxError } from '../core'
 import './editor.css'
 
 export class EditorController {
