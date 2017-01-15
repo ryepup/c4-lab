@@ -1,5 +1,4 @@
-import * as _ from 'lodash'
-
+import _ from 'lodash'
 export function edges(graph, itemOrId) {
   const result = graph.edges || [],
     id = idFor(itemOrId);

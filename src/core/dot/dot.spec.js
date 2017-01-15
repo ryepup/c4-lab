@@ -1,5 +1,5 @@
-import { parse } from '../core/parse'
-import { prepareForRendering } from '../core/codegen'
+import { parse } from '../parse'
+import { prepareForRendering } from '../codegen'
 import toDOT from './dot'
 import empty from './empty.dot'
 import simple from './simple.dot'

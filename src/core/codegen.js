@@ -1,5 +1,6 @@
 import Viz from 'viz.js'
 import lz from 'lz-string';
+import dotExporter from './dot/dot'
 
 /**
  * resolve any links into a exporter-friendly format
@@ -80,3 +81,8 @@ export const toPngDataUri = (dot, createElement) => {
         img.setAttribute("src", "data:image/svg+xml," + encodeURIComponent(svg))
     })
 }
+
+/**
+ * convert a graph to DOT
+ */
+export const toDot = dotExporter
