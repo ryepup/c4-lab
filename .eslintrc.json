@@ -4,7 +4,10 @@
         "impliedStrict": true,
         "sourceType": "module"
     },
-    "env":{
+    "ecmaFeatures": {
+        "modules": true
+    },
+    "env": {
         "commonjs": true,
         "jasmine": true,
         "browser": true
