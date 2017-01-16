@@ -11,14 +11,14 @@
     },
     "extends": "eslint:recommended",
     "rules": {
-        "eqeqeq": "error",
-        "no-extra-parens": "error",
-        "arrow-spacing": "error",
-        "no-var": "error",
-        "prefer-const": "warn",
-        "max-len": "warn",
-        "no-alert": "error",
-        "no-eval": "error",
-        "camelcase": "error"
+        "eqeqeq": 2,
+        "no-extra-parens": 2,
+        "arrow-spacing": 2,
+        "no-var": 2,
+        "prefer-const": 1,
+        "max-len": 1,
+        "no-alert": 2,
+        "no-eval": 2,
+        "camelcase": 2
     }
 }
