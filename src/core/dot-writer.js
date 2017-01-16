@@ -1,12 +1,12 @@
 import wordwrap from 'wordwrap'
-import _ from 'lodash'
+import { flattenDeep, isString } from 'lodash'
+
 
 const DEFAULT_SHAPE = 'box'
 const typeShapeMap = {
     actor: 'egg',
     container: 'box3d'
 }
-const isString = x => typeof x === 'string' || x instanceof String
 
 export class DotContext {
     constructor() {
@@ -96,7 +96,7 @@ ${indent}${indent}label=<<b>${label}</b>> style="rounded"`,
             '}', ''
         ]
 
-        return _.flattenDeep(lines).join('\n')
+        return flattenDeep(lines).join('\n')
     }
 
     toTechDescription(text) {
