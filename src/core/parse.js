@@ -115,3 +115,13 @@ class Parser {
 
 export const parse = text => new Parser().parse(text)
 export const SyntaxError = SParse.SyntaxError
+
+
+/*
+TODO: detect errors:
+
+* duplicate paths
+* self-edges
+* edge to nowhere
+
+*/
