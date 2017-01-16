@@ -6,7 +6,6 @@ export const pathToId = md5
 
 const stripComments = text => text.replace(/^\s*;;.*$/gm, '')
 
-// TODO: DEAR GOD TESTS
 class Parser {
 
     constructor() {
