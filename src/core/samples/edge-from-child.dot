@@ -1,0 +1,12 @@
+digraph g {
+  compound=true
+
+  g0 [shape="box" label=<
+<b>system</b>
+  >]
+  g1 [shape="box" label=<
+<b>other system</b>
+  >]
+
+  g0 -> g1 [style="dashed"]
+}

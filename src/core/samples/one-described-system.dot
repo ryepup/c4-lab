@@ -1,0 +1,10 @@
+digraph g {
+  compound=true
+
+  g0 [shape="box" label=<
+<b>foo</b>
+<br/>
+does some "stuff"
+  >]
+
+}

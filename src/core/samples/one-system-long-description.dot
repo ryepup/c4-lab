@@ -1,0 +1,11 @@
+digraph g {
+  compound=true
+
+  g0 [shape="box" label=<
+<b>foo</b>
+<br/>
+I am the very model of a<br/>
+modern major general
+  >]
+
+}

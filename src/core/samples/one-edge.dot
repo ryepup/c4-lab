@@ -1,0 +1,12 @@
+digraph g {
+  compound=true
+
+  g0 [shape="box" label=<
+<b>system</b>
+  >]
+  g1 [shape="egg" label=<
+<b>user</b>
+  >]
+
+  g1 -> g0 [label="talks to"]
+}
