@@ -1,7 +1,7 @@
 import template from './app.html'
 import sample from './c4lab.sexp'
 
-import { Storage, prepareForRendering, toSvg, Exporter, formats, toDot } from '../core'
+import { Storage, toSvg, Exporter, formats, toDot } from '../core'
 
 export class AppController {
 
@@ -37,11 +37,7 @@ export class AppController {
 
     recalculate() {
         this.log.debug('recalculate', this.graph)
-        this.preparedGraph = prepareForRendering(this.graph, this.selectedRoot)
-        this.dot = toDot(
-            () => null,
-            this.preparedGraph,
-            this.graph.idMap[this.selectedRoot])
+        this.dot = toDot(this.graph, this.selectedRoot)
         this.svg = this.toSvg(this.dot)
     }
 

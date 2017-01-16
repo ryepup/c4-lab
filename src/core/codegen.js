@@ -1,51 +1,5 @@
 import Viz from 'viz.js'
 import lz from 'lz-string';
-import dotExporter from './dot/dot'
-
-/**
- * resolve any links into a exporter-friendly format
- */
-export const prepareForRendering = (graph, zoomNodeId) => {
-
-    const visibleIds = zoomNodeId
-        ? graph.idMap[zoomNodeId]
-            .children
-            .map(x => x.id)
-            .concat(graph.roots)
-        : graph.roots
-
-    const isIdVisible = x => visibleIds.includes(x)
-    const toGraphableEdge = edge => {
-        const srcOk = isIdVisible(edge.sourceId)
-        const dstOk = isIdVisible(edge.destinationId)
-
-        const {type, id, description} = edge;
-
-        return {
-            type, id, description,
-            sourceId: srcOk
-                ? edge.sourceId
-                : edge.sourceParentIds.find(isIdVisible),
-            destinationId: dstOk
-                ? edge.destinationId
-                : edge.destinationParentIds.find(isIdVisible),
-            implicit: !(srcOk && dstOk)
-        }
-    }
-    const visibleEdges = graph.edges
-        .filter(x => isIdVisible(x.sourceId) || isIdVisible(x.destinationId))
-        .map(toGraphableEdge)
-
-    const toGraphableItem = id => {
-        const {type, name, description, tech, parentId} = graph.idMap[id]
-        return { type, id, name, description, tech, parentId }
-    }
-
-    return {
-        items: visibleIds.map(toGraphableItem),
-        edges: visibleEdges
-    };
-}
 
 /**
  * convert a graph from DOT text to SVG
@@ -81,8 +35,3 @@ export const toPngDataUri = (dot, createElement) => {
         img.setAttribute("src", "data:image/svg+xml," + encodeURIComponent(svg))
     })
 }
-
-/**
- * convert a graph to DOT
- */
-export const toDot = dotExporter

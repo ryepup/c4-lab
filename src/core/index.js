@@ -1,4 +1,5 @@
 export { parse, SyntaxError } from './parse'
-export { uriEncode, uriDecode, prepareForRendering, toSvg, toDot } from './codegen'
+export { uriEncode, uriDecode, toSvg } from './codegen'
 export { Storage } from './storage'
 export { Exporter, formats } from './exporter'
+export { toDot } from './dot-writer'
