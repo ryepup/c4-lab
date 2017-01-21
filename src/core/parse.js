@@ -1,12 +1,13 @@
 import SParse from 's-expression'
 import md5 from 'md5'
 import { isString } from 'lodash'
+import * as path from 'path'
 
 export const pathToId = md5
 
 
 const stripComments = text => text.replace(/^\s*;;.*$/gm, '')
-export class ParseError extends Error {}
+export class ParseError extends Error { }
 class Parser {
 
     constructor() {
@@ -48,7 +49,7 @@ class Parser {
             ? this[type](rest, parent)
             : this.item(rest, parent);
 
-        if(!node) return;
+        if (!node) return;
 
         if (/system|container/i.test(type)
             && node.children.some(x => x.type !== 'edge')) {
@@ -83,9 +84,9 @@ class Parser {
         return edge
     }
 
-    title([input], parent){
-        if(!isString(input)) throw new ParseError('title must be a string, was' + JSON.stringify(input))
-        if(parent) throw new ParseError('title is only allowed at the top level')
+    title([input], parent) {
+        if (!isString(input)) throw new ParseError('title must be a string, was' + JSON.stringify(input))
+        if (parent) throw new ParseError('title is only allowed at the top level')
         this.graphTitle = input.toString();
     }
 
@@ -107,15 +108,28 @@ class Parser {
     }
 
     postProcessEdge(edge) {
+        if(edge.to.startsWith('.')){
+            const src = this.idMap[edge.sourceId]
+            const parent = this.idMap[src.parentId]
+            edge.to = path.join(parent.path, edge.to)
+        }
+
         edge.destinationId = this.pathMap[edge.to]
+
+        if (!edge.destinationId) {
+            throw new ParseError(`Could not find node '${edge.to}'`)
+        }
+        if (edge.sourceId === edge.destinationId) {
+            throw new ParseError(`Edge cannot be both from and to '${edge.to}'`)
+        }
         edge.id = pathToId(edge.sourceId + edge.destinationId)
         edge.sourceParentIds = this.findParentIds(edge.sourceId)
         edge.destinationParentIds = this.findParentIds(edge.destinationId)
     }
 
-    findParentIds(id){
+    findParentIds(id) {
         const node = this.idMap[id];
-        if(! node.parentId) return [];
+        if (!node.parentId) return [];
 
         return [node.parentId]
             .concat(this.findParentIds(node.parentId))
@@ -131,7 +145,5 @@ export const SyntaxError = SParse.SyntaxError
 TODO: detect errors:
 
 * duplicate paths
-* self-edges
-* edge to nowhere
 
 */

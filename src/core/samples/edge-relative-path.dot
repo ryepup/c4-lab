@@ -1,0 +1,16 @@
+digraph g {
+  compound=true
+
+  subgraph cluster_g1 {
+    label=<<b>system</b>> style="rounded"
+
+    g0 [shape="box3d" label=<
+<b>a</b>
+    >]
+    g2 [shape="box3d" label=<
+<b>b</b>
+    >]
+  }
+
+  g2 -> g0 []
+}

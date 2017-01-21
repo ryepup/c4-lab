@@ -12,7 +12,8 @@ const samples = [
     ['edge-to-child', require('./edge-to-child.sexp'), require('./edge-to-child.dot')],
     ['edge-from-child', require('./edge-from-child.sexp'), require('./edge-from-child.dot')],
     ['container', require('./container.sexp'), require('./container.dot'), "system"],
-    ['title', require('./title.sexp'), require('./title.dot')]
+    ['title', require('./title.sexp'), require('./title.dot')],
+    ['edge-relative-path', require('./edge-relative-path.sexp'), require('./edge-relative-path.dot'), "system"]
 ]
 
 describe('samples', () => {
