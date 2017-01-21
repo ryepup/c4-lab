@@ -11,7 +11,8 @@ const samples = [
     ['one-edge-long-description', require('./one-edge-long-description.sexp'), require('./one-edge-long-description.dot')],
     ['edge-to-child', require('./edge-to-child.sexp'), require('./edge-to-child.dot')],
     ['edge-from-child', require('./edge-from-child.sexp'), require('./edge-from-child.dot')],
-    ['container', require('./container.sexp'), require('./container.dot'), "system"]
+    ['container', require('./container.sexp'), require('./container.dot'), "system"],
+    ['title', require('./title.sexp'), require('./title.dot')]
 ]
 
 describe('samples', () => {

@@ -84,19 +84,29 @@ ${indent}${indent}label=<<b>${label}</b>> style="rounded"`,
     }
 
     draw() {
-        const lines = [
-            `digraph g {
-  compound=true`, '',
-            this.rootNode
-                ? this.drawCluster('  ')
-                : this.drawItems(this.visibleIds, '  '),
-            '',
-            this.visibleEdges
-                .map(x => this.drawEdge(x, '  ')),
-            '}', ''
-        ]
+        const lines = [`digraph g {`]
+            .concat([...this.digraphHeaders('  ')])
+            .concat([
+                this.rootNode
+                    ? this.drawCluster('  ')
+                    : this.drawItems(this.visibleIds, '  '),
+                '',
+                this.visibleEdges
+                    .map(x => this.drawEdge(x, '  ')),
+                '}', ''
+            ])
 
         return flattenDeep(lines).join('\n')
+    }
+
+    * digraphHeaders(indent) {
+        yield `${indent}compound=true`
+        if (this.graph.title) {
+            yield `${indent}label="${this.toLabel(this.graph.title)}"`
+            yield `${indent}fontsize=20`
+            yield `${indent}labelloc=t`
+        }
+        yield ''
     }
 
     toTechDescription(text) {

@@ -1,3 +1,4 @@
+(title "c4-lab")
 ;; add an actor to represent humans that use your system
 (actor ("Devs")
        ;; add edges to say what part of your system the actor uses

@@ -1,11 +1,12 @@
 import SParse from 's-expression'
 import md5 from 'md5'
+import { isString } from 'lodash'
 
 export const pathToId = md5
 
 
 const stripComments = text => text.replace(/^\s*;;.*$/gm, '')
-
+export class ParseError extends Error {}
 class Parser {
 
     constructor() {
@@ -26,6 +27,7 @@ class Parser {
         }
 
         return {
+            title: this.graphTitle,
             edges: this.edges,
             items: this.items,
             roots: this.items
@@ -45,6 +47,8 @@ class Parser {
         const node = type in this
             ? this[type](rest, parent)
             : this.item(rest, parent);
+
+        if(!node) return;
 
         if (/system|container/i.test(type)
             && node.children.some(x => x.type !== 'edge')) {
@@ -77,6 +81,12 @@ class Parser {
             this.parseKeywordArgs(input, /description|to|tech/))
         this.edges.push(edge)
         return edge
+    }
+
+    title([input], parent){
+        if(!isString(input)) throw new ParseError('title must be a string, was' + JSON.stringify(input))
+        if(parent) throw new ParseError('title is only allowed at the top level')
+        this.graphTitle = input.toString();
     }
 
     pathToNode(name, parent) {
@@ -114,6 +124,7 @@ class Parser {
 
 export const parse = text => new Parser().parse(text)
 export const SyntaxError = SParse.SyntaxError
+
 
 
 /*

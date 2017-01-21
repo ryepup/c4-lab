@@ -42,7 +42,7 @@ export class AppController {
     }
 
     onExport(format) {
-        this.exporter.export(format, 'c4lab-graph', this.text, this.dot)
+        this.exporter.export(format, this.graph.title || 'c4lab-graph', this.text, this.dot)
     }
 
     onImport(text) {

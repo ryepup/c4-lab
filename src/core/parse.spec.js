@@ -20,6 +20,7 @@ describe('parse.js', () => {
             const result = parse('(system ("foo"))');
 
             expect(result).toEqual({
+                title: undefined,
                 edges: [],
                 items: [item],
                 roots: [item.id],
@@ -49,6 +50,7 @@ describe('parse.js', () => {
             const result = parse('(system ("foo") (container ("bar")))');
 
             expect(result).toEqual({
+                title: undefined,
                 edges: [],
                 items: [parent, child],
                 roots: [parent.id],
@@ -88,6 +90,7 @@ describe('parse.js', () => {
                 (system ("dst"))`);
 
             expect(result).toEqual({
+                title: undefined,
                 edges: [edge],
                 items: [src, dst],
                 roots: [src.id, dst.id],
@@ -129,6 +132,13 @@ describe('parse.js', () => {
             expect(edge.sourceParentIds).toEqual([pathToId("src")])
             expect(edge.destinationId).toBe(pathToId("dst/inner"))
             expect(edge.destinationParentIds).toEqual([pathToId("dst")])
+        })
+
+        it('parses a title', () => {
+            const result = parse(`(title "test")`)
+
+            expect(result.title).toBe("test");
+            expect(result.items.length).toBe(0);
         })
     })
 })

@@ -1,0 +1,8 @@
+digraph g {
+  compound=true
+  label="foo"
+  fontsize=20
+  labelloc=t
+
+
+}
