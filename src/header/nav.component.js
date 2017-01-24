@@ -11,7 +11,10 @@ class NavController {
 
     href() {
         return this.$state.href('load',
-            { data: uriEncode(this.text) });
+            {
+                data: uriEncode(this.text),
+                zoom: this.zoom
+            });
     }
 
     export(format) {
@@ -35,7 +38,8 @@ export const options = {
         text: '<',
         exportFormats: '<',
         onExport: '&',
-        onImport: '&'
+        onImport: '&',
+        zoom: '<'
     }
 
 }

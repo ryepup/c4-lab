@@ -9,7 +9,6 @@ export class AppController {
         this.log = $log
         this.$window = $window
         this.$state = $state
-        this.selectedRoot = null
         this.storage = new Storage($window.localStorage)
         this.exporter = new Exporter($window.document)
         this.exportFormats = formats
@@ -31,18 +30,18 @@ export class AppController {
     }
 
     onZoom() {
-        this.log.debug('onZoom')
-        this.recalculate()
+        this.$state.go('home', { zoom: this.zoom })
     }
 
     recalculate() {
-        this.log.debug('recalculate', this.graph)
-        this.dot = toDot(this.graph, this.selectedRoot)
+        this.log.debug('recalculate', this.zoom, this.graph)
+        this.dot = toDot(this.graph, this.zoom)
         this.svg = this.toSvg(this.dot)
     }
 
     onExport(format) {
-        this.exporter.export(format, this.graph.title || 'c4lab-graph', this.text, this.dot)
+        const title = this.graph.title || 'c4lab-graph'
+        this.exporter.export(format, title, this.text, this.dot)
     }
 
     onImport(text) {
@@ -54,5 +53,8 @@ export class AppController {
 export const name = "c4LabApp"
 export const options = {
     template: template,
-    controller: AppController
+    controller: AppController,
+    bindings: {
+        zoom: '<'
+    }
 }

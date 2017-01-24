@@ -1,4 +1,4 @@
-<c4-lab-nav text="$ctrl.text" on-export="$ctrl.onExport(format)" export-formats="$ctrl.exportFormats" on-import="$ctrl.onImport(text)"></c4-lab-nav>
+<c4-lab-nav text="$ctrl.text" on-export="$ctrl.onExport(format)" export-formats="$ctrl.exportFormats" on-import="$ctrl.onImport(text)" zoom="$ctrl.zoom"></c4-lab-nav>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
@@ -8,8 +8,8 @@
             <form class="form-inline">
                 <div class="form-group">
                     <label for="zoomableNodes">Zoom to node</label>
-                    <select name="zoomableNodes" class="form-control" ng-model="$ctrl.selectedRoot" ng-change="$ctrl.onZoom()">
-                        <option ng-value="null">--none--</option>
+                    <select name="zoomableNodes" class="form-control" ng-model="$ctrl.zoom" ng-change="$ctrl.onZoom()">
+                        <option ng-value="undefined">--none--</option>
                         <option ng-repeat="node in $ctrl.expandableNodes track by node.id"
                             value="{{node.id}}">{{node.path}}</option>
                     </select>
