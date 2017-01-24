@@ -11,8 +11,8 @@ import './editor.css'
 
 export class EditorController {
 
-    // @ngInject
     constructor($log) {
+        'ngInject'
         this.log = $log
         this.editorOptions = {
             lineNumbers: true,

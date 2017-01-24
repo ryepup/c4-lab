@@ -2,13 +2,14 @@ import { Storage, uriDecode } from './core'
 
 class StateParamMirrorController {
   constructor($stateParams, $log){
+    'ngInject'
     Object.assign(this, $stateParams)
     $log.debug('StateParamMirrorController', this)
   }
 }
 
 function configureRoutes($stateProvider, $urlRouterProvider) {
-  "ngInject"
+  'ngInject'
   $urlRouterProvider.otherwise('/');
   $stateProvider
     .state('home', {

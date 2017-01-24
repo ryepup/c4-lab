@@ -5,7 +5,7 @@ import { readAllText } from './importer'
 
 class NavController {
     constructor($state) {
-        "ngInject"
+        'ngInject'
         this.$state = $state
     }
 

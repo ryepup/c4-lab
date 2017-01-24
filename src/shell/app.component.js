@@ -6,6 +6,7 @@ import { Storage, toSvg, Exporter, formats, toDot } from '../core'
 export class AppController {
 
     constructor($log, $window, $state, $sce) {
+        'ngInject'
         this.log = $log
         this.$window = $window
         this.$state = $state
