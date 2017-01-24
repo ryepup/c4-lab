@@ -11,8 +11,7 @@ class NavController {
 
     href() {
         return this.$state.href('load',
-            { data: uriEncode(this.text) },
-            { absolute: true });
+            { data: uriEncode(this.text) });
     }
 
     export(format) {
