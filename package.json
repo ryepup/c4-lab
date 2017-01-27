@@ -3,7 +3,7 @@
   "config": {
     "codeclimate_token": "ededa0c572bd7d90bd93f248d5510d2ff8f6d4a658f1349590a8c2e5d49497cc"
   },
-  "version": "0.20.0",
+  "version": "0.20.1",
   "description": "web interface to create software architecture diagrams",
   "main": "src/index.js",
   "scripts": {
@@ -12,10 +12,9 @@
     "codeclimate": "CODECLIMATE_REPO_TOKEN=$npm_package_config_codeclimate_token codeclimate-test-reporter < reports/lcov.info",
     "build": "npm-run-all build:ensure-dist -p build:vendor build:app build:html",
     "build:ensure-dist": "mkdir -p dist",
-    "build:vendor":"browserify -g [uglifyify --ignore 'node_modules/viz.js/*'] -r angular -r babel-polyfill -r viz.js -r angular-ui-bootstrap -r angular-ui-router -r angular-animate -r ng-file-upload -r md5 -r codemirror -r lz-string -r s-expression -r wordwrap -r lodash -r codemirror/addon/edit/matchbrackets -r codemirror/mode/commonlisp/commonlisp -r codemirror/addon/edit/closebrackets -r path > dist/vendor.min.js",
+    "build:vendor": "browserify -g [uglifyify --ignore 'node_modules/viz.js/*'] -r angular -r babel-polyfill -r viz.js -r angular-ui-bootstrap -r angular-ui-router -r angular-animate -r ng-file-upload -r md5 -r codemirror -r lz-string -r s-expression -r wordwrap -r lodash -r codemirror/addon/edit/matchbrackets -r codemirror/mode/commonlisp/commonlisp -r codemirror/addon/edit/closebrackets -r path > dist/vendor.min.js",
     "build:app": "browserify -x angular -x babel-polyfill -x viz.js -x angular-ui-bootstrap -x angular-ui-router -x angular-animate -x ng-file-upload -x md5 -x codemirror -x lz-string -x s-expression -x wordwrap -x lodash -x codemirror/addon/edit/matchbrackets -x codemirror/mode/commonlisp/commonlisp -x codemirror/addon/edit/closebrackets -x path src/index.js -d | exorcist dist/bundle.js.map > dist/bundle.js",
     "build:html": "cp src/index.html dist/",
-
     "serve": "live-server src",
     "serve:dist": "live-server dist",
     "watch": "watchify src/index.js -o 'node_modules/.bin/exorcist src/bundle.js.map > src/bundle.js' -d",
