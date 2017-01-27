@@ -106,6 +106,8 @@ ${indent}${indent}label=<<b>${label}</b>> style="rounded"`,
             yield `${indent}fontsize=20`
             yield `${indent}labelloc=t`
         }
+        yield `${indent}node[fontsize=12]`
+        yield `${indent}edge[fontsize=12]`
         yield ''
     }
 

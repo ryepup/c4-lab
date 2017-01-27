@@ -3,6 +3,8 @@ digraph g {
   label="foo"
   fontsize=20
   labelloc=t
+  node[fontsize=12]
+  edge[fontsize=12]
 
 
 }
