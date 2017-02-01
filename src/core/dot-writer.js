@@ -9,10 +9,11 @@ const typeShapeMap = {
 }
 
 export class DotContext {
-    constructor() {
+    constructor(hrefTo) {
         this.indent = ''
         this.lines = []
         this.wordwrap = wordwrap(30)
+        this.hrefTo = hrefTo
     }
 
     load(graph, zoomNodeId) {
@@ -139,9 +140,24 @@ ${indent}${indent}label=<<b>${label}</b>> style="rounded"`,
 
         const shape = typeShapeMap[node.type] || DEFAULT_SHAPE
 
-        return `${indent}${dotId} [shape="${shape}" label=<
+        const attrs = {
+            shape: `"${shape}"`
+        }
+
+        if (this.hrefTo && node.children && node.children.some(x => x.type !== 'edge')) {
+            attrs.href = `"${this.hrefTo(node.id)}"`
+            attrs.tooltip = `"See more details about ${node.name}"`
+        }
+
+        attrs.label = `<
 <b>${node.name}</b>${tech}${desc}
-${indent}>]`
+${indent}>`
+
+        const dotAttrs = Reflect.ownKeys(attrs)
+            .map(x => `${x}=${attrs[x]}`)
+            .join(' ')
+
+        return `${indent}${dotId} [${dotAttrs}]`
     }
 
     drawEdge(edge, indent) {
@@ -180,8 +196,8 @@ ${indent}>]`
 /**
  * build a DOT representation of the graph
  */
-export const toDot = (graph, zoomNodeId) => {
-    const ctx = new DotContext()
+export const toDot = (graph, zoomNodeId, hrefTo) => {
+    const ctx = new DotContext(hrefTo)
     ctx.load(graph, zoomNodeId)
     return ctx.draw()
 }

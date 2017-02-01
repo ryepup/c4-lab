@@ -13,8 +13,11 @@ const samples = [
     ['edge-from-child', require('./edge-from-child.sexp'), require('./edge-from-child.dot')],
     ['container', require('./container.sexp'), require('./container.dot'), "system"],
     ['title', require('./title.sexp'), require('./title.dot')],
-    ['edge-relative-path', require('./edge-relative-path.sexp'), require('./edge-relative-path.dot'), "system"]
+    ['edge-relative-path', require('./edge-relative-path.sexp'), require('./edge-relative-path.dot'), "system"],
+    ['unzoomed container', require('./container.sexp'), require('./container-unzoomed.dot')]
 ]
+
+const hrefTo = id => `#!/?zoom=${id}`
 
 describe('samples', () => {
 
@@ -25,7 +28,7 @@ describe('samples', () => {
             it('generates the right DOT', () => {
                 const graph = parse(sexp)
 
-                const actual = toDot(graph, graph.pathMap[path])
+                const actual = toDot(graph, graph.pathMap[path], hrefTo)
 
                 expect(actual).toBe(dot)
             })

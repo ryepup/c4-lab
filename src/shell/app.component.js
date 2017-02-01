@@ -36,7 +36,7 @@ export class AppController {
 
     recalculate() {
         this.log.debug('recalculate', this.zoom, this.graph)
-        this.dot = toDot(this.graph, this.zoom)
+        this.dot = toDot(this.graph, this.zoom, zoom => this.$state.href('home', { zoom }))
         this.svg = this.toSvg(this.dot)
     }
 
