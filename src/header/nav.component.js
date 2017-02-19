@@ -2,11 +2,13 @@ import template from './nav.html'
 import './nav.css'
 import { uriEncode } from '../core'
 import { readAllText } from './importer'
+import * as aboutComponent from './about.component'
 
 class NavController {
-    constructor($state) {
+    constructor($state, $uibModal) {
         'ngInject'
         this.$state = $state
+        this.$uibModal = $uibModal
     }
 
     href() {
@@ -26,6 +28,12 @@ class NavController {
             readAllText(files[0])
                 .then(text => this.onImport({ text }))
         }
+    }
+
+    openAbout(){
+        this.$uibModal.open({
+            component: aboutComponent.name
+        })
     }
 
 }

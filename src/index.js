@@ -7,7 +7,7 @@ import 'angular-animate'
 import 'ng-file-upload'
 
 import * as editor from './editor'
-import * as header from './header'
+import headerModule from './header'
 import * as shell from './shell'
 import * as buildInfo from './build-info'
 import configureRoutes from './routes'
@@ -17,11 +17,11 @@ angular.module('c4-lab', [
   'ui.bootstrap',
   'ui.router',
   'ngAnimate',
-  'ngFileUpload'])
+  'ngFileUpload',
+  headerModule])
   .component(buildInfo.name, buildInfo.options)
   .component(editor.name, editor.options)
   .component(shell.name, shell.options)
-  .component(header.name, header.options)
   .run(editor.install)
   .config(allowBlobsAndDataHrefs)
   .config(configureRoutes)
