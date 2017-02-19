@@ -46,14 +46,14 @@ export class DotContext {
         const wrapped = this.wordwrap(text)
 
         return htmlNewlines
-            ? wrapped.replace('\n', '<br/>\n')
+            ? wrapped.replace(/\n/g, '<br/>\n')
             : wrapped
     }
 
     toLabel(edgeOrText) {
         return this.toDescription(edgeOrText, false)
             .replace(/"/g, '\\"')
-            .replace('\n', '\\n')
+            .replace(/\n/g, '\\n')
     }
 
     isEdgeVisible(edge) {

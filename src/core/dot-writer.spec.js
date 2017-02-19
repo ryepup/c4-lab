@@ -32,6 +32,13 @@ describe('dot-writer', () => {
                 expect(ctx.toDescription({ description }, false))
                     .toBe("I am the very model of a\nmodern major general")
             })
+
+            it('wraps very long lines', () => {
+                const description = "I am the very model of a modern major general, I've information vegetable, animal, and mineral"
+
+                expect(ctx.toDescription({ description }, false))
+                    .toBe("I am the very model of a\nmodern major general, I've\ninformation vegetable,\nanimal, and mineral")
+            })
         })
 
         describe('toLabel', () => {
@@ -64,6 +71,13 @@ describe('dot-writer', () => {
 
                 expect(ctx.toLabel({ description }))
                     .toBe("I am the very model of a\\nmodern major general")
+            })
+
+            it('wraps very long lines', () => {
+                const description = "I am the very model of a modern major general, I've information vegetable, animal, and mineral"
+
+                expect(ctx.toLabel({ description }))
+                    .toBe("I am the very model of a\\nmodern major general, I've\\ninformation vegetable,\\nanimal, and mineral")
             })
         })
     })
