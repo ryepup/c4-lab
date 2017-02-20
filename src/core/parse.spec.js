@@ -1,5 +1,13 @@
 import { parse, SyntaxError, pathToId } from './parse'
 
+const fooSystem = {
+    name: "foo",
+    id: 'acbd18db4cc2f85cedef654fccc4a4d8',
+    path: "foo",
+    type: 'system',
+    children: []
+};
+
 describe('parse.js', () => {
 
     describe('parse', () => {
@@ -9,24 +17,44 @@ describe('parse.js', () => {
         })
 
         it('parses single node', () => {
-            const item = {
-                name: "foo",
-                id: 'acbd18db4cc2f85cedef654fccc4a4d8',
-                path: "foo",
-                type: 'system',
-                children: []
-            };
-
             const result = parse('(system ("foo"))');
 
             expect(result).toEqual({
                 title: undefined,
                 edges: [],
-                items: [item],
-                roots: [item.id],
-                idMap: { [item.id]: item },
-                pathMap: { [item.path]: item.id }
+                items: [fooSystem],
+                roots: [fooSystem.id],
+                idMap: { [fooSystem.id]: fooSystem },
+                pathMap: { [fooSystem.path]: fooSystem.id }
             })
+        })
+
+        it('supports def- prefix', () => {
+            const result = parse('(def-system ("foo"))');
+
+            expect(result).toEqual({
+                title: undefined,
+                edges: [],
+                items: [fooSystem],
+                roots: [fooSystem.id],
+                idMap: { [fooSystem.id]: fooSystem },
+                pathMap: { [fooSystem.path]: fooSystem.id }
+            })
+
+        })
+
+        it('supports define- prefix', () => {
+            const result = parse('(define-system ("foo"))');
+
+            expect(result).toEqual({
+                title: undefined,
+                edges: [],
+                items: [fooSystem],
+                roots: [fooSystem.id],
+                idMap: { [fooSystem.id]: fooSystem },
+                pathMap: { [fooSystem.path]: fooSystem.id }
+            })
+
         })
 
         it('parses nested nodes', () => {

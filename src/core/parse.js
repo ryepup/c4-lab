@@ -44,7 +44,7 @@ class Parser {
     }
 
     buildIRNode([type, ...rest], parent) {
-
+        type = type.replace(/^def(ine)?-/i, '')
         const node = type in this
             ? this[type](rest, parent)
             : this.item(rest, parent);
@@ -55,7 +55,6 @@ class Parser {
             && node.children.some(x => x.type !== 'edge')) {
             node.canExpand = true
         }
-
         return Object.assign(node, { type: type.toLowerCase() });
     }
 
@@ -108,7 +107,7 @@ class Parser {
     }
 
     postProcessEdge(edge) {
-        if(edge.to.startsWith('.')){
+        if (edge.to.startsWith('.')) {
             const src = this.idMap[edge.sourceId]
             const parent = this.idMap[src.parentId]
             edge.to = path.join(parent.path, edge.to)

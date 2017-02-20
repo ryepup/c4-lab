@@ -1,6 +1,6 @@
 (title "c4-lab")
 ;; add an actor to represent humans that use your system
-(actor ("Devs")
+(define-actor ("Devs")
        ;; add edges to say what part of your system the actor uses
        (edge
         ;; specify where the other end of this edge is using something like a path
@@ -9,17 +9,17 @@
         :description "Create/read/update designs")
        )
 ;; add your system
-(system ("C4 Lab"
+(define-system ("C4 Lab"
          :description "Web-based rapid prototyping of C4 diagrams to augment whiteboards")
         ;; add the containers inside your system
-        (container ("UI" :tech "html5, angularjs"
+        (def-container ("UI" :tech "html5, angularjs"
                          :description "prototype, import, export C4 diagrams" ))
         )
-(system ("Github" :description "Free git and web hosting")
+(define-system ("Github" :description "Free git and web hosting")
         ;; add edges between any actor, system, or container
         (edge :description "hosts" :to "C4 Lab/UI")
         (edge :to "Travis-ci" :description "triggers build")
         )
-(system ("Travis-ci" :description "Open source CI")
+(define-system ("Travis-ci" :description "Open source CI")
         (edge :to "Github" :description "publishes"))
 ;; any line that starts with ";;" is a comment
