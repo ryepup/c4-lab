@@ -5,4 +5,5 @@
         ng-model-options="{ debounce: 500 }"
         ng-change="$ctrl.parse($ctrl.text)">
     </ui-codemirror>
+    <span class="help-block">{{ $ctrl.lastError.message }}</span>
 </div>

@@ -1,4 +1,4 @@
-import { parse, SyntaxError, pathToId } from './parse'
+import { parse, SyntaxError, pathToId, NameNotFoundError, OptsNotFoundError } from './parse'
 
 const fooSystem = {
     name: "foo",
@@ -167,6 +167,16 @@ describe('parse.js', () => {
 
             expect(result.title).toBe("test");
             expect(result.items.length).toBe(0);
+        })
+
+        it('throws an error when missing opts', () => {
+            expect(() => parse('(system)'))
+                .toThrowError(OptsNotFoundError)
+        })
+
+        it('throws an error when missing name', () => {
+            expect(() => parse('(system ())'))
+                .toThrowError(NameNotFoundError)
         })
     })
 })

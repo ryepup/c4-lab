@@ -7,6 +7,8 @@ export const pathToId = md5
 
 
 const stripComments = text => text.replace(/^\s*;;.*$/gm, '')
+// SParse.SyntaxError is just an alias for Error, unfortunately
+export const SyntaxError = SParse.SyntaxError
 export class ParseError extends Error { }
 export class TitleNotAStringError extends ParseError {
     constructor(input) {
@@ -18,6 +20,14 @@ export class TitleNotAtTopLevelError extends ParseError {
         super('title is only allowed at the top level')
     }
 }
+export class OptsNotFoundError extends ParseError {
+    constructor(type) { super(`missing options for a ${type}`) }
+}
+export class NameNotFoundError extends ParseError {
+    constructor(type) { super(`missing a name for a ${type}`) }
+}
+
+
 
 class Parser {
 
@@ -58,7 +68,7 @@ class Parser {
         type = type.replace(/^def(ine)?-/i, '')
         const node = type in this
             ? this[type](rest, parent)
-            : this.item(rest, parent);
+            : this.item(rest, parent, type);
 
         if (!node) return;
 
@@ -69,8 +79,10 @@ class Parser {
         return Object.assign(node, { type: type.toLowerCase() });
     }
 
-    item([opts, ...children], parent) {
+    item([opts, ...children], parent, type) {
+        if (!opts) { throw new OptsNotFoundError(type) }
         const [name, ...kwargs] = opts
+        if (!name) { throw new NameNotFoundError(type) }
         const path = this.pathToNode(name, parent).toString()
         const node = {
             name: name.toString(),
@@ -147,7 +159,6 @@ class Parser {
 }
 
 export const parse = text => new Parser().parse(text)
-export const SyntaxError = SParse.SyntaxError
 
 
 

@@ -6,7 +6,7 @@ import '../../node_modules/codemirror/theme/elegant.css'
 import CodeMirror from 'codemirror'
 
 import template from './editor.html'
-import { parse, SyntaxError } from '../core'
+import { parse, SyntaxError, ParseError } from '../core'
 import './editor.css'
 
 export class EditorController {
@@ -28,17 +28,28 @@ export class EditorController {
     }
 
     parse(text) {
+        this.lastError = undefined;
         this.text = text;
         try {
             const parsed = parse(text);
             this.ngModel.$setViewValue(parsed);
             this.syntaxIsValid = true
-            if (this.onParse) { this.onParse({text}) }
+            this.tryOnParse(text)
         } catch (e) {
             this.log.error(e)
-            if (e instanceof SyntaxError) {
-                this.syntaxIsValid = false;
+            if (e instanceof SyntaxError || e instanceof ParseError) {
+                this.syntaxIsValid = false
+                this.lastError = e
             }
+        }
+    }
+
+    tryOnParse(text) {
+        if (!this.onParse) return;
+        try {
+            this.onParse({ text })
+        } catch (e) {
+            this.log.error('Trouble firing onParse event', e);
         }
     }
 }
