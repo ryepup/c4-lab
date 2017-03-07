@@ -8,6 +8,17 @@ export const pathToId = md5
 
 const stripComments = text => text.replace(/^\s*;;.*$/gm, '')
 export class ParseError extends Error { }
+export class TitleNotAStringError extends ParseError {
+    constructor(input) {
+        super('title must be a string, was: ' + JSON.stringify(input))
+    }
+}
+export class TitleNotAtTopLevelError extends ParseError {
+    constructor() {
+        super('title is only allowed at the top level')
+    }
+}
+
 class Parser {
 
     constructor() {
@@ -84,8 +95,8 @@ class Parser {
     }
 
     title([input], parent) {
-        if (!isString(input)) throw new ParseError('title must be a string, was' + JSON.stringify(input))
-        if (parent) throw new ParseError('title is only allowed at the top level')
+        if (!isString(input)) { throw new TitleNotAStringError(input) }
+        if (parent) { throw new TitleNotAtTopLevelError() }
         this.graphTitle = input.toString();
     }
 

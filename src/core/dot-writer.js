@@ -8,6 +8,17 @@ const typeShapeMap = {
     container: 'box3d'
 }
 
+/**
+ * does this node have children that aren't edges?
+ * 
+ * @param {*} node 
+ * @returns {boolean}
+ */
+function hasNonEdgeChildren(node) {
+    return node && node.children
+        && node.children.some(x => x.type !== 'edge')
+}
+
 export class DotContext {
     constructor(hrefTo) {
         this.indent = ''
@@ -144,7 +155,7 @@ ${indent}${indent}label=<<b>${label}</b>> style="rounded"`,
             shape: `"${shape}"`
         }
 
-        if (this.hrefTo && node.children && node.children.some(x => x.type !== 'edge')) {
+        if (this.hrefTo && hasNonEdgeChildren(node)) {
             attrs.href = `"${this.hrefTo(node.id)}"`
             attrs.tooltip = `"See more details about ${node.name}"`
         }

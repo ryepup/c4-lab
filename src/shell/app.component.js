@@ -14,6 +14,7 @@ export class AppController {
         this.exporter = new Exporter($window.document)
         this.exportFormats = formats
         this.toSvg = dot => $sce.trustAsHtml(toSvg(dot))
+        this.hrefTo = zoom => $state.href('home', { zoom })
     }
 
     $onInit() {
@@ -36,7 +37,7 @@ export class AppController {
 
     recalculate() {
         this.log.debug('recalculate', this.zoom, this.graph)
-        this.dot = toDot(this.graph, this.zoom, zoom => this.$state.href('home', { zoom }))
+        this.dot = toDot(this.graph, this.zoom, this.hrefTo)
         this.svg = this.toSvg(this.dot)
     }
 
