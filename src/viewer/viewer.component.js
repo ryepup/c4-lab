@@ -53,6 +53,7 @@ export const options = {
     require: {
         ngModel: '^'
     },
+    transclude: true,
     template,
     controller: ViewerComponent,
     bindings: {

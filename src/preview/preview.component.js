@@ -1,9 +1,11 @@
 import template from './preview.html'
-import { parse, uriDecode, Exporter } from '../core'
+import { parse, uriDecode, Exporter, Storage } from '../core'
 
 class PreviewComponent{
-    constructor($window){
+    constructor($window, $state){
         this.exporter = new Exporter($window.document)
+        this.storage = new Storage($window.localStorage)
+        this.$state = $state
     }
 
     $onChanges(){
@@ -13,6 +15,11 @@ class PreviewComponent{
 
     onExport(format) {
         this.exporter.export(format, this.graph.title, this.text, this.dot)
+    }
+
+    edit(){
+        this.storage.save(this.text)
+        this.$state.go('home')
     }
 }
 

@@ -3,10 +3,12 @@
         <div class="form-group">
             <label for="zoomableNodes">Zoom to node</label>
             <select name="zoomableNodes" class="form-control" ng-model="$ctrl.zoom" ng-change="$ctrl.onZoom()">
-            <option ng-value="undefined">--none--</option>
-            <option ng-repeat="node in $ctrl.expandableNodes track by node.id"
-                value="{{node.id}}">{{node.path}}</option>
-        </select>
+                <option ng-value="undefined">--none--</option>
+                <option ng-repeat="node in $ctrl.expandableNodes track by node.id"
+                    value="{{node.id}}">{{node.path}}</option>
+            </select>
+        </div>
+        <div class="form-group" ng-transclude>
         </div>
     </form>
     <uib-tabset>
