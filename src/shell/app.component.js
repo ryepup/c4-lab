@@ -1,11 +1,11 @@
 import template from './app.html'
 import sample from './c4lab.sexp'
 
-import { Storage, toSvg, Exporter, formats, toDot } from '../core'
+import { Storage, Exporter, formats } from '../core'
 
 export class AppController {
 
-    constructor($log, $window, $state, $sce) {
+    constructor($log, $window, $state) {
         'ngInject'
         this.log = $log
         this.$window = $window
@@ -13,8 +13,6 @@ export class AppController {
         this.storage = new Storage($window.localStorage)
         this.exporter = new Exporter($window.document)
         this.exportFormats = formats
-        this.toSvg = dot => $sce.trustAsHtml(toSvg(dot))
-        this.hrefTo = zoom => $state.href('home', { zoom })
     }
 
     $onInit() {
@@ -24,21 +22,7 @@ export class AppController {
     onParse(text) {
         this.log.debug('onParse')
         this.text = text
-        this.expandableNodes = this.graph.items
-            .filter(x => x.canExpand)
-            .sort(x => x.path)
         this.storage.save(text)
-        this.recalculate()
-    }
-
-    onZoom() {
-        this.$state.go('home', { zoom: this.zoom })
-    }
-
-    recalculate() {
-        this.log.debug('recalculate', this.zoom, this.graph)
-        this.dot = toDot(this.graph, this.zoom, this.hrefTo)
-        this.svg = this.toSvg(this.dot)
     }
 
     onExport(format) {

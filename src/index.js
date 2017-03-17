@@ -11,6 +11,7 @@ import headerModule from './header'
 import * as shell from './shell'
 import * as buildInfo from './build-info'
 import configureRoutes from './routes'
+import viewer from './viewer'
 
 angular.module('c4-lab', [
   'ui.codemirror',
@@ -18,7 +19,8 @@ angular.module('c4-lab', [
   'ui.router',
   'ngAnimate',
   'ngFileUpload',
-  headerModule])
+  headerModule,
+  viewer])
   .component(buildInfo.name, buildInfo.options)
   .component(editor.name, editor.options)
   .component(shell.name, shell.options)
