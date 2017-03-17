@@ -9,7 +9,7 @@ export class Exporter {
     }
 
     export(format, title, text, dot) {
-        this[format](title, text, dot)
+        this[format](title || 'c4-lab-graph', text, dot)
     }
 
     sexp(title, text) {

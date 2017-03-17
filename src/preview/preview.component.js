@@ -1,11 +1,18 @@
 import template from './preview.html'
-import { parse, uriDecode } from '../core'
+import { parse, uriDecode, Exporter } from '../core'
 
 class PreviewComponent{
-    constructor(){}
+    constructor($window){
+        this.exporter = new Exporter($window.document)
+    }
 
     $onChanges(){
-        this.graph = parse(uriDecode(this.encodedText))
+        this.text = uriDecode(this.encodedText)
+        this.graph = parse(this.text)
+    }
+
+    onExport(format) {
+        this.exporter.export(format, this.graph.title, this.text, this.dot)
     }
 }
 

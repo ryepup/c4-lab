@@ -1,14 +1,16 @@
 import template from './nav.html'
 import './nav.css'
-import { uriEncode } from '../core'
+import { Storage, uriEncode, formats } from '../core'
 import { readAllText } from './importer'
 import * as aboutComponent from './about.component'
 
 class NavController {
-    constructor($state, $uibModal) {
+    constructor($state, $uibModal, $window) {
         'ngInject'
         this.$state = $state
         this.$uibModal = $uibModal
+        this.storage = new Storage($window.localStorage)
+        this.exportFormats = formats
     }
 
     href() {
@@ -26,7 +28,7 @@ class NavController {
     import(files) {
         if (files) {
             readAllText(files[0])
-                .then(text => this.onImport({ text }))
+                .then(text => this._onImport(text))
         }
     }
 
@@ -36,6 +38,10 @@ class NavController {
         })
     }
 
+    _onImport(text) {
+        this.storage.save(text)
+        this.$state.go('home', {}, { reload: true })
+    }
 }
 
 export const name = "c4LabNav"
@@ -44,9 +50,7 @@ export const options = {
     controller: NavController,
     bindings: {
         text: '<',
-        exportFormats: '<',
         onExport: '&',
-        onImport: '&',
         zoom: '<'
     }
 

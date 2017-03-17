@@ -1,7 +1,6 @@
+import { Storage, Exporter } from '../core'
 import template from './app.html'
 import sample from './c4lab.sexp'
-
-import { Storage, Exporter, formats } from '../core'
 
 export class AppController {
 
@@ -12,7 +11,6 @@ export class AppController {
         this.$state = $state
         this.storage = new Storage($window.localStorage)
         this.exporter = new Exporter($window.document)
-        this.exportFormats = formats
     }
 
     $onInit() {
@@ -26,13 +24,7 @@ export class AppController {
     }
 
     onExport(format) {
-        const title = this.graph.title || 'c4lab-graph'
-        this.exporter.export(format, title, this.text, this.dot)
-    }
-
-    onImport(text) {
-        this.storage.save(text)
-        this.$state.go('home', {}, { reload: true })
+        this.exporter.export(format, this.graph.title, this.text, this.dot)
     }
 }
 
