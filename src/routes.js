@@ -1,5 +1,3 @@
-import { Storage, uriDecode } from './core'
-
 class StateParamMirrorController {
   constructor($stateParams, $log){
     'ngInject'
@@ -20,12 +18,9 @@ function configureRoutes($stateProvider, $urlRouterProvider) {
     })
     .state('load', {
       url: '/load/{data}?zoom',
-      onEnter: function ($window, $stateParams, $state) {
-        const storage = new Storage($window.localStorage)
-        const text = uriDecode($stateParams.data)
-        storage.save(text)
-        $state.go('home', {zoom: $stateParams.zoom})
-      }
+      template: '<c4-lab-preview encoded-text="vm.data" zoom="vm.zoom" />',
+      controller: StateParamMirrorController,
+      controllerAs: 'vm'
     })
 }
 

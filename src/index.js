@@ -11,6 +11,7 @@ import headerModule from './header'
 import * as shell from './shell'
 import * as buildInfo from './build-info'
 import configureRoutes from './routes'
+import preview from './preview'
 import viewer from './viewer'
 
 angular.module('c4-lab', [
@@ -20,6 +21,7 @@ angular.module('c4-lab', [
   'ngAnimate',
   'ngFileUpload',
   headerModule,
+  preview,
   viewer])
   .component(buildInfo.name, buildInfo.options)
   .component(editor.name, editor.options)
