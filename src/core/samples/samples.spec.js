@@ -16,7 +16,8 @@ const samples = [
     ['edge-relative-path', require('./edge-relative-path.sexp'), require('./edge-relative-path.dot'), "system"],
     ['unzoomed container', require('./container.sexp'), require('./container-unzoomed.dot')],
     ['edge-from-child-to-child', require('./edge-from-child-to-child.sexp'), require('./edge-from-child-to-child.dot')],
-    ['component', require('./component.sexp'), require('./component.dot'), "system/container"]
+    ['component', require('./component.sexp'), require('./component.dot'), "system/container"],
+    ['component-with-sibling', require('./component-with-sibling.sexp'), require('./component-with-sibling.dot'), "A/a"]
 ]
 
 const hrefTo = id => `#!/?zoom=${id}`

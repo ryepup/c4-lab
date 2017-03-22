@@ -32,8 +32,10 @@ export class DotContext {
 
     findVisibleNodes(zoomNodeId) {
         this.rootNode = this.graph.idMap[zoomNodeId]
+        const parent = this.graph.idMap[this.rootNode.parentId]
 
         const visibleIds = this.rootNode.children
+            .concat(parent ? parent.children : [])
             .map(x => x.id)
             .concat(this.graph.roots)
             .concat([this.rootNode.id, this.rootNode.parentId])
@@ -114,14 +116,19 @@ ${indent}  label=<<b>${label}</b>> style="${style}"`,
 
         const nonClustered = this.graph.roots
             .filter(x => x !== parent.id)
+        const otherChildren = parent.children
+            .filter(x => x !== this.rootNode);
+
+        const nextIndent = `${indent}  `
 
         return [
             `${indent}subgraph cluster_${dotId} {`,
-            `${indent}${indent}label=<<b>${label}</b>> style="rounded"`,
+            `${nextIndent}label=<<b>${label}</b>> style="rounded"`,
             '',
-            `${indent}${indent}${dotId} [style="invisible"]`,
+            `${nextIndent}${dotId} [style="invisible"]`,
+            this.drawItems(otherChildren, nextIndent),
             '',
-            this.drawCluster(`${indent}${indent}`, this.rootNode, 'solid'),
+            this.drawCluster(nextIndent, this.rootNode, 'solid'),
             `${indent}}`,
             this.drawItems(nonClustered, indent)
         ]
@@ -171,6 +178,7 @@ ${indent}  label=<<b>${label}</b>> style="${style}"`,
     drawItems(nodesOrIds, indent) {
         return nodesOrIds
             .map(x => isString(x) ? this.graph.idMap[x] : x)
+            .filter(x => x.type !== 'edge')
             .map(x => this.drawItem(x, indent))
     }
 
@@ -187,7 +195,7 @@ ${indent}  label=<<b>${label}</b>> style="${style}"`,
 
         const attrs = {
             shape: `"${shape}"`
-        }
+        } 
 
         let name = `<b>${node.name}</b>`
         if (this.hrefTo && node.children && node.children.some(x => x.type !== 'edge')) {
