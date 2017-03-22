@@ -67,7 +67,8 @@ export class DotContext {
     }
 
     isEdgeVisible(edge) {
-        return this.findVisibleIds([edge.sourceId, edge.destinationId])
+        return this.isIdVisible(edge.sourceId)
+            || this.isIdVisible(edge.destinationId)
             || this.isCrossingSystems(edge)
     }
 
