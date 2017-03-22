@@ -30,6 +30,7 @@ export class DotContext {
     load(graph, zoomNodeId) {
         this.graph = graph
         this.rootNode = graph.idMap[zoomNodeId]
+        this.zoomNodeId = zoomNodeId
         this.visibleIds = zoomNodeId
             ? this.rootNode
                 .children
@@ -70,6 +71,16 @@ export class DotContext {
     isEdgeVisible(edge) {
         return this.isIdVisible(edge.sourceId)
             || this.isIdVisible(edge.destinationId)
+            || this.isCrossingSystems(edge)
+    }
+
+    isCrossingSystems(edge){
+        const visibleSourceIds = edge.sourceParentIds
+            .filter(x => this.isIdVisible(x))
+        const visibleDestinationIds = edge.destinationParentIds
+            .filter(x => this.isIdVisible(x))
+
+        return visibleSourceIds[0] !== visibleDestinationIds[0]
     }
 
     isIdVisible(id) {
@@ -88,6 +99,8 @@ export class DotContext {
         return [
             `${indent}subgraph cluster_${dotId} {
 ${indent}${indent}label=<<b>${label}</b>> style="rounded"`,
+            '',
+            `${indent}${indent}${dotId} [style="invisible"]`,
             '',
             this.drawItems(this.rootNode.children, indent + '  '),
             `${indent}}`,
@@ -180,10 +193,11 @@ ${indent}>`
             return idOk ? id : parentIds.find(x => this.isIdVisible(x))
         }
 
-        const src = this.toDotId(
-            getId(srcOk, edge.sourceId, edge.sourceParentIds))
-        const dst = this.toDotId(
-            getId(dstOk, edge.destinationId, edge.destinationParentIds))
+        const srcId = getId(srcOk, edge.sourceId, edge.sourceParentIds)
+        const dstId = getId(dstOk, edge.destinationId, edge.destinationParentIds)
+
+        const src = this.toDotId(srcId)
+        const dst = this.toDotId(dstId)
 
         const attrs = {}
 
@@ -193,6 +207,14 @@ ${indent}>`
 
         if (!(srcOk && dstOk)) {
             attrs.style = 'dashed'
+        }
+
+        if(srcId === this.zoomNodeId){
+            attrs.ltail = `cluster_${src}`
+        }
+
+        if(dstId === this.zoomNodeId){
+            attrs.lhead = `cluster_${dst}`
         }
 
         const dotAttrs = Reflect.ownKeys(attrs)
