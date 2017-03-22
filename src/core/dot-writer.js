@@ -81,7 +81,7 @@ export class DotContext {
         return visibleSourceIds[0] !== visibleDestinationIds[0]
     }
 
-    findVisibleIds(ids){
+    findVisibleIds(ids) {
         return ids.filter(x => this.isIdVisible(x))
     }
 
@@ -99,7 +99,7 @@ export class DotContext {
 
         return [
             `${indent}subgraph cluster_${dotId} {
-${indent}  label=<<b>${label}</b>> style="${style}"`,
+${indent}  label=<${DOT.b(label)}> style="${style}"`,
             '',
             `${indent}  ${dotId} [style="invisible"]`,
             '',
@@ -123,7 +123,7 @@ ${indent}  label=<<b>${label}</b>> style="${style}"`,
 
         return [
             `${indent}subgraph cluster_${dotId} {`,
-            `${nextIndent}label=<<b>${label}</b>> style="rounded"`,
+            `${nextIndent}label=<${DOT.b(label)}> style="rounded"`,
             '',
             `${nextIndent}${dotId} [style="invisible"]`,
             this.drawItems(otherChildren, nextIndent),
@@ -168,10 +168,11 @@ ${indent}  label=<<b>${label}</b>> style="${style}"`,
         if (!text) return ''
 
         text = this.toDescription(text)
+        text = DOT.font("#666666", DOT.i(`&#171;${text}&#187;`))
 
         return `
 <br/>
-<font color="#666666"><i>&#171;${text}&#187;</i></font>
+${text}
 <br/>`
     }
 
@@ -194,25 +195,21 @@ ${indent}  label=<<b>${label}</b>> style="${style}"`,
         const shape = typeShapeMap[node.type] || DEFAULT_SHAPE
 
         const attrs = {
-            shape: `"${shape}"`
-        } 
+            shape
+        }
 
-        let name = `<b>${node.name}</b>`
+        let name = DOT.b(node.name)
         if (this.hrefTo && node.children && node.children.some(x => x.type !== 'edge')) {
-            attrs.href = `"${this.hrefTo(node.id)}"`
-            attrs.tooltip = `"See more details about ${node.name}"`
-            name = `<font color="blue"><u>${name}</u></font>`
+            attrs.href = this.hrefTo(node.id)
+            attrs.tooltip = `See more details about ${node.name}`
+            name = DOT.font('blue', DOT.u(name))
         }
 
         attrs.label = `<
 ${name}${tech}${desc}
 ${indent}>`
 
-        const dotAttrs = Reflect.ownKeys(attrs)
-            .map(x => `${x}=${attrs[x]}`)
-            .join(' ')
-
-        return `${indent}${dotId} [${dotAttrs}]`
+        return `${indent}${dotId} ${DOT.attrList(attrs)}`
     }
 
     drawEdge(edge, indent) {
@@ -248,12 +245,27 @@ ${indent}>`
             attrs.lhead = `cluster_${dst}`
         }
 
+        return `${indent}${src} -> ${dst} ${DOT.attrList(attrs)}`
+    }
+}
+
+class DOT {
+    static i(text) { return `<i>${text}</i>` }
+    static b(text) { return `<b>${text}</b>` }
+    static u(text) { return `<u>${text}</u>` }
+    static font(color, text) { return `<font color="${color}">${text}</font>` }
+    static attrList(attrs) {
         const dotAttrs = Reflect.ownKeys(attrs)
-            .map(x => `${x}="${attrs[x]}"`)
+            .filter(x => attrs[x])
+            .map(x => `${x}=${DOT.quoteAttr(attrs[x])}`)
             .join(' ')
 
-        return `${indent}${src} -> ${dst} [${dotAttrs}]`
+        return `[${dotAttrs}]`
     }
+    static quoteAttr(value) {
+        return /^</.test(value) ? value : `"${value}"`
+    }
+
 }
 
 
