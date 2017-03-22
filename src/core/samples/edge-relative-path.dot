@@ -6,6 +6,8 @@ digraph g {
   subgraph cluster_g1 {
     label=<<b>system</b>> style="rounded"
 
+    g1 [style="invisible"]
+
     g0 [shape="box3d" label=<
 <b>a</b>
     >]
