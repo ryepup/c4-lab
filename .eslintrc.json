@@ -43,5 +43,8 @@
         "no-alert": 2,
         "no-eval": 2,
         "camelcase": 2
+    },
+    "globals": {
+        "__dirname": true
     }
 }

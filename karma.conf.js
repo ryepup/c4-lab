@@ -1,32 +1,34 @@
-module.exports = function(config) {
+const path = require('path');
+const webpackConfig = require('./webpack.test.config')
+
+module.exports = function (config) {
   config.set({
-    files: [
-      'src/test-setup.js',
-      'src/index.js',
-      'src/**/*.spec.js'],
-    frameworks: ['jasmine', 'browserify'],
+    files: ['src/test-setup.js'],
+    frameworks: ['jasmine'],
     browsers: ['PhantomJS'],
     preprocessors: {
-      'src/**/*.js': 'browserify'
+      'src/test-setup.js': ['webpack', 'sourcemap']
     },
-    browserify: {
-      debug: true,
-      noParse: ['viz.js'],
-      transform:[
-        'babelify',
-        ['browserify-istanbul', {
-          ignore: '**/node_modules/** **/*.spec.js **/*.dot **/*.html **/*.css **/test-setup.js **/*.sexp'
-            .split(' ')
-        }]
-      ]
+    webpack: webpackConfig,
+    webpackMiddleware: {
+      stats: 'errors-only'
     },
-    reporters: config.reporters.concat(['coverage']),
-    coverageReporter: {
-      dir: 'reports',
-      reporters: [
-        { type: 'lcovonly', subdir: '.', file: 'lcov.info' },
-        { type: 'text-summary' }
-      ]
+    reporters: ['progress', 'coverage-istanbul'],
+    coverageIstanbulReporter: {
+      reports: ['html', 'lcovonly', 'text-summary'],
+      dir: path.join(__dirname, 'reports'),
+      fixWebpackSourcePaths: true,
+      'report-config': {
+        html: {
+          subdir: 'html'
+        }
+      },
+      thresholds: {
+        statements: 70,
+        lines: 70,
+        branches: 70,
+        functions: 70
+      }
     }
   });
 };

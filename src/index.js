@@ -7,7 +7,7 @@ import 'angular-animate'
 import 'ng-file-upload'
 
 import * as editor from './editor'
-import headerModule from './header'
+import header from './header'
 import * as shell from './shell'
 import * as buildInfo from './build-info'
 import configureRoutes from './routes'
@@ -20,7 +20,7 @@ angular.module('c4-lab', [
   'ui.router',
   'ngAnimate',
   'ngFileUpload',
-  headerModule,
+  header,
   preview,
   viewer])
   .component(buildInfo.name, buildInfo.options)

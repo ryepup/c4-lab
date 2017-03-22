@@ -1,22 +1,8 @@
-if(!Function.prototype.bind){
-  Function.prototype.bind = require("function-bind"); // support phantomJS
-}
-
 const angular = require('angular');
 require('angular-mocks');
+require('../src/index.js')
+
 beforeEach(angular.mock.module('c4-lab'));
-
-
-beforeEach(function() {
-  jasmine.addMatchers({
-    toEqualTrimmed: function() {
-      return {
-        compare: function(actual, expected) {
-          return {
-            pass: actual && actual.trim() === expected.trim()
-          };
-        }
-      };
-    }
-  });
-});
+ 
+const testContexts = require.context('.', true, /spec\.js$/i)
+testContexts.keys().map(testContexts)
