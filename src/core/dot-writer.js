@@ -1,22 +1,12 @@
 import wordwrap from 'wordwrap'
-import { flattenDeep, isString } from 'lodash'
+import { flattenDeep, isString, uniq } from 'lodash'
 
 
 const DEFAULT_SHAPE = 'box'
 const typeShapeMap = {
     actor: 'egg',
-    container: 'box3d'
-}
-
-/**
- * does this node have children that aren't edges?
- * 
- * @param {*} node 
- * @returns {boolean}
- */
-function hasNonEdgeChildren(node) {
-    return node && node.children
-        && node.children.some(x => x.type !== 'edge')
+    container: 'box3d',
+    component: 'component'
 }
 
 export class DotContext {
@@ -29,19 +19,27 @@ export class DotContext {
 
     load(graph, zoomNodeId) {
         this.graph = graph
-        this.rootNode = graph.idMap[zoomNodeId]
         this.zoomNodeId = zoomNodeId
         this.visibleIds = zoomNodeId
-            ? this.rootNode
-                .children
-                .map(x => x.id)
-                .concat(graph.roots)
+            ? this.findVisibleNodes(zoomNodeId)
             : graph.roots
 
         this.visibleIds.sort()
 
         this.visibleEdges = graph.edges
             .filter(x => this.isEdgeVisible(x))
+    }
+
+    findVisibleNodes(zoomNodeId) {
+        this.rootNode = this.graph.idMap[zoomNodeId]
+
+        const visibleIds = this.rootNode.children
+            .map(x => x.id)
+            .concat(this.graph.roots)
+            .concat([this.rootNode.id, this.rootNode.parentId])
+            .filter(x => x)
+
+        return uniq(visibleIds)
     }
 
     toDotId(nodeOrId) {
@@ -69,40 +67,60 @@ export class DotContext {
     }
 
     isEdgeVisible(edge) {
-        return this.isIdVisible(edge.sourceId)
-            || this.isIdVisible(edge.destinationId)
+        return this.findVisibleIds([edge.sourceId, edge.destinationId])
             || this.isCrossingSystems(edge)
     }
 
-    isCrossingSystems(edge){
-        const visibleSourceIds = edge.sourceParentIds
-            .filter(x => this.isIdVisible(x))
-        const visibleDestinationIds = edge.destinationParentIds
-            .filter(x => this.isIdVisible(x))
+    isCrossingSystems(edge) {
+        const visibleSourceIds = this.findVisibleIds(edge.sourceParentIds)
+        const visibleDestinationIds = this.findVisibleIds(edge.destinationParentIds)
 
         return visibleSourceIds[0] !== visibleDestinationIds[0]
+    }
+
+    findVisibleIds(ids){
+        return ids.filter(x => this.isIdVisible(x))
     }
 
     isIdVisible(id) {
         return this.visibleIds.includes(id)
     }
 
-    addLine(text) { this.lines.push(text) }
-
-    drawCluster(indent) {
-        const dotId = this.toDotId(this.rootNode)
-        const label = this.toLabel(this.rootNode.name)
+    drawCluster(indent, rootNode, style = "rounded") {
+        const dotId = this.toDotId(rootNode)
+        const label = this.toLabel(rootNode.name)
 
         const nonClustered = this.graph.roots
-            .filter(x => x !== this.rootNode.id)
+            .filter(x => x !== rootNode.id)
+            .filter(x => x !== rootNode.parentId)
 
         return [
             `${indent}subgraph cluster_${dotId} {
-${indent}${indent}label=<<b>${label}</b>> style="rounded"`,
+${indent}  label=<<b>${label}</b>> style="${style}"`,
+            '',
+            `${indent}  ${dotId} [style="invisible"]`,
+            '',
+            this.drawItems(rootNode.children, indent + '  '),
+            `${indent}}`,
+            rootNode.parentId ? [] : this.drawItems(nonClustered, indent)
+        ]
+    }
+
+    drawChildCluster(indent) {
+        const parent = this.graph.idMap[this.rootNode.parentId]
+        const dotId = this.toDotId(parent)
+        const label = this.toLabel(parent.name)
+
+        const nonClustered = this.graph.roots
+            .filter(x => x !== parent.id)
+
+        return [
+            `${indent}subgraph cluster_${dotId} {`,
+            `${indent}${indent}label=<<b>${label}</b>> style="rounded"`,
             '',
             `${indent}${indent}${dotId} [style="invisible"]`,
             '',
-            this.drawItems(this.rootNode.children, indent + '  '),
+            this.drawCluster(`${indent}${indent}`, this.rootNode, 'solid'),
             `${indent}}`,
             this.drawItems(nonClustered, indent)
         ]
@@ -112,9 +130,11 @@ ${indent}${indent}label=<<b>${label}</b>> style="rounded"`,
         const lines = [`digraph g {`]
             .concat([...this.digraphHeaders('  ')])
             .concat([
-                this.rootNode
-                    ? this.drawCluster('  ')
-                    : this.drawItems(this.visibleIds, '  '),
+                this.rootNode && this.rootNode.parentId
+                    ? this.drawChildCluster('  ')
+                    : this.rootNode
+                        ? this.drawCluster('  ', this.rootNode)
+                        : this.drawItems(this.visibleIds, '  '),
                 '',
                 this.visibleEdges
                     .map(x => this.drawEdge(x, '  ')),
@@ -168,7 +188,7 @@ ${indent}${indent}label=<<b>${label}</b>> style="rounded"`,
             shape: `"${shape}"`
         }
 
-        if (this.hrefTo && hasNonEdgeChildren(node)) {
+        if (this.hrefTo && node.children && node.children.some(x => x.type !== 'edge')) {
             attrs.href = `"${this.hrefTo(node.id)}"`
             attrs.tooltip = `"See more details about ${node.name}"`
         }
@@ -209,11 +229,11 @@ ${indent}>`
             attrs.style = 'dashed'
         }
 
-        if(srcId === this.zoomNodeId){
+        if (srcId === this.zoomNodeId) {
             attrs.ltail = `cluster_${src}`
         }
 
-        if(dstId === this.zoomNodeId){
+        if (dstId === this.zoomNodeId) {
             attrs.lhead = `cluster_${dst}`
         }
 
