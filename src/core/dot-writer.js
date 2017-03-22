@@ -189,13 +189,15 @@ ${indent}  label=<<b>${label}</b>> style="${style}"`,
             shape: `"${shape}"`
         }
 
+        let name = `<b>${node.name}</b>`
         if (this.hrefTo && node.children && node.children.some(x => x.type !== 'edge')) {
             attrs.href = `"${this.hrefTo(node.id)}"`
             attrs.tooltip = `"See more details about ${node.name}"`
+            name = `<font color="blue"><u>${name}</u></font>`
         }
 
         attrs.label = `<
-<b>${node.name}</b>${tech}${desc}
+${name}${tech}${desc}
 ${indent}>`
 
         const dotAttrs = Reflect.ownKeys(attrs)
