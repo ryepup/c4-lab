@@ -10,7 +10,7 @@ module.exports = {
         noParse: /viz\.js/,
         rules: [
             {
-                test: /\.(sexp|dot)$/,
+                test: /\.(sexp|dot|md)$/,
                 use: 'raw-loader'
             },
             {
