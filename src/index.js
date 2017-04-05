@@ -13,6 +13,7 @@ import * as buildInfo from './build-info'
 import configureRoutes from './routes'
 import preview from './preview'
 import viewer from './viewer'
+import help from './help'
 
 angular.module('c4-lab', [
   'ui.codemirror',
@@ -22,7 +23,8 @@ angular.module('c4-lab', [
   'ngFileUpload',
   header,
   preview,
-  viewer])
+  viewer,
+  help])
   .component(buildInfo.name, buildInfo.options)
   .component(editor.name, editor.options)
   .component(shell.name, shell.options)

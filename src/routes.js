@@ -22,6 +22,10 @@ function configureRoutes($stateProvider, $urlRouterProvider) {
       controller: StateParamMirrorController,
       controllerAs: 'vm'
     })
+    .state('help', {
+      url: '/help',
+      template: '<c4-lab-help />'
+    })
 }
 
 export default configureRoutes;
