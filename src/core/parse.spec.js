@@ -29,6 +29,18 @@ describe('parse.js', () => {
             })
         })
 
+        it('parses description', () => {
+            const result = parse('(system ("foo" :description "text"))');
+
+            expect(result.items[0].description).toBe('text')
+        })
+
+        it('parses desc', () => {
+            const result = parse('(system ("foo" :desc "text"))');
+
+            expect(result.items[0].description).toBe('text')
+        })
+
         it('supports def- prefix', () => {
             const result = parse('(def-system ("foo"))');
 

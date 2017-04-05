@@ -27,7 +27,28 @@ export class NameNotFoundError extends ParseError {
     constructor(type) { super(`missing a name for a ${type}`) }
 }
 
+const keywordAliases = [
+    { from: /^:desc.*/i, to: 'description' },
+    { from: /^:to/i, to: 'to' },
+    { from: /^:tech/i, to: 'tech' }
+]
 
+function canonicalize(key) {
+    return keywordAliases
+        .filter(({ from }) => from.test(key))
+        .map(({ to }) => to)[0] || key;
+}
+
+function parseKeywordArgs(kwargs, allowed = /.*/) {
+    if (kwargs.length === 0) return {};
+
+    const [keyword, value, ...rest] = kwargs;
+    const key = canonicalize(keyword);
+
+    return Object.assign(
+        allowed.test(key) ? { [key]: value.toString() } : {},
+        parseKeywordArgs(rest, allowed));
+}
 
 class Parser {
 
@@ -92,7 +113,7 @@ class Parser {
         if (parent) node.parentId = parent.id
         this.idMap[node.id] = node
         this.pathMap[node.path] = node.id
-        Object.assign(node, this.parseKeywordArgs(kwargs, /description|tech/))
+        Object.assign(node, parseKeywordArgs(kwargs, /description|tech/))
         this.items.push(node)
         node.children = this.buildIR(children, node)
         return node;
@@ -101,7 +122,7 @@ class Parser {
     edge(input, parent) {
         const edge = Object.assign(
             { sourceId: parent.id },
-            this.parseKeywordArgs(input, /description|to|tech/))
+            parseKeywordArgs(input, /description|to|tech/))
         this.edges.push(edge)
         return edge
     }
@@ -116,17 +137,6 @@ class Parser {
         return parent
             ? this.idMap[parent.id].path + '/' + name
             : name
-    }
-
-    parseKeywordArgs(kwargs, allowed = /.*/) {
-        if (kwargs.length === 0) return {};
-
-        const [keyword, value, ...rest] = kwargs;
-        const key = keyword.substring(1).toLowerCase();
-
-        return Object.assign(
-            allowed.test(key) ? { [key]: value.toString() } : {},
-            this.parseKeywordArgs(rest, allowed));
     }
 
     postProcessEdge(edge) {
