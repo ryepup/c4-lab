@@ -23,8 +23,8 @@ The latest version is deployed at https://ryepup.github.io/c4-lab
 
 `c4-lab` uses npm to install dependencies and as a task runner. To develop:
 
-    npm install
-    npm start
+    yarn install
+    yarn start
 
 ## Contributing
 
