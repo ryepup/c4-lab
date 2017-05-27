@@ -27,10 +27,15 @@ export class NameNotFoundError extends ParseError {
     constructor(type) { super(`missing a name for a ${type}`) }
 }
 
+export class InvalidDirectionError extends ParseError {
+    constructor(dir) { super(`Unknown edge direction "${dir}". valid options are "push", "pull", or "both"`) }
+}
+
 const keywordAliases = [
     { from: /^:desc.*/i, to: 'description' },
     { from: /^:to/i, to: 'to' },
-    { from: /^:tech/i, to: 'tech' }
+    { from: /^:tech/i, to: 'tech' },
+    { from: /^:dir.*/i, to: 'direction' }
 ]
 
 function canonicalize(key) {
@@ -122,7 +127,7 @@ class Parser {
     edge(input, parent) {
         const edge = Object.assign(
             { sourceId: parent.id },
-            parseKeywordArgs(input, /description|to|tech/))
+            parseKeywordArgs(input, /description|to|tech|direction/))
         this.edges.push(edge)
         return edge
     }
@@ -154,6 +159,14 @@ class Parser {
         if (edge.sourceId === edge.destinationId) {
             throw new ParseError(`Edge cannot be both from and to '${edge.to}'`)
         }
+        if (edge.direction) {
+            if (/^(push|pull|both)$/i.test(edge.direction)) {
+                edge.direction = edge.direction.toLowerCase()
+            } else {
+                throw new InvalidDirectionError(edge.direction)
+            }
+        }
+
         edge.id = pathToId(edge.sourceId + edge.destinationId)
         edge.sourceParentIds = this.findParentIds(edge.sourceId)
         edge.destinationParentIds = this.findParentIds(edge.destinationId)

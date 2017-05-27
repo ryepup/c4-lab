@@ -39,7 +39,8 @@ some of the syntax.
     (define-system ("dog rater" :desc "fun clickbait website")
 
       (def-container ("frontend" :tech "typescript, reactjs")
-        (edge :to "./database" :desc "display sweet dog pictures")
+        (edge :to "./database" :desc "display sweet dog pictures" 
+              :direction "both")
         )
 
       (def-container ("backend" :tech "golang")
@@ -130,6 +131,16 @@ identify the destination of an edge.
 They can be used as children of `def-actor`, `def-system`, `def-container`, and
 `def-component`.
 
+You can customize the direction of the edge using the `:direction` (`:dir` for
+short) option. The valid options are:
+
+* `push` - (default), indicates this node is reaching out to the target. Draws
+  an arrow from the current node to the target.
+* `pull` - indicates this node is pulling from the target, e.g. as a subscriber.
+  Draws an arrow from the target to the current node.
+* `both` - indicates bidrectional flow of actions/information. Draws an arrow to
+  and from the target to the current node.
+
 Examples:
 
     (def-actor ("customer")
@@ -140,7 +151,7 @@ Examples:
     (def-system ("dog ratr")
       (def-container ("frontend")
         ;; connect the frontend to the backend, with a relative path
-        (edge :to "./backend" :desc "fetch list of dogs")
+        (edge :to "./backend" :desc "fetch list of dogs" :dir "both")
         ;; can specify a "full" path to connect with nodes that aren't
         ;; on the top level
         (edge :to "ad server/click tracker" :desc "records a click via HTTP")
@@ -153,7 +164,7 @@ Examples:
 
 If this were a real lisp function, it's definition would look like:
 
-    (defun edge (&key to description))
+    (defun edge (&key to description (direction "both")))
 
 ### Comments
 

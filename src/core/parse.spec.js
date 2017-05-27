@@ -1,4 +1,4 @@
-import { parse, SyntaxError, pathToId, NameNotFoundError, OptsNotFoundError } from './parse'
+import { parse, SyntaxError, pathToId, NameNotFoundError, OptsNotFoundError, InvalidDirectionError } from './parse'
 
 const fooSystem = {
     name: "foo",
@@ -189,6 +189,11 @@ describe('parse.js', () => {
         it('throws an error when missing name', () => {
             expect(() => parse('(system ())'))
                 .toThrowError(NameNotFoundError)
+        })
+
+        it('throws an error when the edge direction is wrong', () => {
+            expect(() => parse('(system ("a"))(system ("b")(edge :to "a" :direction "nonesense"))'))
+                .toThrowError(InvalidDirectionError)
         })
     })
 })

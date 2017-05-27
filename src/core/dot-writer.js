@@ -244,8 +244,20 @@ ${indent}>`
         if (dstId === this.zoomNodeId) {
             attrs.lhead = `cluster_${dst}`
         }
+        attrs.dir = this.getEdgeDirection(edge.direction)
 
         return `${indent}${src} -> ${dst} ${DOT.attrList(attrs)}`
+    }
+
+    getEdgeDirection(direction){
+        switch(direction){
+            case "both":
+                return "both"
+            case "pull":
+                return "back"
+            default:
+                return null
+        }
     }
 }
 

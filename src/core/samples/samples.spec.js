@@ -7,6 +7,8 @@ const samples = [
     ['one-system-long-description', require('./one-system-long-description.sexp'), require('./one-system-long-description.dot')],
     ['system-with-actor', require('./system-with-actor.sexp'), require('./system-with-actor.dot')],
     ['one-edge', require('./one-edge.sexp'), require('./one-edge.dot')],
+    ['one-edge-both', require('./one-edge-both.sexp'), require('./one-edge-both.dot')],
+    ['one-edge-pull', require('./one-edge-pull.sexp'), require('./one-edge-pull.dot')],
     ['two-edges', require('./two-edges.sexp'), require('./two-edges.dot')],
     ['one-edge-long-description', require('./one-edge-long-description.sexp'), require('./one-edge-long-description.dot')],
     ['edge-to-child', require('./edge-to-child.sexp'), require('./edge-to-child.dot')],
