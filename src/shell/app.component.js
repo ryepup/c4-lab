@@ -1,4 +1,4 @@
-import { Storage, Exporter } from '../core'
+import { DataStore, Exporter } from '../core'
 import template from './app.html'
 import sample from './c4lab.sexp'
 
@@ -9,7 +9,7 @@ export class AppController {
         this.log = $log
         this.$window = $window
         this.$state = $state
-        this.storage = new Storage($window.localStorage)
+        this.storage = new DataStore($window.localStorage)
         this.exporter = new Exporter($window.document)
     }
 

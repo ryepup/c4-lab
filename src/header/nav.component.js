@@ -1,6 +1,6 @@
 import template from './nav.html'
 import './nav.css'
-import { Storage, uriEncode, formats } from '../core'
+import { DataStore, uriEncode, formats } from '../core'
 import { readAllText } from './importer'
 import * as aboutComponent from './about.component'
 
@@ -9,7 +9,7 @@ class NavController {
         'ngInject'
         this.$state = $state
         this.$uibModal = $uibModal
-        this.storage = new Storage($window.localStorage)
+        this.storage = new DataStore($window.localStorage)
         this.exportFormats = formats
     }
 

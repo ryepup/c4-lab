@@ -1,10 +1,10 @@
 import template from './preview.html'
-import { parse, uriDecode, Exporter, Storage } from '../core'
+import { parse, uriDecode, Exporter, DataStore } from '../core'
 
 class PreviewComponent{
     constructor($window, $state){
         this.exporter = new Exporter($window.document)
-        this.storage = new Storage($window.localStorage)
+        this.storage = new DataStore($window.localStorage)
         this.$state = $state
     }
 
