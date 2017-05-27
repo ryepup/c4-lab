@@ -11,6 +11,7 @@ export class AppController {
         this.$state = $state
         this.storage = new DataStore($window.localStorage)
         this.exporter = new Exporter($window.document)
+        this.codeExpanded = true;
     }
 
     $onInit() {
