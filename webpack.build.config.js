@@ -17,12 +17,12 @@ module.exports = merge(webpackCommon, {
         new webpack.optimize.CommonsChunkPlugin({
             name: 'manifest'
         }),
-        new webpack.EnvironmentPlugin([
-            'npm_package_version',
-            'TRAVIS_BUILD_NUMBER',
-            'TRAVIS_COMMIT',
-            'npm_package_gitHead'
-        ]),
+        new webpack.EnvironmentPlugin({
+            'npm_package_version': null,
+            'TRAVIS_BUILD_NUMBER': null,
+            'TRAVIS_COMMIT': null,
+            'npm_package_gitHead': null
+        }),
         new webpack.optimize.UglifyJsPlugin({
             mangle: false,
             sourceMap: true
