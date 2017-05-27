@@ -28,8 +28,32 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /(node_modules)/,
-                use: ['babel-loader']
+                use: 'babel-loader'
+            },
+            {
+                test: /\.ts$/,
+                exclude: /(node_modules)/,
+                use: ['babel-loader', 'ts-loader']
+
+            },
+            {
+                enforce: 'pre',
+                test: /\.js$/,
+                exclude: /(node_modules)/,
+                use: 'source-map-loader'
+            },
+            {
+                enforce: 'pre',
+                test: /\.ts$/,
+                exclude: /(node_modules)/,
+                use: [
+                    'source-map-loader',
+                    'tslint-loader'
+                ]
             }]
+    },
+    resolve: {
+        extensions: [".ts", ".js"]
     },
     externals: {
         'fs': 'empty' // drop support for some node-only viz.js features

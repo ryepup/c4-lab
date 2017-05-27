@@ -12,7 +12,8 @@
     "codeclimate": "CODECLIMATE_REPO_TOKEN=$npm_package_config_codeclimate_token codeclimate-test-reporter < reports/lcov.info",
     "build": "webpack --config webpack.build.config.js",
     "serve": "webpack-dev-server --config webpack.dev.config.js --watch --open",
-    "start": "npm-run-all --parallel serve 'test:watch'"
+    "start": "npm-run-all --parallel serve 'test:watch'",
+    "lint": "tslint 'src/**/*.ts'"
   },
   "keywords": [
     "diagrams",
@@ -60,7 +61,12 @@
     "npm-run-all": "^4.0.0",
     "phantomjs-prebuilt": "^2.1.14",
     "raw-loader": "^0.5.1",
+    "source-map-loader": "^0.2.1",
     "style-loader": "^0.14.1",
+    "ts-loader": "^2.1.0",
+    "tslint": "^5.3.2",
+    "tslint-loader": "^3.5.3",
+    "typescript": "^2.3.3",
     "uglifyjs-webpack-plugin": "^0.3.1",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.2",
