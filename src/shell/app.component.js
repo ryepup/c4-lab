@@ -4,11 +4,10 @@ import sample from './c4lab.sexp'
 
 export class AppController {
 
-    constructor($log, $window, $state) {
+    constructor($log, $window) {
         'ngInject'
         this.log = $log
         this.$window = $window
-        this.$state = $state
         this.storage = new DataStore($window.localStorage)
         this.exporter = new Exporter($window.document)
         this.codeExpanded = true;

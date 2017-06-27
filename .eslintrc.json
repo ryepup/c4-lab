@@ -46,6 +46,8 @@
     },
     "globals": {
         "__dirname": true,
-        "Reflect": true
+        "Reflect": true,
+        "jest": true,
+        "inject": true
     }
 }

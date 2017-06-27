@@ -1,8 +1,7 @@
 class StateParamMirrorController {
-  constructor($stateParams, $log){
+  constructor($stateParams){
     'ngInject'
     Object.assign(this, $stateParams)
-    $log.debug('StateParamMirrorController', this)
   }
 }
 
