@@ -4,7 +4,9 @@ describe('editor.component.js', () => {
     let $ctrl, ngModel;
 
     beforeEach(inject($componentController => {
-        ngModel = jasmine.createSpyObj('ngModel', ['$setViewValue'])
+        ngModel = {
+            '$setViewValue': jest.fn()
+        };
         $ctrl = $componentController(editor.name, {}, { ngModel })
     }))
 
