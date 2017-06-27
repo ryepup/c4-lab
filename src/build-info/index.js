@@ -5,7 +5,7 @@ class BuildInfoController {
         /* global process */
         this.version = process.env.npm_package_version
         this.build = process.env.TRAVIS_BUILD_NUMBER || 'SNAPSHOT'
-        this.hash = process.env.TRAVIS_COMMIT || process.env.npm_package_gitHead
+        this.hash = process.env.TRAVIS_COMMIT || process.env.npm_package_gitHead || 'HEAD'
     }
 }
 

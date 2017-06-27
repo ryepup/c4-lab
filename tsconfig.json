@@ -6,6 +6,9 @@
         "sourceMap": true,
         "moduleResolution": "node",
         "baseUrl": "types",
-        "typeRoots": ["types"]
+        "typeRoots": ["types"],
+        "types": [
+            "jasmine"
+        ]
     }
 }
