@@ -8,7 +8,10 @@
         "baseUrl": "types",
         "typeRoots": ["types"],
         "types": [
-            "jasmine"
+            "jest"
+        ],
+        "lib": [
+            "dom", "es2017"
         ]
     }
 }

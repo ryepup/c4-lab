@@ -1,29 +1,25 @@
-class StateParamMirrorController {
-  constructor($stateParams){
-    'ngInject'
-    Object.assign(this, $stateParams)
-  }
-}
-
 function configureRoutes($stateProvider, $urlRouterProvider) {
   'ngInject'
   $urlRouterProvider.otherwise('/');
   $stateProvider
     .state('home', {
       url: '/?zoom',
-      template: '<c4-lab-app zoom="vm.zoom"/>',
-      controller: StateParamMirrorController,
-      controllerAs: 'vm'
+      component: 'c4LabApp',
+      resolve: {
+        zoom: $stateParams => $stateParams.zoom
+      }
     })
     .state('load', {
       url: '/load/{data}?zoom',
-      template: '<c4-lab-preview encoded-text="vm.data" zoom="vm.zoom" />',
-      controller: StateParamMirrorController,
-      controllerAs: 'vm'
+      component: 'c4LabPreview',
+      resolve: {
+        encodedText: $stateParams => $stateParams.data,
+        zoom: $stateParams => $stateParams.zoom
+      }
     })
     .state('help', {
       url: '/help',
-      template: '<c4-lab-help />'
+      component: 'c4LabHelp'
     })
 }
 
