@@ -11,12 +11,14 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li>
-                    <a popover-placement="bottom" uib-popover-template="'_share.html'">
+                    <a popover-placement="bottom" uib-popover-template="'_share.html'"
+                        analytics-on="click" analytics-event="share">
                         <span class="glyphicon glyphicon-duplicate"> </span> Share
                     </a>
                 </li>
                 <li>
-                    <a ngf-select="$ctrl.import($files)" ngf-pattern="'.sexp'" ngf-accept="'.sexp'">
+                    <a ngf-select="$ctrl.import($files)" ngf-pattern="'.sexp'" ngf-accept="'.sexp'"
+                        analytics-on="click" analytics-event="import">
                         <span class="glyphicon glyphicon-open-file"> </span> Import
                     </a>
                 </li>
@@ -26,15 +28,16 @@
                     </a>
                     <ul id="export-format-list" class="dropdown-menu" uib-dropdown-menu>
                         <li ng-repeat="format in $ctrl.exportFormats">
-                            <a ng-click="$ctrl.export(format)">{{format}}</a>
+                            <a ng-click="$ctrl.export(format)" analytics-on="click" analytics-event="export" analytics-label="{{format}}" >{{format}}</a>
                         </li>
                         <li>
-                            <a ng-click="$ctrl.export('gist')">GitHub Gist&nbsp;<img src="GitHub-Mark-32px.png"></a>
+                            <a ng-click="$ctrl.export('gist')" analytics-on="click" analytics-event="export" analytics-label="gist">GitHub Gist&nbsp;<img src="GitHub-Mark-32px.png"></a>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="#" ng-click="$ctrl.openAbout()">
+                    <!-- TODO: make this a modal route-->
+                    <a href="#" ng-click="$ctrl.openAbout()" analytics-on="click" analytics-event="about">
                         <span class="glyphicon glyphicon-info-sign"> </span> About
                     </a>
                 </li>
