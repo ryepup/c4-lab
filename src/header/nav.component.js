@@ -13,7 +13,7 @@ class NavController {
         this.exportFormats = formats
     }
 
-    href(zoom = this.zoom) {
+    href(zoom) {
         return this.$state.href('load',
             {
                 data: uriEncode(this.text),
