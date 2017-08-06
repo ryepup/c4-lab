@@ -15,9 +15,11 @@ These files were exported from [C4-Lab](https://ryepup.github.io/c4-lab)
 }
 
 export class GistExporter {
-    public export(title: string, sexp: string, dot: string, url: URL): Promise<IGistResult> {
-        const gh = new Github()
-        const gist = gh.getGist()
+
+    constructor(private gh = new Github()) { }
+
+    public export(title: string, sexp: string, url: URL): Promise<IGistResult> {
+        const gist = this.gh.getGist()
         // TODO: use async/await
         return gist.create({
             description: `C4 diagrams for '${title}'`,

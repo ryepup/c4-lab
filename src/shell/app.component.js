@@ -39,7 +39,7 @@ export class AppController {
         if (format === 'gist') {
             const gist = new GistExporter()
             // TODO: show a loading spinner or something while we wait
-            gist.export(this.graph.title, this.text, this.dot, this.baseUri + href)
+            gist.export(this.graph.title, this.text, this.baseUri + href)
                 .then((result) => {
                     // TODO: show a modal with the link
                     this.$window.open(result.url, '_blank')
