@@ -5,6 +5,8 @@ import 'angular-ui-bootstrap'
 import 'angular-ui-router'
 import 'angular-animate'
 import 'ng-file-upload'
+import 'angulartics'
+import angularticsGa from 'angulartics-google-analytics'
 
 import * as editor from './editor'
 import header from './header'
@@ -21,6 +23,7 @@ angular.module('c4-lab', [
   'ui.router',
   'ngAnimate',
   'ngFileUpload',
+  angularticsGa,
   header,
   preview,
   viewer,
