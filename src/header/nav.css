@@ -5,3 +5,7 @@
 .navbar a {
     cursor: pointer;
 }
+
+#export-format-list li{
+    min-height: 32px;
+}

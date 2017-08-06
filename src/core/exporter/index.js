@@ -1,4 +1,4 @@
-import { toPngDataUri } from './codegen'
+import { toPngDataUri } from '../codegen'
 
 export const formats = 'sexp dot png'.split(' ')
 

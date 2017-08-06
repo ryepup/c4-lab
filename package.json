@@ -3,7 +3,7 @@
   "config": {
     "codeclimate_token": "ededa0c572bd7d90bd93f248d5510d2ff8f6d4a658f1349590a8c2e5d49497cc"
   },
-  "version": "0.32.1",
+  "version": "0.33.2",
   "description": "web interface to create software architecture diagrams",
   "main": "src/index.js",
   "scripts": {
@@ -30,6 +30,7 @@
     "angular-ui-codemirror": "^0.3.0",
     "angular-ui-router": "^1.0.0-alpha0",
     "codemirror": "^5.22.2",
+    "github-api": "^3.0.0",
     "lodash": "^4.17.4",
     "lz-string": "^1.4.4",
     "md5": "^2.2.1",
@@ -67,6 +68,7 @@
     "tslint-loader": "^3.5.3",
     "typescript": "^2.3.3",
     "uglifyjs-webpack-plugin": "^0.3.1",
+    "url-loader": "^0.5.9",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.2",
     "webpack-merge": "^4.1.0"

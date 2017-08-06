@@ -9,7 +9,8 @@ describe('app.controller', () => {
             '$window': {
                 localStorage: new LocalStorage(),
                 document: {
-                    createElement: jest.fn()
+                    createElement: jest.fn(),
+                    location: {}
                 }
             }
         }, {})
