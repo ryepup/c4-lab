@@ -13,16 +13,16 @@ class NavController {
         this.exportFormats = formats
     }
 
-    href() {
+    href(zoom = this.zoom) {
         return this.$state.href('load',
             {
                 data: uriEncode(this.text),
-                zoom: this.zoom
+                zoom
             });
     }
 
     export(format) {
-        this.onExport({ format })
+        this.onExport({ format, href: this.href() })
     }
 
     import(files) {

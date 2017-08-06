@@ -50,6 +50,10 @@ module.exports = {
                     'source-map-loader',
                     'tslint-loader'
                 ]
+            },
+            {
+                test: /\.png$/,
+                use: 'url-loader'
             }]
     },
     resolve: {
