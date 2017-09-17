@@ -1,18 +1,14 @@
-declare var SParse: SParse.SParse
-export default SParse
+export = SParse
+
+declare function SParse(src: string) : SParse.ParseError | SParse.Tree
 
 declare namespace SParse {
 
-    interface SParse {
-        (src: string): ParseError | Tree
-        SyntaxError : Error
-    }
-
-    interface ParseError extends Error {
+    export interface ParseError extends Error {
         line: number
         col: number
     }
 
-    interface Tree extends Array<string | Tree> { }
+    export interface Tree extends Array<string | Tree> { }
 
 }
