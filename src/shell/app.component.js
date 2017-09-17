@@ -1,17 +1,27 @@
 import { DataStore, Exporter } from '../core'
 import { GistExporter } from '../core/exporter/gist'
 import template from './app.html'
-import sample from './c4lab.sexp'
+import { sourceLoaded } from '../store/actions'
 
 export class AppController {
 
-    constructor($log, $window) {
+    constructor($log, $window, $ngRedux) {
         'ngInject'
         this.log = $log
         this.$window = $window
         this.storage = new DataStore($window.localStorage)
         this.exporter = new Exporter($window.document)
         this.codeExpanded = true;
+
+        this.unsubscribe = $ngRedux.connect(this.mapStateToThis, { sourceLoaded })(this);
+    }
+
+    $onDestroy() {
+        this.unsubscribe();
+    }
+
+    mapStateToThis(state) {
+        return { text: state.source, graph: state.graph }
     }
 
     /**
@@ -25,7 +35,8 @@ export class AppController {
     }
 
     $onInit() {
-        this.initialText = this.storage.load() || sample
+        // TODO: move storage concerns elsewhere so we can do that once on app initialize
+        this.sourceLoaded({ source: this.storage.load(), zoomNodeId: this.zoom })
     }
 
     onParse(text) {
@@ -56,6 +67,7 @@ export const options = {
     template: template,
     controller: AppController,
     bindings: {
+        // TODO: hook up routing with redux so we can fetch this from state
         zoom: '<'
     }
 }

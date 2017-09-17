@@ -8,10 +8,13 @@ import CodeMirror from 'codemirror'
 import template from './editor.html'
 import { parse, SyntaxError, ParseError } from '../core'
 import './editor.css'
+import { sourceChanged, sourceParseError, sourceParsed } from '../store/actions'
+
+
 
 export class EditorController {
 
-    constructor($log) {
+    constructor($log, $ngRedux) {
         'ngInject'
         this.log = $log
         this.editorOptions = {
@@ -21,29 +24,48 @@ export class EditorController {
             matchBrackets: true,
             autoCloseBrackets: true
         }
+
+        this.unsubscribe = $ngRedux.connect(this.mapStateToThis, { sourceParsed, sourceChanged, sourceParseError })(this);
+    }
+
+    $onDestroy() {
+        this.unsubscribe();
     }
 
     $onInit() {
-        this.parse(this.initialText);
+        this.parse(this.text);
+    }
+
+    mapStateToThis(state) {
+        return { text: state.source }
     }
 
     parse(text) {
+        this.sourceChanged({ source: text})
         this.lastError = undefined;
         this.text = text;
         try {
+            // TODO: move parsing into a reducer and state
             const parsed = parse(text);
-            this.ngModel.$setViewValue(parsed);
             this.syntaxIsValid = true
             this.tryOnParse(text)
+            this.sourceParsed({ graph: parsed })
         } catch (e) {
-            this.log.error(e)
-            if (e instanceof SyntaxError || e instanceof ParseError) {
-                this.syntaxIsValid = false
-                this.lastError = e
-            }
+            this._onParseError(e);
         }
     }
 
+    _onParseError(error) {
+        this.log.error(error)
+        if (error instanceof SyntaxError || error instanceof ParseError) {
+            this.syntaxIsValid = false
+            this.lastError = error
+
+            this.sourceParseError({error: error.message, line: error.line, column: error.col})
+        }
+    }
+
+    // TODO: delete me, interested parties can pull from redux
     tryOnParse(text) {
         if (!this.onParse) return;
         try {
@@ -56,14 +78,9 @@ export class EditorController {
 
 export const name = "c4LabEditor"
 export const options = {
-    require: {
-        ngModel: '^'
-    },
     template: template,
-    // TODO: use a custom validator tied to the parser
     controller: EditorController,
     bindings: {
-        initialText: '<',
         onParse: '&'
     }
 }

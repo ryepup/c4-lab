@@ -16,6 +16,7 @@ import configureRoutes from './routes'
 import preview from './preview'
 import viewer from './viewer'
 import help from './help'
+import store from './store/store.module'
 
 angular.module('c4-lab', [
   'ui.codemirror',
@@ -27,7 +28,7 @@ angular.module('c4-lab', [
   header,
   preview,
   viewer,
-  help])
+  help, store])
   .component(buildInfo.name, buildInfo.options)
   .component(editor.name, editor.options)
   .component(shell.name, shell.options)

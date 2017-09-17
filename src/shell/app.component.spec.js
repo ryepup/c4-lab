@@ -17,17 +17,12 @@ describe('app.controller', () => {
     }))
 
     describe('$onInit()', () => {
-        it('sets initial text when storage is empty', () => {
-            $ctrl.$onInit()
-
-            expect($ctrl.initialText).toBeDefined()
-        })
 
         it('sets initial text from storage', () => {
             $ctrl.storage.save('text')
             $ctrl.$onInit()
 
-            expect($ctrl.initialText).toBe('text')
+            expect($ctrl.text).toBe('text')
         })
     })
 

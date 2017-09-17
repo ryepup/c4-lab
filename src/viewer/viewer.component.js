@@ -2,16 +2,30 @@ import template from './viewer.html'
 import { toSvg, toDot } from '../core'
 
 class ViewerComponent {
-    constructor($log, $sce, $state) {
+    constructor($log, $sce, $state, $ngRedux) {
         'ngInject'
         this.$log = $log;
         this.$state = $state;
 
         this.toSvg = dot => $sce.trustAsHtml(toSvg(dot))
+
+        this.unsubscribe = $ngRedux.connect(this.mapStateToThis)(
+            (selectedState, actions) => {
+                Object.assign(this, selectedState, actions);
+                if (this.graph) this._onGraphChanged();
+            });
     }
 
-    $onChanges(diffs) {
-        if (diffs.graph) this._onGraphChanged();
+    $onDestroy() {
+        this.unsubscribe();
+    }
+
+    mapStateToThis(state) {
+        return {
+            expandableNodes: state.zoomableNodes,
+            graph: state.graph,
+            zoom: state.zoomNodeId
+        }
     }
 
     onZoom() {
@@ -20,12 +34,11 @@ class ViewerComponent {
     }
 
     _onGraphChanged() {
-        this.$log.debug('redrawing')
-        this._recalculateExpandableNodes()
+        this.$log.debug('redrawing', this.zoom)
         this.dot = toDot(this.graph, this.zoom, x => this._hrefTo(x))
 
         this.svg = this.toSvg(this.dot)
-        this.ngModel.$setViewValue(this.dot);
+        this.ngModel && this.ngModel.$setViewValue(this.dot);
     }
 
     _nextState(zoom = this.zoom) {
@@ -38,13 +51,6 @@ class ViewerComponent {
         const [name, params] = this._nextState(zoom);
         return this.$state.href(name, params);
     }
-
-    _recalculateExpandableNodes() {
-        this.expandableNodes = this.graph.items
-            .filter(x => x.canExpand)
-            .sort(x => x.path)
-    }
-
 }
 
 
@@ -55,9 +61,5 @@ export const options = {
     },
     transclude: true,
     template,
-    controller: ViewerComponent,
-    bindings: {
-        zoom: '<',
-        graph: '<'
-    }
+    controller: ViewerComponent
 }
