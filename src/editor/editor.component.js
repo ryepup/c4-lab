@@ -6,7 +6,8 @@ import '../../node_modules/codemirror/theme/elegant.css'
 import CodeMirror from 'codemirror'
 
 import template from './editor.html'
-import { parse, SyntaxError, ParseError } from '../core'
+// TODO: don't need core, just look at redux
+import { parse, SyntaxError, ParseError } from '../core/index.ts'
 import './editor.css'
 import { sourceChanged, sourceParseError, sourceParsed } from '../store/actions'
 

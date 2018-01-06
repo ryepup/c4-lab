@@ -1,4 +1,5 @@
-import { DataStore, Exporter } from '../core'
+// TODO: don't need core, just look at redux
+import { DataStore, Exporter } from '../core/index'
 import { GistExporter } from '../core/exporter/gist'
 import template from './app.html'
 import { sourceLoaded } from '../store/actions'

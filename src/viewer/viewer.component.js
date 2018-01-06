@@ -1,5 +1,6 @@
 import template from './viewer.html'
-import { toSvg, toDot } from '../core'
+// TODO: don't need core, just look at redux
+import { toSvg, toDot } from '../core/index'
 
 class ViewerComponent {
     constructor($log, $sce, $state, $ngRedux) {

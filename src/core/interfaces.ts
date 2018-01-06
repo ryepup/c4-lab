@@ -5,11 +5,11 @@ export interface IGraph {
     title?: string
     roots: NodeId[]
     idMap: { [id: string]: INode }
-    pathMap: { [path: string]: INode }
+    pathMap: { [path: string]: NodeId }
 }
 
 export interface IEdge {
-    type: string
+    type: 'edge'
     id: NodeId
     sourceId: NodeId
     to: Path
@@ -19,6 +19,10 @@ export interface IEdge {
     description?: string
     tech?: string
     direction?: string
+}
+
+export function isEdge(x: INode | IEdge): x is IEdge {
+    return x.type === 'edge'
 }
 
 export interface INode {

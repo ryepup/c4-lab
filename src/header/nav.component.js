@@ -1,6 +1,7 @@
 import template from './nav.html'
 import './nav.css'
-import { DataStore, uriEncode, formats } from '../core'
+// TODO: don't need core, just look at redux
+import { DataStore, uriEncode, formats } from '../core/index'
 import { readAllText } from './importer'
 import * as aboutComponent from './about.component'
 
