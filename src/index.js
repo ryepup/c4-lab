@@ -17,6 +17,7 @@ import preview from './preview'
 import viewer from './viewer'
 import help from './help'
 import store from './store/store.module'
+import { angularInitialized } from './store/actions'
 
 angular.module('c4-lab', [
   'ui.codemirror',
@@ -35,6 +36,9 @@ angular.module('c4-lab', [
   .run(editor.install)
   .config(allowBlobsAndDataHrefs)
   .config(configureRoutes)
+  .run(($state, $ngRedux) => {
+    $ngRedux.dispatch(angularInitialized({ $state }))
+  })
 
 // @ngInject
 function allowBlobsAndDataHrefs($compileProvider) {

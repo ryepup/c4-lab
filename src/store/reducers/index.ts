@@ -1,7 +1,8 @@
+import { StateService } from 'angular-ui-router'
 import { Action, combineReducers } from 'redux'
 import { reducerWithInitialState } from 'typescript-fsa-reducers'
 import { IGraph, INode, NodeId } from '../../core/interfaces'
-import { sourceChanged, sourceLoaded, sourceParsed } from '../actions'
+import { angularInitialized, dotChanged, sourceChanged, sourceLoaded, sourceParsed, svgChanged } from '../actions'
 import { IState } from '../state'
 import sample from './c4lab.sexp'
 
@@ -40,10 +41,25 @@ const zoomNodeIdReducer = reducerWithInitialState<NodeId | null>(null)
     .case(sourceLoaded, (old, evt) => evt.zoomNodeId || null)
     .build()
 
+const dotReducer = reducerWithInitialState<string | null>(null)
+    .case(dotChanged, (old, evt) => evt.dot)
+    .build()
+
+const svgReducer = reducerWithInitialState<string | null>(null)
+    .case(svgChanged, (old, evt) => evt.svg)
+    .build()
+
+const stateReducer = reducerWithInitialState<StateService | null>(null)
+    .case(angularInitialized, (old, evt) => evt.$state)
+    .build()
+
 const rootReducer = combineReducers<IState>({
+    $state: stateReducer,
+    dot: dotReducer,
     graph: graphReducer,
     parseError: parseErrorReducer,
     source: testSafeSourceReducer,
+    svg: svgReducer,
     zoomNodeId: zoomNodeIdReducer,
     zoomableNodes: zoomableNodesReducer,
 })

@@ -1,16 +1,15 @@
+import { StateService } from 'angular-ui-router'
 import actionCreatorFactory from 'typescript-fsa'
 import { IGraph, NodeId } from '../core/interfaces'
 
-// TODO: delete me, move logic into Core or a Reducer
 export interface IEditorParseEvent {
     graph: IGraph
 }
 
-// TODO: delete me, move logic into Core or a Reducer
 export interface IEditorParseError {
     error: string,
-    line: number|undefined,
-    column: number|undefined
+    line?: number,
+    column?: number
 }
 
 export interface ISourceChanged {
@@ -19,7 +18,18 @@ export interface ISourceChanged {
 
 export interface ISourceLoaded {
     source: string,
-    zoomNodeId: NodeId|null
+    zoomNodeId: NodeId | null
+}
+
+export interface IDotChanged {
+    dot: string
+}
+export interface ISvgChanged {
+    svg: string
+}
+
+export interface IAngularInitialized {
+    $state: StateService
 }
 
 const actionCreator = actionCreatorFactory()
@@ -28,3 +38,6 @@ export const sourceParsed = actionCreator<IEditorParseEvent>('C4_SOURCE_PARSED')
 export const sourceParseError = actionCreator<IEditorParseError>('C4_SOURCE_PARSE_ERROR')
 export const sourceChanged = actionCreator<ISourceChanged>('C4_SOURCE_CHANGED')
 export const sourceLoaded = actionCreator<ISourceLoaded>('C4_SOURCE_LOADED')
+export const dotChanged = actionCreator<IDotChanged>('C4_DOT_CHANGED')
+export const svgChanged = actionCreator<ISvgChanged>('C4_SVG_CHANGED')
+export const angularInitialized = actionCreator<IAngularInitialized>('C4_ANGULAR_INITIALIZED')
