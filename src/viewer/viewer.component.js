@@ -1,16 +1,15 @@
 import template from './viewer.html'
-// TODO: don't need core, just look at redux
-import { toSvg, toDot } from '../core/index'
+
 
 class ViewerComponent {
     constructor($log, $sce, $state, $ngRedux) {
         'ngInject'
         this.$log = $log;
         this.$state = $state;
+        this.$sce = $sce;
 
-        this.toSvg = dot => $sce.trustAsHtml(toSvg(dot))
 
-        this.unsubscribe = $ngRedux.connect(this.mapStateToThis)(
+        this.unsubscribe = $ngRedux.connect(this.mapStateToThis.bind(this))(
             (selectedState, actions) => {
                 Object.assign(this, selectedState, actions);
                 if (this.graph) this._onGraphChanged();
@@ -25,7 +24,9 @@ class ViewerComponent {
         return {
             expandableNodes: state.zoomableNodes,
             graph: state.graph,
-            zoom: state.zoomNodeId
+            zoom: state.zoomNodeId,
+            dot: state.dot,
+            svg: this.$sce.trustAsHtml(state.svg)
         }
     }
 
@@ -35,22 +36,7 @@ class ViewerComponent {
     }
 
     _onGraphChanged() {
-        this.$log.debug('redrawing', this.zoom)
-        this.dot = toDot(this.graph, this.zoom, x => this._hrefTo(x))
-
-        this.svg = this.toSvg(this.dot)
         this.ngModel && this.ngModel.$setViewValue(this.dot);
-    }
-
-    _nextState(zoom = this.zoom) {
-        const name = this.$state.current.name;
-        const params = Object.assign({}, this.$state.params, { zoom })
-        return [name, params]
-    }
-
-    _hrefTo(zoom) {
-        const [name, params] = this._nextState(zoom);
-        return this.$state.href(name, params);
     }
 }
 
