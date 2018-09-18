@@ -20,11 +20,6 @@ export interface IZoomChanged {
     zoomNodeId: NodeId | null
 }
 
-export interface ISourceLoaded {
-    source: string,
-    zoomNodeId: NodeId | null
-}
-
 export interface IDotChanged {
     dot: string
 }
@@ -42,7 +37,6 @@ const actionCreator = actionCreatorFactory()
 export const sourceParsed = actionCreator<IEditorParseEvent>('C4_SOURCE_PARSED')
 export const sourceParseError = actionCreator<IEditorParseError>('C4_SOURCE_PARSE_ERROR')
 export const sourceChanged = actionCreator<ISourceChanged>('C4_SOURCE_CHANGED')
-export const sourceLoaded = actionCreator<ISourceLoaded>('C4_SOURCE_LOADED')
 export const dotChanged = actionCreator<IDotChanged>('C4_DOT_CHANGED')
 export const svgChanged = actionCreator<ISvgChanged>('C4_SVG_CHANGED')
 export const angularInitialized = actionCreator<IAngularInitialized>('C4_ANGULAR_INITIALIZED')

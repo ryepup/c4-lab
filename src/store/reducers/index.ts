@@ -1,11 +1,10 @@
 import { StateService } from 'angular-ui-router'
-import { Action, combineReducers } from 'redux'
+import { combineReducers } from 'redux'
 import { reducerWithInitialState } from 'typescript-fsa-reducers'
-import { DataStore } from '../../core'
 import { IGraph, INode, NodeId } from '../../core/interfaces'
 import {
     angularInitialized, dotChanged, sourceChanged,
-    sourceLoaded, sourceParsed, sourceParseError, svgChanged, zoomChanged,
+    sourceParsed, sourceParseError, svgChanged, zoomChanged,
 } from '../actions'
 import { IState } from '../state'
 import sample from './c4lab.sexp'
@@ -19,7 +18,7 @@ export const initialState: IState = {
 }
 
 const sourceReducer = reducerWithInitialState(sample)
-    .cases([sourceLoaded, sourceChanged], (old, evt) => evt.source)
+    .case(sourceChanged, (old, evt) => evt.source)
     .build()
 
 // TODO: not need this; there's gotta be some config to teach jest's
@@ -43,7 +42,7 @@ const zoomableNodesReducer = reducerWithInitialState<INode[]>([])
     .build()
 
 const zoomNodeIdReducer = reducerWithInitialState<NodeId | null>(null)
-    .cases([sourceLoaded, zoomChanged], (old, evt) => evt.zoomNodeId || null)
+    .case(zoomChanged, (old, evt) => evt.zoomNodeId || null)
     .build()
 
 const dotReducer = reducerWithInitialState<string | null>(null)
