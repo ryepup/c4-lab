@@ -1,19 +1,19 @@
 import template from './nav.html'
 import './nav.css'
 // TODO: don't need core, just look at redux
-import { DataStore, uriEncode, formats } from '../core/index'
+import { uriEncode, formats } from '../core/index'
 import { readAllText } from './importer'
 import * as aboutComponent from './about.component'
+import { sourceChanged } from '../store/actions'
 
 class NavController {
-    constructor($state, $uibModal, $window, $ngRedux) {
+    constructor($state, $uibModal, $ngRedux) {
         'ngInject'
         this.$state = $state
         this.$uibModal = $uibModal
-        this.storage = new DataStore($window.localStorage)
         this.exportFormats = formats
 
-        this.unsubscribe = $ngRedux.connect(this.mapStateToThis)(this);
+        this.unsubscribe = $ngRedux.connect(this.mapStateToThis, { sourceChanged })(this);
     }
 
     $onDestroy() {
@@ -50,9 +50,7 @@ class NavController {
     }
 
     _onImport(text) {
-        // TODO: trigger redux action
-        this.storage.save(text)
-        this.$state.go('home', {}, { reload: true })
+        this.sourceChanged({ source: text })
     }
 }
 
