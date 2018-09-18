@@ -1,7 +1,7 @@
 export default class LocalStorageMock implements Storage {
     [index: number]: string;
     [key: string]: any;
-    public length: number
+    public length: number = 0
     public clear(): void {
         throw new Error('Method not implemented.')
     }
@@ -15,6 +15,7 @@ export default class LocalStorageMock implements Storage {
         throw new Error('Method not implemented.')
     }
     public setItem(key: string, data: string): void {
+        this.length++
         this[key] = data
     }
 }

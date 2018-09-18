@@ -1,4 +1,4 @@
-<c4-lab-nav text="$ctrl.text" on-export="$ctrl.onExport(format, href)" zoom="$ctrl.zoom"></c4-lab-nav>
+<c4-lab-nav on-export="$ctrl.onExport(format, href)"></c4-lab-nav>
 <div class="container-fluid">
     <div class="row">
         <div ng-class="$ctrl.codeExpanded ? 'col-md-6' : 'col-md-4'">
@@ -10,8 +10,7 @@
             </button>
         </div>
         <div ng-class="$ctrl.codeExpanded ? 'col-md-6' : 'col-md-8'">
-            <c4-lab-viewer ng-model="$ctrl.dot">
-            </c4-lab-viewer>
+            <c4-lab-viewer></c4-lab-viewer>
         </div>
     </div>
 </div>

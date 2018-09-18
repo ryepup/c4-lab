@@ -8,8 +8,6 @@ import template from './editor.html'
 import './editor.css'
 import { sourceChanged } from '../store/actions'
 
-
-
 export class EditorController {
 
     constructor($log, $ngRedux) {
@@ -29,10 +27,6 @@ export class EditorController {
 
     $onDestroy() {
         this.unsubscribe();
-    }
-
-    $onInit() {
-        this.parse(this.text);
     }
 
     mapStateToThis(state) {

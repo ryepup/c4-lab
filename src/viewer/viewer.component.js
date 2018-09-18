@@ -1,19 +1,14 @@
 import template from './viewer.html'
+import { zoomChanged } from '../store/actions'
 
 
 class ViewerComponent {
-    constructor($log, $sce, $state, $ngRedux) {
+    constructor($log, $sce, $ngRedux) {
         'ngInject'
         this.$log = $log;
-        this.$state = $state;
         this.$sce = $sce;
 
-
-        this.unsubscribe = $ngRedux.connect(this.mapStateToThis.bind(this))(
-            (selectedState, actions) => {
-                Object.assign(this, selectedState, actions);
-                if (this.graph) this._onGraphChanged();
-            });
+        this.unsubscribe = $ngRedux.connect(this.mapStateToThis.bind(this), { zoomChanged })(this);
     }
 
     $onDestroy() {
@@ -31,21 +26,12 @@ class ViewerComponent {
     }
 
     onZoom() {
-        const [name, params] = this._nextState();
-        return this.$state.go(name, params);
-    }
-
-    _onGraphChanged() {
-        this.ngModel && this.ngModel.$setViewValue(this.dot);
+        this.zoomChanged({ zoomNodeId: this.zoom });
     }
 }
 
-
 export const name = 'c4LabViewer';
 export const options = {
-    require: {
-        ngModel: '^'
-    },
     transclude: true,
     template,
     controller: ViewerComponent
