@@ -128,7 +128,7 @@ export class Parser {
             throw new OptsNotFoundError(type)
         }
         const [name, ...kwargs] = opts.content
-        if (!isString(name)) {
+        if (!isString(name) || name.content === '') {
             throw new NameNotFoundError(type)
         }
 
