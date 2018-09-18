@@ -36,8 +36,8 @@ angular.module('c4-lab', [
   .run(editor.install)
   .config(allowBlobsAndDataHrefs)
   .config(configureRoutes)
-  .run(($state, $ngRedux) => {
-    $ngRedux.dispatch(angularInitialized({ $state }))
+  .run(($state, $ngRedux, $window) => {
+    $ngRedux.dispatch(angularInitialized({ $state, $window }))
   })
 
 // @ngInject

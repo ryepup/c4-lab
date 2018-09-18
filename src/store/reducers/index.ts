@@ -1,8 +1,12 @@
 import { StateService } from 'angular-ui-router'
 import { Action, combineReducers } from 'redux'
 import { reducerWithInitialState } from 'typescript-fsa-reducers'
+import { DataStore } from '../../core'
 import { IGraph, INode, NodeId } from '../../core/interfaces'
-import { angularInitialized, dotChanged, sourceChanged, sourceLoaded, sourceParsed, svgChanged } from '../actions'
+import {
+    angularInitialized, dotChanged, sourceChanged,
+    sourceLoaded, sourceParsed, sourceParseError, svgChanged, zoomChanged,
+} from '../actions'
 import { IState } from '../state'
 import sample from './c4lab.sexp'
 
@@ -15,16 +19,17 @@ export const initialState: IState = {
 }
 
 const sourceReducer = reducerWithInitialState(sample)
-    .case(sourceLoaded, (old, evt) => evt.source)
-    .case(sourceChanged, (old, evt) => evt.source)
+    .cases([sourceLoaded, sourceChanged], (old, evt) => evt.source)
     .build()
 
 // TODO: not need this; there's gotta be some config to teach jest's
 // typescript preprocessor to respect the additional types
 const testSafeSourceReducer = (src: string, evt: any) =>
-    sourceReducer(src, evt) || 'jest needs a string here, it ignores .sexp config'
+    sourceReducer(src, evt) || ''
 
 const parseErrorReducer = reducerWithInitialState<string | null>(null)
+    .case(sourceParseError, (old, evt) => evt.error)
+    .case(sourceParsed, (old, evt) => null)
     .build()
 
 const graphReducer = reducerWithInitialState<IGraph | null>(null)
@@ -38,7 +43,7 @@ const zoomableNodesReducer = reducerWithInitialState<INode[]>([])
     .build()
 
 const zoomNodeIdReducer = reducerWithInitialState<NodeId | null>(null)
-    .case(sourceLoaded, (old, evt) => evt.zoomNodeId || null)
+    .cases([sourceLoaded, zoomChanged], (old, evt) => evt.zoomNodeId || null)
     .build()
 
 const dotReducer = reducerWithInitialState<string | null>(null)
@@ -53,8 +58,13 @@ const stateReducer = reducerWithInitialState<StateService | null>(null)
     .case(angularInitialized, (old, evt) => evt.$state)
     .build()
 
+const windowReducer = reducerWithInitialState<Window | null>(null)
+    .case(angularInitialized, (old, evt) => evt.$window)
+    .build()
+
 const rootReducer = combineReducers<IState>({
     $state: stateReducer,
+    $window: windowReducer,
     dot: dotReducer,
     graph: graphReducer,
     parseError: parseErrorReducer,

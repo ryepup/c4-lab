@@ -16,6 +16,10 @@ export interface ISourceChanged {
     source: string
 }
 
+export interface IZoomChanged {
+    zoomNodeId: NodeId | null
+}
+
 export interface ISourceLoaded {
     source: string,
     zoomNodeId: NodeId | null
@@ -29,7 +33,8 @@ export interface ISvgChanged {
 }
 
 export interface IAngularInitialized {
-    $state: StateService
+    $state: StateService,
+    $window: Window
 }
 
 const actionCreator = actionCreatorFactory()
@@ -41,3 +46,4 @@ export const sourceLoaded = actionCreator<ISourceLoaded>('C4_SOURCE_LOADED')
 export const dotChanged = actionCreator<IDotChanged>('C4_DOT_CHANGED')
 export const svgChanged = actionCreator<ISvgChanged>('C4_SVG_CHANGED')
 export const angularInitialized = actionCreator<IAngularInitialized>('C4_ANGULAR_INITIALIZED')
+export const zoomChanged = actionCreator<IZoomChanged>('C4_ZOOM_CHANGED')

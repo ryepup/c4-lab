@@ -10,5 +10,6 @@ export interface IState {
     dot?: string,
     svg?: string,
     // TODO: just keep a ((id:NodeId) => Uri) method in state
-    $state?: StateService
+    $state?: StateService,
+    $window?: Window
 }
