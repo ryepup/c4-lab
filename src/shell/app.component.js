@@ -1,17 +1,26 @@
-import { DataStore, Exporter } from '../core'
+// TODO: don't need core, just look at redux
+import { Exporter } from '../core/index'
 import { GistExporter } from '../core/exporter/gist'
 import template from './app.html'
-import sample from './c4lab.sexp'
 
 export class AppController {
 
-    constructor($log, $window) {
+    constructor($log, $window, $ngRedux) {
         'ngInject'
         this.log = $log
         this.$window = $window
-        this.storage = new DataStore($window.localStorage)
         this.exporter = new Exporter($window.document)
         this.codeExpanded = true;
+
+        this.unsubscribe = $ngRedux.connect(this.mapStateToThis)(this);
+    }
+
+    $onDestroy() {
+        this.unsubscribe();
+    }
+
+    mapStateToThis(state) {
+        return { text: state.source, graph: state.graph, dot: state.dot }
     }
 
     /**
@@ -22,16 +31,6 @@ export class AppController {
     get baseUri() {
         const l = this.$window.document.location;
         return `${l.origin}${l.pathname}`
-    }
-
-    $onInit() {
-        this.initialText = this.storage.load() || sample
-    }
-
-    onParse(text) {
-        this.log.debug('onParse')
-        this.text = text
-        this.storage.save(text)
     }
 
     onExport(format, href) {
@@ -54,8 +53,5 @@ export class AppController {
 export const name = "c4LabApp"
 export const options = {
     template: template,
-    controller: AppController,
-    bindings: {
-        zoom: '<'
-    }
+    controller: AppController
 }

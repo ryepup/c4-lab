@@ -1,5 +1,6 @@
-const angular = require('angular');
-require('angular-mocks');
-require('../src/index.js')
+import { mock } from 'angular';
+import 'angular-mocks';
 
-beforeEach(angular.mock.module('c4-lab'));
+import '../src/index.js';
+
+beforeEach(mock.module('c4-lab'));

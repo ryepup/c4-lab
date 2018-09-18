@@ -1,5 +1,6 @@
 import template from './preview.html'
-import { parse, uriDecode, Exporter, DataStore } from '../core'
+// TODO: don't need core, just look at redux
+import { parse, uriDecode, Exporter, DataStore } from '../core/index'
 
 class PreviewComponent{
     constructor($window, $state){

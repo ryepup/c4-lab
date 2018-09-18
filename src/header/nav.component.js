@@ -1,16 +1,27 @@
 import template from './nav.html'
 import './nav.css'
-import { DataStore, uriEncode, formats } from '../core'
+// TODO: don't need core, just look at redux
+import { uriEncode, formats } from '../core/index'
 import { readAllText } from './importer'
 import * as aboutComponent from './about.component'
+import { sourceChanged } from '../store/actions'
 
 class NavController {
-    constructor($state, $uibModal, $window) {
+    constructor($state, $uibModal, $ngRedux) {
         'ngInject'
         this.$state = $state
         this.$uibModal = $uibModal
-        this.storage = new DataStore($window.localStorage)
         this.exportFormats = formats
+
+        this.unsubscribe = $ngRedux.connect(this.mapStateToThis, { sourceChanged })(this);
+    }
+
+    $onDestroy() {
+        this.unsubscribe();
+    }
+
+    mapStateToThis(state) {
+        return { text: state.source, zoom: state.zoomNodeId }
     }
 
     href(zoom) {
@@ -32,15 +43,14 @@ class NavController {
         }
     }
 
-    openAbout(){
+    openAbout() {
         this.$uibModal.open({
             component: aboutComponent.name
         })
     }
 
     _onImport(text) {
-        this.storage.save(text)
-        this.$state.go('home', {}, { reload: true })
+        this.sourceChanged({ source: text })
     }
 }
 
@@ -49,9 +59,7 @@ export const options = {
     template: template,
     controller: NavController,
     bindings: {
-        text: '<',
-        onExport: '&',
-        zoom: '<'
+        onExport: '&'
     }
 
 }

@@ -1,9 +1,11 @@
 import * as editor from './editor.component'
+import LocalStorageMock from '../../__mocks__/LocalStorage'
 
 describe('editor.component.js', () => {
     let $ctrl, ngModel;
 
-    beforeEach(inject($componentController => {
+    beforeEach(inject(($componentController, $window) => {
+        $window.localStorage = new LocalStorageMock();
         ngModel = {
             '$setViewValue': jest.fn()
         };
@@ -20,28 +22,6 @@ describe('editor.component.js', () => {
             $ctrl.parse('(system ("foo")')
 
             expect($ctrl.syntaxIsValid).toBeFalsy()
-        })
-    })
-
-    describe('lastError', () => {
-        it('is undefined for valid syntax', () => {
-            $ctrl.parse('(system ("foo"))')
-
-            expect($ctrl.lastError).toBeUndefined()
-        })
-
-        it('is defined for invalid syntax', () => {
-            $ctrl.parse('(system')
-
-            expect($ctrl.lastError).toBeDefined()
-        })
-
-        it('is undefined after fixing syntax', () => {
-            $ctrl.parse('(system')
-
-            $ctrl.parse('(system ("foo"))')
-
-            expect($ctrl.lastError).toBeUndefined()
         })
     })
 })

@@ -4,14 +4,13 @@ import 'codemirror/addon/edit/closebrackets'
 import '../../node_modules/codemirror/lib/codemirror.css'
 import '../../node_modules/codemirror/theme/elegant.css'
 import CodeMirror from 'codemirror'
-
 import template from './editor.html'
-import { parse, SyntaxError, ParseError } from '../core'
 import './editor.css'
+import { sourceChanged } from '../store/actions'
 
 export class EditorController {
 
-    constructor($log) {
+    constructor($log, $ngRedux) {
         'ngInject'
         this.log = $log
         this.editorOptions = {
@@ -21,51 +20,32 @@ export class EditorController {
             matchBrackets: true,
             autoCloseBrackets: true
         }
+
+        this.unsubscribe = $ngRedux
+            .connect(this.mapStateToThis, { sourceChanged })(this);
     }
 
-    $onInit() {
-        this.parse(this.initialText);
+    $onDestroy() {
+        this.unsubscribe();
+    }
+
+    mapStateToThis(state) {
+        return {
+            text: state.source,
+            parseError: state.parseError,
+            syntaxIsValid: state.parseError ? false : true
+        }
     }
 
     parse(text) {
-        this.lastError = undefined;
-        this.text = text;
-        try {
-            const parsed = parse(text);
-            this.ngModel.$setViewValue(parsed);
-            this.syntaxIsValid = true
-            this.tryOnParse(text)
-        } catch (e) {
-            this.log.error(e)
-            if (e instanceof SyntaxError || e instanceof ParseError) {
-                this.syntaxIsValid = false
-                this.lastError = e
-            }
-        }
-    }
-
-    tryOnParse(text) {
-        if (!this.onParse) return;
-        try {
-            this.onParse({ text })
-        } catch (e) {
-            this.log.error('Trouble firing onParse event', e);
-        }
+        this.sourceChanged({ source: text })
     }
 }
 
 export const name = "c4LabEditor"
 export const options = {
-    require: {
-        ngModel: '^'
-    },
     template: template,
-    // TODO: use a custom validator tied to the parser
-    controller: EditorController,
-    bindings: {
-        initialText: '<',
-        onParse: '&'
-    }
+    controller: EditorController
 }
 
 // @ngInject

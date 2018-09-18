@@ -1,4 +1,5 @@
-import { parse, SyntaxError, pathToId, NameNotFoundError, OptsNotFoundError, InvalidDirectionError } from './parse'
+import { parse, SyntaxError, NameNotFoundError, OptsNotFoundError, InvalidDirectionError } from './parse/index'
+import { pathToId } from './parse/Parser'
 
 const fooSystem = {
     name: "foo",
@@ -8,7 +9,7 @@ const fooSystem = {
     children: []
 };
 
-describe('parse.js', () => {
+fdescribe('parse.js', () => {
 
     describe('parse', () => {
         it('throws an error with bad input', () => {

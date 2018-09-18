@@ -24,7 +24,7 @@ export const uriDecode = (uriData: string) => lz.decompressFromEncodedURICompone
 export const toPngDataUri = (dot: string, createElement: elementCreator) => {
     const svg = toSvg(dot)
     const img = createElement('img') as HTMLImageElement
-    return new Promise((resolve) => {
+    return new Promise<string>((resolve) => {
         img.onload = () => resolve(toDataUrl(img, createElement))
         img.setAttribute('src', 'data:image/svg+xml,' + encodeURIComponent(svg))
     })

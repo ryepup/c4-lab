@@ -1,9 +1,6 @@
 <div ng-class="{'bg-success': $ctrl.syntaxIsValid, 'bg-danger': !$ctrl.syntaxIsValid}" style="padding: 0 1em;">
-    <ui-codemirror
-        ui-codemirror-opts="$ctrl.editorOptions"
-        ng-model="$ctrl.text"
-        ng-model-options="{ debounce: 500 }"
+    <ui-codemirror ui-codemirror-opts="$ctrl.editorOptions" ng-model="$ctrl.text" ng-model-options="{ debounce: 250 }"
         ng-change="$ctrl.parse($ctrl.text)">
     </ui-codemirror>
-    <span class="help-block">{{ $ctrl.lastError.message }}</span>
+    <span class="help-block">{{ $ctrl.parseError }}</span>
 </div>
