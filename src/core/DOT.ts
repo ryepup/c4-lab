@@ -6,7 +6,7 @@ export class DOT {
     public static attrList(attrs: any) {
         const dotAttrs = Reflect.ownKeys(attrs)
             .filter((x) => attrs[x])
-            .map((x) => `${x}=${DOT.quoteAttr(attrs[x])}`)
+            .map((x) => `${String(x)}=${DOT.quoteAttr(attrs[x])}`)
             .join(' ')
 
         return `[${dotAttrs}]`
