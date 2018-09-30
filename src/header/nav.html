@@ -49,6 +49,16 @@
                         <span class="glyphicon glyphicon-question-sign"> </span> Help
                     </a>
                 </li>
+                <p class="navbar-text" ng-if="$ctrl.user">
+                    <img ng-src="{{$ctrl.user.avatarUrl}}" height=20 class="img-circle">
+                    {{$ctrl.user.login}}
+                    <a href="#" class="navbar-link" ng-click="$ctrl.githubLogout()">Logout</a>
+                </p>
+                <li ng-if="!$ctrl.user">
+                    <a href="#" ng-click="$ctrl.login()">
+                        Login with Github
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
