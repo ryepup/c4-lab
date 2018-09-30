@@ -52,3 +52,4 @@ export const angularInitialized = actionCreator<IAngularInitialized>('C4_ANGULAR
 export const zoomChanged = actionCreator<IZoomChanged>('C4_ZOOM_CHANGED')
 export const githubLoggedIn = actionCreator<IGithubLoggedIn>('C4_GITHUB_LOGGED_IN')
 export const githubLoginComplete = actionCreator<IGithubLoginComplete>('C4_GITHUB_LOGIN_COMPLETE')
+export const githubLogout = actionCreator('C4_GITHUB_LOGOUT')

@@ -3,7 +3,7 @@ import { combineReducers } from 'redux'
 import { reducerWithInitialState } from 'typescript-fsa-reducers'
 import { IGraph, INode, NodeId } from '../../core/interfaces'
 import {
-    angularInitialized, dotChanged, githubLoginComplete,
+    angularInitialized, dotChanged, githubLoginComplete, githubLogout,
     sourceChanged, sourceParsed, sourceParseError, svgChanged,
     zoomChanged,
 } from '../actions'
@@ -64,6 +64,7 @@ const windowReducer = reducerWithInitialState<Window | null>(null)
 
 const userReducer = reducerWithInitialState<IUser | null>(null)
     .case(githubLoginComplete, (old, evt) => evt)
+    .case(githubLogout, (old, evt) => null)
     .build()
 
 const rootReducer = combineReducers<IState>({
