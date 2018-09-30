@@ -1,8 +1,0 @@
-/node_modules/
-/src/bundle.js
-/src/bundle.js.map
-/dist/
-/reports/
-/npm-debug.log
-.vscode
-coverage/

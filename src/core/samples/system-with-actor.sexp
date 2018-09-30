@@ -1,2 +1,0 @@
-(actor ("user"))
-(system ("system"))

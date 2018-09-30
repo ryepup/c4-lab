@@ -1,5 +1,0 @@
-(actor ("user")
-  (edge :to "system" :description "talks to"))
-(system ("system")
-  (edge :to "system b" :description "talks to"))
-(system ("system b"))
