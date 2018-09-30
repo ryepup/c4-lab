@@ -31,11 +31,10 @@
                             <a ng-click="$ctrl.export(format)" analytics-on="click" analytics-event="export"
                                 analytics-label="{{format}}">{{format}}</a>
                         </li>
-                        <!-- TODO: fix gist integration with oauth login
-                            <li>
-                                <a ng-click="$ctrl.export('gist')" analytics-on="click" analytics-event="export" analytics-label="gist">GitHub Gist&nbsp;<img src="GitHub-Mark-32px.png"></a>
-                            </li>
-                        -->
+                        <li ng-if="$ctrl.user">
+                            <a ng-click="$ctrl.export('gist')" analytics-on="click" analytics-event="export"
+                                analytics-label="gist">GitHub Private Gist&nbsp;<img src="GitHub-Mark-32px.png"></a>
+                        </li>
                     </ul>
                 </li>
                 <li>

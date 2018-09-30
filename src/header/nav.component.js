@@ -4,7 +4,7 @@ import './nav.css'
 import { uriEncode, formats } from '../core/index'
 import { readAllText } from './importer'
 import * as aboutComponent from './about.component'
-import { sourceChanged, githubLoggedIn, githubLogout } from '../store/actions'
+import { sourceChanged, githubLoggedIn, githubLogout, gistExport } from '../store/actions'
 
 /* global process */
 const githubLoginPopupUrl = process.env.C4_GITHUB_LOGIN_POPUP_URL
@@ -20,7 +20,7 @@ class NavController {
 
         this.unsubscribe = $ngRedux.connect(
             this.mapStateToThis,
-            { sourceChanged, githubLoggedIn, githubLogout })(this);
+            { sourceChanged, githubLoggedIn, githubLogout, gistExport: gistExport.started })(this);
     }
 
     $onDestroy() {
@@ -44,7 +44,13 @@ class NavController {
     }
 
     export(format) {
-        this.onExport({ format, href: this.href() })
+        const href = this.href();
+        if (format === 'gist') {
+            this.gistExport({ href })
+        } else {
+            // TODO: fire an action
+            this.onExport({ format, href })
+        }
     }
 
     import(files) {

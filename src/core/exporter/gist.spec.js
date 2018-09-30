@@ -1,18 +1,18 @@
 import { GistExporter } from './gist'
 
 describe('GistExporter', () => {
-    let exporter, gist, $digest
+    let exporter, gists, $digest
     const testGistId = 'test id'
     const testGistUrl = 'http://gist'
 
     beforeEach(inject(($q, $rootScope) => {
 
         $digest = () => $rootScope.$digest()
-        gist = {
+        gists = {
             create: jest.fn()
         }
 
-        gist.create.mockReturnValueOnce($q.resolve({
+        gists.create.mockReturnValueOnce($q.resolve({
             data: {
                 id: testGistId,
                 html_url: testGistUrl
@@ -20,7 +20,7 @@ describe('GistExporter', () => {
         }))
 
         exporter = new GistExporter({
-            getGist: () => gist
+            gists
         })
     }))
 
@@ -28,7 +28,7 @@ describe('GistExporter', () => {
         const title = 'test title'
         const sexp = `(title "${title}")`
         const url = 'http://c4-lab?data'
-        const gistOptions = () => gist.create.mock.calls[0][0]
+        const gistOptions = () => gists.create.mock.calls[0][0]
 
         it('writes the sexp', (done) => {
             exporter.export(title, sexp, url)
@@ -57,7 +57,8 @@ describe('GistExporter', () => {
                 .then((result) => {
                     expect(result).toEqual({
                         id: testGistId,
-                        url: new URL(testGistUrl)})
+                        url: new URL(testGistUrl)
+                    })
                     done()
                 })
             $digest()
