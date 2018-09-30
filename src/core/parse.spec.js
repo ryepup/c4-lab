@@ -21,7 +21,7 @@ fdescribe('parse.js', () => {
             const result = parse('(system ("foo"))');
 
             expect(result).toEqual({
-                title: undefined,
+                title: "",
                 edges: [],
                 items: [fooSystem],
                 roots: [fooSystem.id],
@@ -46,7 +46,7 @@ fdescribe('parse.js', () => {
             const result = parse('(def-system ("foo"))');
 
             expect(result).toEqual({
-                title: undefined,
+                title: "",
                 edges: [],
                 items: [fooSystem],
                 roots: [fooSystem.id],
@@ -60,7 +60,7 @@ fdescribe('parse.js', () => {
             const result = parse('(define-system ("foo"))');
 
             expect(result).toEqual({
-                title: undefined,
+                title: "",
                 edges: [],
                 items: [fooSystem],
                 roots: [fooSystem.id],
@@ -91,7 +91,7 @@ fdescribe('parse.js', () => {
             const result = parse('(system ("foo") (container ("bar")))');
 
             expect(result).toEqual({
-                title: undefined,
+                title: "",
                 edges: [],
                 items: [parent, child],
                 roots: [parent.id],
@@ -131,7 +131,7 @@ fdescribe('parse.js', () => {
                 (system ("dst"))`);
 
             expect(result).toEqual({
-                title: undefined,
+                title: "",
                 edges: [edge],
                 items: [src, dst],
                 roots: [src.id, dst.id],
