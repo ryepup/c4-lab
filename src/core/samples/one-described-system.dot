@@ -1,0 +1,12 @@
+digraph g {
+  compound=true
+  node[fontsize=12]
+  edge[fontsize=12]
+
+  g0 [shape="box" label=<
+<b>foo</b>
+<br/>
+does some "stuff"
+  >]
+
+}

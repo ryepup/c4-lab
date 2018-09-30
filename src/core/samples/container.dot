@@ -1,0 +1,21 @@
+digraph g {
+  compound=true
+  node[fontsize=12]
+  edge[fontsize=12]
+
+  subgraph cluster_g0 {
+    label=<<b>system</b>> style="rounded"
+
+    g0 [style="invisible"]
+
+    g1 [shape="box3d" label=<
+<b>container</b>
+<br/>
+<font color="#666666"><i>&#171;js&#187;</i></font>
+<br/>
+<br/>
+does something
+    >]
+  }
+
+}

@@ -1,0 +1,14 @@
+digraph g {
+  compound=true
+  node[fontsize=12]
+  edge[fontsize=12]
+
+  g0 [shape="box" href="#!/?zoom=7fc56270e7a70fa81a5935b72eacbe29" tooltip="See more details about A" label=<
+<font color="blue"><u><b>A</b></u></font>
+  >]
+  g1 [shape="box" href="#!/?zoom=9d5ed678fe57bcca610140957afab571" tooltip="See more details about B" label=<
+<font color="blue"><u><b>B</b></u></font>
+  >]
+
+  g0 -> g1 [style="dashed"]
+}

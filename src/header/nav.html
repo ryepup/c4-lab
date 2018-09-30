@@ -1,0 +1,63 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">C4 Lab</a>
+        </div>
+
+        <p class="navbar-text navbar-right c4lab-build">
+            <c4-lab-build-info></c4-lab-build-info>
+        </p>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a popover-placement="bottom" uib-popover-template="'_share.html'" analytics-on="click"
+                        analytics-event="share">
+                        <span class="glyphicon glyphicon-duplicate"> </span> Share
+                    </a>
+                </li>
+                <li>
+                    <a ngf-select="$ctrl.import($files)" ngf-pattern="'.sexp'" ngf-accept="'.sexp'" analytics-on="click"
+                        analytics-event="import">
+                        <span class="glyphicon glyphicon-open-file"> </span> Import
+                    </a>
+                </li>
+                <li class="dropdown" uib-dropdown>
+                    <a uib-dropdown-toggle>
+                        <span class="glyphicon glyphicon-picture"> </span> Export <span class="caret"></span>
+                    </a>
+                    <ul id="export-format-list" class="dropdown-menu" uib-dropdown-menu>
+                        <li ng-repeat="format in $ctrl.exportFormats">
+                            <a ng-click="$ctrl.export(format)" analytics-on="click" analytics-event="export"
+                                analytics-label="{{format}}">{{format}}</a>
+                        </li>
+                        <!-- TODO: fix gist integration with oauth login
+                            <li>
+                                <a ng-click="$ctrl.export('gist')" analytics-on="click" analytics-event="export" analytics-label="gist">GitHub Gist&nbsp;<img src="GitHub-Mark-32px.png"></a>
+                            </li>
+                        -->
+                    </ul>
+                </li>
+                <li>
+                    <!-- TODO: make this a modal route-->
+                    <a href="#" ng-click="$ctrl.openAbout()" analytics-on="click" analytics-event="about">
+                        <span class="glyphicon glyphicon-info-sign"> </span> About
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="help">
+                        <span class="glyphicon glyphicon-question-sign"> </span> Help
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<script type="text/ng-template" id="_share.html">
+    <div style="width:10em;">
+        <a ng-href="{{$ctrl.href($ctrl.zoom)}}" target="_blank">
+            <span class="glyphicon glyphicon-new-window" > </span>
+            Link to this page</a>
+    </div>
+</script>

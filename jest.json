@@ -1,0 +1,29 @@
+{
+    "moduleFileExtensions": [
+        "js",
+        "ts"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+        "src/**/*.{js,ts}",
+        "!**/node_modules/**"
+    ],
+    "coverageThreshold": {
+        "global": {
+            "branches": 70,
+            "functions": 65,
+            "lines": 70,
+            "statements": 70
+        }
+    },
+    "transform": {
+        "\\.(sexp|dot|html|md)$": "<rootDir>/__mocks__/as-is.js",
+        "\\.ts$": "<rootDir>/node_modules/ts-jest/preprocessor.js",
+        "\\.js$": "babel-jest"
+    },
+    "moduleNameMapper": {
+        "\\.(css)$": "identity-obj-proxy"
+    },
+    "setupTestFrameworkScriptFile": "<rootDir>/__mocks__/test-setup.js",
+    "testRegex": "\\.spec\\.(j|t)s"
+}

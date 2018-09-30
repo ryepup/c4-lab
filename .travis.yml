@@ -1,0 +1,21 @@
+branches:
+  only:
+  - master
+language: node_js
+cache:
+  directories:
+  - node_modules
+after_success:
+- npm run codeclimate
+node_js:
+- stable
+env:
+  matrix:
+    secure: eb23yK/8DjHt9P3yu3gMcYysKM5HeS4TS2cN6OxoXSHIGxZovMp18yQ8LHO62l5loBy+h3FfL+VUa2kOZJvZhyx0+6MbpU+E0uiNckcLKjN1pSHu6S0t7jaI/KzE27q34mvo5uUOEC4QQj1T8EWRNU7DgiYN8rSPo4/FdB6BHS4vXG+ia+4fqzskhWoh38aW1/ifeJM3ZSIBjmwgzsWX6omvkHfaYvsoirySLDKPcd3iyPZF8ki4wyhYLjNdOTlxvW5gagxFqb96jL+3vAf3Rln5g6CpUfEaOuUd5sPkKKL5IGitJqN4A3SNHLD7ID3bqmjx5nM75d1jBsYqzdANZxaUNMGVeJqBJ84D0YIhjp5EsKFNyZ8H5OaCo60xQ4o7JLcJE73XOWGudLcqYJgk5YA1XCndnhRkrDur45tDHj3xT0uw/JZLPlacX+56esw6e9VCws4gByKCERaaiR9e7zyJzf939he3bgf2swtu8l9Zm0vPq/gm4yaLWgE5fj62BXNc8MiMoUhMzbhnmbp49CaGnE0b/DKxR9vROX9t7ktUxefc4mderpj1ISJ/wuiljWsrrExw9A9rhYvgsPMFtDtfwCjHJMh6jqMfkiu2Bcdv68hp+aZJezOkRlDBpGKfFnMdacjb6AqLKTXZbgfIJuGuLA1gA608e71rpm6mQuw=
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: "$GH_TOKEN"
+  keep-history: true
+  on:
+    branch: master
