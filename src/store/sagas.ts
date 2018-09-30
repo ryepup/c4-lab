@@ -1,3 +1,4 @@
+
 import { StateService } from '@uirouter/core'
 import { SagaIterator } from 'redux-saga'
 import { all, call, put, select, take, takeLatest, throttle } from 'redux-saga/effects'
@@ -8,6 +9,7 @@ import {
     angularInitialized, dotChanged, ISourceChanged, IZoomChanged, sourceChanged,
     sourceParsed, sourceParseError, svgChanged, zoomChanged,
 } from './actions'
+import githubSaga from './sagas/github'
 
 function* onSourceChanged(action: Action<ISourceChanged>): SagaIterator {
     try {
@@ -77,5 +79,6 @@ export function* rootSaga(): SagaIterator {
         call(latestGraph),
         call(latestZoom),
         call(init),
+        call(githubSaga),
     ])
 }

@@ -32,6 +32,15 @@ export interface IAngularInitialized {
     $window: Window
 }
 
+export interface IGithubLoggedIn {
+    token: string
+}
+
+export interface IGithubLoginComplete extends IGithubLoggedIn {
+    login: string,
+    avatarUrl: string
+}
+
 const actionCreator = actionCreatorFactory()
 
 export const sourceParsed = actionCreator<IEditorParseEvent>('C4_SOURCE_PARSED')
@@ -41,3 +50,5 @@ export const dotChanged = actionCreator<IDotChanged>('C4_DOT_CHANGED')
 export const svgChanged = actionCreator<ISvgChanged>('C4_SVG_CHANGED')
 export const angularInitialized = actionCreator<IAngularInitialized>('C4_ANGULAR_INITIALIZED')
 export const zoomChanged = actionCreator<IZoomChanged>('C4_ZOOM_CHANGED')
+export const githubLoggedIn = actionCreator<IGithubLoggedIn>('C4_GITHUB_LOGGED_IN')
+export const githubLoginComplete = actionCreator<IGithubLoginComplete>('C4_GITHUB_LOGIN_COMPLETE')
