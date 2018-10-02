@@ -16,11 +16,11 @@ const INDENT = '  '
 export class DotContext {
     private wordwrap: (text: string) => string
     private hrefTo?: (text: string) => string
-    private graph: IGraph
-    private zoomNodeId: NodeId
-    private visibleIds: NodeId[]
-    private visibleEdges: IEdge[]
-    private rootNode: INode
+    private graph?: IGraph
+    private zoomNodeId?: NodeId
+    private visibleIds: NodeId[] = []
+    private visibleEdges: IEdge[] = []
+    private rootNode?: INode
 
     constructor(hrefTo?: ((text: string) => string)) {
         // TODO: why doesn't `wordwrap(30)` work? Something about typescript definitions
@@ -64,6 +64,7 @@ export class DotContext {
     }
 
     private findVisibleNodes(zoomNodeId: NodeId) {
+        if (!this.graph) { throw new Error('must have a graph') }
         this.rootNode = this.graph.idMap[zoomNodeId]
         let visibleNodes = this.rootNode.children
             .concat([this.rootNode])
@@ -128,6 +129,8 @@ export class DotContext {
     }
 
     private * drawCluster(indent: string, rootNode: INode, style = 'rounded') {
+        if (!this.graph) { throw new Error('must have a graph') }
+
         const dotId = this.toDotId(rootNode)
         const label = this.toLabel(rootNode.name)
 
@@ -150,6 +153,9 @@ ${indent}  label=<${DOT.b(label)}> style="${style}"`
     }
 
     private * drawChildCluster(indent: string, parentId: NodeId) {
+        if (!this.graph) { throw new Error('must have a graph') }
+        if (!this.rootNode) { throw new Error('must have a rootNode') }
+
         const parent = this.graph.idMap[parentId]
         const dotId = this.toDotId(parent)
         const label = this.toLabel(parent.name)
@@ -175,6 +181,8 @@ ${indent}  label=<${DOT.b(label)}> style="${style}"`
     }
 
     private * digraphHeaders(indent: string) {
+        if (!this.graph) { throw new Error('must have a graph') }
+
         yield `${indent}compound=true`
         if (this.graph.title) {
             yield `${indent}label="${this.toLabel(this.graph.title)}"`
@@ -199,9 +207,11 @@ ${text}
     }
 
     private * drawItems(nodesOrIds: Array<string | INode | IEdge>, indent: string) {
+        if (!this.graph) { throw new Error('must have a graph') }
+        const { idMap } = this.graph
         if (VERBOSE) { yield `${indent}# <drawItems>` }
         yield* nodesOrIds
-            .map((x) => isString(x) ? this.graph.idMap[x] : x)
+            .map((x) => isString(x) ? idMap[x] : x)
             .filter((x) => x.type !== 'edge')
             .map((x) => this.drawItem((x as INode), indent))
         if (VERBOSE) { yield `${indent}# </drawItems>` }

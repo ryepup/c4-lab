@@ -31,11 +31,10 @@
                             <a ng-click="$ctrl.export(format)" analytics-on="click" analytics-event="export"
                                 analytics-label="{{format}}">{{format}}</a>
                         </li>
-                        <!-- TODO: fix gist integration with oauth login
-                            <li>
-                                <a ng-click="$ctrl.export('gist')" analytics-on="click" analytics-event="export" analytics-label="gist">GitHub Gist&nbsp;<img src="GitHub-Mark-32px.png"></a>
-                            </li>
-                        -->
+                        <li ng-if="$ctrl.user">
+                            <a ng-click="$ctrl.export('gist')" analytics-on="click" analytics-event="export"
+                                analytics-label="gist">GitHub Private Gist&nbsp;<img src="GitHub-Mark-32px.png"></a>
+                        </li>
                     </ul>
                 </li>
                 <li>
@@ -47,6 +46,16 @@
                 <li>
                     <a ui-sref="help">
                         <span class="glyphicon glyphicon-question-sign"> </span> Help
+                    </a>
+                </li>
+                <p class="navbar-text" ng-if="$ctrl.user">
+                    <img ng-src="{{$ctrl.user.avatarUrl}}" height=20 class="img-circle">
+                    {{$ctrl.user.login}}
+                    <a href="#" class="navbar-link" ng-click="$ctrl.githubLogout()">Logout</a>
+                </p>
+                <li ng-if="!$ctrl.user">
+                    <a href="#" ng-click="$ctrl.login()">
+                        Login with Github
                     </a>
                 </li>
             </ul>

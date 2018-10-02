@@ -3,10 +3,11 @@ import { combineReducers } from 'redux'
 import { reducerWithInitialState } from 'typescript-fsa-reducers'
 import { IGraph, INode, NodeId } from '../../core/interfaces'
 import {
-    angularInitialized, dotChanged, sourceChanged,
-    sourceParsed, sourceParseError, svgChanged, zoomChanged,
+    angularInitialized, dotChanged, githubLoginComplete, githubLogout,
+    sourceChanged, sourceParsed, sourceParseError, svgChanged,
+    zoomChanged,
 } from '../actions'
-import { IState } from '../state'
+import { IState, IUser } from '../state'
 import sample from './c4lab.sexp'
 
 export const initialState: IState = {
@@ -61,6 +62,11 @@ const windowReducer = reducerWithInitialState<Window | null>(null)
     .case(angularInitialized, (old, evt) => evt.$window)
     .build()
 
+const userReducer = reducerWithInitialState<IUser | null>(null)
+    .case(githubLoginComplete, (old, evt) => evt)
+    .case(githubLogout, (old, evt) => null)
+    .build()
+
 const rootReducer = combineReducers<IState>({
     $state: stateReducer,
     $window: windowReducer,
@@ -69,6 +75,7 @@ const rootReducer = combineReducers<IState>({
     parseError: parseErrorReducer,
     source: testSafeSourceReducer,
     svg: svgReducer,
+    user: userReducer,
     zoomNodeId: zoomNodeIdReducer,
     zoomableNodes: zoomableNodesReducer,
 })

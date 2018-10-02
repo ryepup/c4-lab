@@ -60,7 +60,7 @@ export class Parser {
     private pathMap: { [id: string]: NodeId }
     private edges: IEdge[]
     private items: INode[]
-    private graphTitle: string
+    private graphTitle: string = ''
 
     constructor() {
         this.idMap = {}

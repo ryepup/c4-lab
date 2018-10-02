@@ -1,4 +1,4 @@
-import Github from 'github-api'
+import * as Octokit from '@octokit/rest'
 
 interface IGistResult {
     id: string
@@ -16,23 +16,15 @@ These files were exported from [C4-Lab](https://ryepup.github.io/c4-lab)
 
 export class GistExporter {
 
-    constructor(private gh = new Github()) { }
+    constructor(private gh: Octokit) { }
 
     public export(title: string, sexp: string, url: URL): Promise<IGistResult> {
-        const gist = this.gh.getGist()
         // TODO: use async/await
-        return gist.create({
+        return this.gh.gists.create({
             description: `C4 diagrams for '${title}'`,
-            files: {
-                'README.md': {
-                    content: createReadme(title, url),
-                },
-                [`${title}.sexp`]: {
-                    content: sexp,
-                },
-                // TODO: save the top-level SVG
-            },
-            public: true,
+            // octokit types are just wrong
+            files: this.createFiles(title, url, sexp) as Octokit.GistsCreateParamsFiles,
+            public: false,
         })
             .then((resp) => {
                 return {
@@ -40,5 +32,16 @@ export class GistExporter {
                     url: new URL(resp.data.html_url),
                 }
             })
+    }
+
+    private createFiles(title: string, url: URL, sexp: string) {
+        return {
+            'README.md': {
+                content: createReadme(title, url),
+            },
+            [`${title}.sexp`]: {
+                content: sexp,
+            },
+        }
     }
 }

@@ -1,5 +1,10 @@
 import { StateService } from 'angular-ui-router'
 import { IGraph, INode, NodeId } from '../core/interfaces'
+export interface IUser {
+    login: string,
+    avatarUrl: string,
+    token: string
+}
 
 export interface IState {
     source: string
@@ -9,7 +14,8 @@ export interface IState {
     zoomableNodes: INode[],
     dot?: string,
     svg?: string,
-    // TODO: just keep a ((id:NodeId) => Uri) method in state
+    // TODO: just keep a ((id:NodeId) => Uri) method in state?
     $state?: StateService,
-    $window?: Window
+    $window?: Window,
+    user?: IUser
 }

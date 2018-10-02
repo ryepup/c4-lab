@@ -4,16 +4,23 @@ import './nav.css'
 import { uriEncode, formats } from '../core/index'
 import { readAllText } from './importer'
 import * as aboutComponent from './about.component'
-import { sourceChanged } from '../store/actions'
+import { sourceChanged, githubLoggedIn, githubLogout, gistExport } from '../store/actions'
+
+/* global process */
+const githubLoginPopupUrl = process.env.C4_GITHUB_LOGIN_POPUP_URL
+    || 'https://c4-lab.azurewebsites.net/api/GithubLogin?code=CZiBo89DKe5LcWUHYtYqQYkTZUU1OmLsIXOFxmBfLaL3HmVXVTCbkg==';
 
 class NavController {
-    constructor($state, $uibModal, $ngRedux) {
+    constructor($state, $uibModal, $ngRedux, $window) {
         'ngInject'
         this.$state = $state
         this.$uibModal = $uibModal
         this.exportFormats = formats
+        this.$window = $window;
 
-        this.unsubscribe = $ngRedux.connect(this.mapStateToThis, { sourceChanged })(this);
+        this.unsubscribe = $ngRedux.connect(
+            this.mapStateToThis,
+            { sourceChanged, githubLoggedIn, githubLogout, gistExport: gistExport.started })(this);
     }
 
     $onDestroy() {
@@ -21,7 +28,11 @@ class NavController {
     }
 
     mapStateToThis(state) {
-        return { text: state.source, zoom: state.zoomNodeId }
+        return {
+            text: state.source,
+            zoom: state.zoomNodeId,
+            user: state.user
+        }
     }
 
     href(zoom) {
@@ -33,7 +44,13 @@ class NavController {
     }
 
     export(format) {
-        this.onExport({ format, href: this.href() })
+        const href = this.href();
+        if (format === 'gist') {
+            this.gistExport({ href })
+        } else {
+            // TODO: fire an action
+            this.onExport({ format, href })
+        }
     }
 
     import(files) {
@@ -51,6 +68,17 @@ class NavController {
 
     _onImport(text) {
         this.sourceChanged({ source: text })
+    }
+
+    login() {
+        const expectedOrigin = new URL(githubLoginPopupUrl).origin;
+        this.$window.open(githubLoginPopupUrl, 'Github authentication');
+
+        this.$window.addEventListener('message', (event) => {
+            if (event.origin === expectedOrigin) {
+                this.githubLoggedIn({ token: event.data.payload.token })
+            }
+        }, { capture: false, once: true })
     }
 }
 
