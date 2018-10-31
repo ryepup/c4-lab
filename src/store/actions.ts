@@ -44,9 +44,14 @@ export interface IGithubLoginComplete extends IGithubLoggedIn {
 export interface IGistExportRequest {
     href: string
 }
+
 export interface IGistExportResult {
     id: string
     url: URL
+}
+
+export interface IPreview {
+    encodedSource: string
 }
 
 const actionCreator = actionCreatorFactory()
@@ -62,3 +67,4 @@ export const githubLoggedIn = actionCreator<IGithubLoggedIn>('C4_GITHUB_LOGGED_I
 export const githubLoginComplete = actionCreator<IGithubLoginComplete>('C4_GITHUB_LOGIN_COMPLETE')
 export const githubLogout = actionCreator('C4_GITHUB_LOGOUT')
 export const gistExport = actionCreator.async<IGistExportRequest, IGistExportResult>('C4_GIST_EXPORT')
+export const preview = actionCreator<IPreview>('C4_PREVIEW')

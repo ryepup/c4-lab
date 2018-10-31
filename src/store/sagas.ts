@@ -3,11 +3,11 @@ import { StateService } from '@uirouter/core'
 import { SagaIterator } from 'redux-saga'
 import { all, call, put, select, take, takeLatest, throttle } from 'redux-saga/effects'
 import { Action } from 'typescript-fsa'
-import { DataStore, parse, toDot, toSvg } from '../core'
+import { DataStore, parse, toDot, toSvg, uriDecode } from '../core'
 import { NodeId } from '../core/interfaces'
 import {
-    angularInitialized, dotChanged, ISourceChanged, IZoomChanged, sourceChanged,
-    sourceParsed, sourceParseError, svgChanged, zoomChanged,
+    angularInitialized, dotChanged, IPreview, ISourceChanged, IZoomChanged,
+    preview, sourceChanged, sourceParsed, sourceParseError, svgChanged, zoomChanged,
 } from './actions'
 import githubSaga from './sagas/github'
 
@@ -29,9 +29,11 @@ function hrefTo($state: StateService, zoom: NodeId) {
 
 function* render(): SagaIterator {
     // TODO: make this type safe, need to mess with NodeId being nullable
-    const { zoomNodeId, graph, $state, $window, source } = yield select()
+    const { zoomNodeId, graph, $state, $window, source, isPreview } = yield select()
 
-    new DataStore($window.localStorage).save(source)
+    if (!isPreview) {
+        new DataStore($window.localStorage).save(source)
+    }
 
     // TODO: resolve race condition where we call this method before $state.current exists
     // so we can drop this wait
@@ -60,9 +62,15 @@ function* updateZoom(action: Action<IZoomChanged>): SagaIterator {
     }
 }
 
+function* onPreview(action: Action<IPreview>): SagaIterator {
+    const source = uriDecode(action.payload.encodedSource)
+    yield put(sourceChanged({ source }))
+}
+
 function* latestSource(): SagaIterator { yield takeLatest(sourceChanged, onSourceChanged) }
 function* latestGraph(): SagaIterator { yield takeLatest(sourceParsed, render) }
 function* latestZoom(): SagaIterator { yield throttle(100, zoomChanged, updateZoom) }
+function* latestPreview(): SagaIterator { yield takeLatest(preview, onPreview) }
 
 function* init(): SagaIterator {
     yield take(angularInitialized.type)
@@ -80,5 +88,6 @@ export function* rootSaga(): SagaIterator {
         call(latestZoom),
         call(init),
         call(githubSaga),
+        call(latestPreview),
     ])
 }

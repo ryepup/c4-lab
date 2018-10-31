@@ -17,5 +17,6 @@ export interface IState {
     // TODO: just keep a ((id:NodeId) => Uri) method in state?
     $state?: StateService,
     $window?: Window,
-    user?: IUser
+    user?: IUser,
+    isPreview: boolean
 }
