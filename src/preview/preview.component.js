@@ -1,26 +1,22 @@
 import template from './preview.html'
-// TODO: don't need core, just look at redux
-import { parse, uriDecode, Exporter, DataStore } from '../core/index'
+import { preview, previewEdit } from '../store/actions'
 
-class PreviewComponent{
-    constructor($window, $state){
-        this.exporter = new Exporter($window.document)
-        this.storage = new DataStore($window.localStorage)
-        this.$state = $state
+class PreviewComponent {
+    constructor($ngRedux) {
+        this.unsubscribe = $ngRedux.connect(
+            null,
+            { preview, previewEdit })(this);
+
     }
 
-    $onChanges(){
-        this.text = uriDecode(this.encodedText)
-        this.graph = parse(this.text)
+    $onDestroy() {
+        this.unsubscribe();
     }
 
-    onExport(format) {
-        this.exporter.export(format, this.graph.title, this.text, this.dot)
-    }
-
-    edit(){
-        this.storage.save(this.text)
-        this.$state.go('home')
+    $onChanges() {
+        this.preview({
+            encodedSource: this.encodedText
+        })
     }
 }
 
@@ -30,7 +26,6 @@ export const options = {
     template,
     controller: PreviewComponent,
     bindings: {
-        zoom: '<',
         encodedText: '<'
     }
 }

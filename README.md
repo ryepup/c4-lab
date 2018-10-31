@@ -26,6 +26,8 @@ The latest version is deployed at https://ryepup.github.io/c4-lab
     yarn install
     yarn start
 
+See architecture decision records in `doc/adr`
+
 ## Contributing
 
 Pull requests are welcome.

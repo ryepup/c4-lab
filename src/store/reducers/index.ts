@@ -4,14 +4,15 @@ import { reducerWithInitialState } from 'typescript-fsa-reducers'
 import { IGraph, INode, NodeId } from '../../core/interfaces'
 import {
     angularInitialized, dotChanged, githubLoginComplete, githubLogout,
-    sourceChanged, sourceParsed, sourceParseError, svgChanged,
-    zoomChanged,
+    preview, previewEdit, sourceChanged, sourceParsed, sourceParseError,
+    svgChanged, zoomChanged,
 } from '../actions'
 import { IState, IUser } from '../state'
 import sample from './c4lab.sexp'
 
 export const initialState: IState = {
     graph: null,
+    isPreview: false,
     parseError: null,
     source: sample,
     zoomNodeId: null,
@@ -67,11 +68,17 @@ const userReducer = reducerWithInitialState<IUser | null>(null)
     .case(githubLogout, (old, evt) => null)
     .build()
 
+const isPreviewReducer = reducerWithInitialState<boolean | null>(false)
+    .case(preview, (old, evt) => true)
+    .case(previewEdit, (old, evt) => false)
+    .build()
+
 const rootReducer = combineReducers<IState>({
     $state: stateReducer,
     $window: windowReducer,
     dot: dotReducer,
     graph: graphReducer,
+    isPreview: isPreviewReducer,
     parseError: parseErrorReducer,
     source: testSafeSourceReducer,
     svg: svgReducer,

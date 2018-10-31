@@ -6,10 +6,12 @@ import { Action } from 'typescript-fsa'
 import { DataStore, parse, toDot, toSvg } from '../core'
 import { NodeId } from '../core/interfaces'
 import {
-    angularInitialized, dotChanged, ISourceChanged, IZoomChanged, sourceChanged,
-    sourceParsed, sourceParseError, svgChanged, zoomChanged,
+    angularInitialized, dotChanged, ISourceChanged, IZoomChanged,
+    sourceChanged, sourceParsed, sourceParseError, svgChanged, zoomChanged,
 } from './actions'
+import exportSaga from './sagas/export'
 import githubSaga from './sagas/github'
+import previewSaga from './sagas/preview'
 
 function* onSourceChanged(action: Action<ISourceChanged>): SagaIterator {
     try {
@@ -29,9 +31,14 @@ function hrefTo($state: StateService, zoom: NodeId) {
 
 function* render(): SagaIterator {
     // TODO: make this type safe, need to mess with NodeId being nullable
-    const { zoomNodeId, graph, $state, $window, source } = yield select()
+    const { zoomNodeId, graph, $state, $window, source, isPreview } = yield select()
 
-    new DataStore($window.localStorage).save(source)
+    // TODO: resolve race where we call this from routes.js
+    if (!graph) { return }
+
+    if (!isPreview) {
+        new DataStore($window.localStorage).save(source)
+    }
 
     // TODO: resolve race condition where we call this method before $state.current exists
     // so we can drop this wait
@@ -66,9 +73,13 @@ function* latestZoom(): SagaIterator { yield throttle(100, zoomChanged, updateZo
 
 function* init(): SagaIterator {
     yield take(angularInitialized.type)
-    const { $window } = yield select()
-    if (!$window.localStorage) { return } // TODO: hack to make tests happy
-    const storage = new DataStore($window.localStorage)
+    if (!window.localStorage) { return } // TODO: hack to make tests happy
+
+    // skip restoring from local storage if we're on a preview page
+    if ((/load/i).test(window.location.hash)) {
+        return
+    }
+    const storage = new DataStore(window.localStorage)
     const source = storage.load()
     if (source) { yield put(sourceChanged({ source })) }
 }
@@ -80,5 +91,7 @@ export function* rootSaga(): SagaIterator {
         call(latestZoom),
         call(init),
         call(githubSaga),
+        call(previewSaga),
+        call(exportSaga),
     ])
 }

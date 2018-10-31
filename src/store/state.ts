@@ -16,6 +16,8 @@ export interface IState {
     svg?: string,
     // TODO: just keep a ((id:NodeId) => Uri) method in state?
     $state?: StateService,
+    // TODO: drop this and just use `window`
     $window?: Window,
-    user?: IUser
+    user?: IUser,
+    isPreview: boolean
 }
