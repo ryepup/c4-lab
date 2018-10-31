@@ -4,7 +4,7 @@ import { reducerWithInitialState } from 'typescript-fsa-reducers'
 import { IGraph, INode, NodeId } from '../../core/interfaces'
 import {
     angularInitialized, dotChanged, githubLoginComplete, githubLogout,
-    preview, sourceChanged, sourceParsed, sourceParseError,
+    preview, previewEdit, sourceChanged, sourceParsed, sourceParseError,
     svgChanged, zoomChanged,
 } from '../actions'
 import { IState, IUser } from '../state'
@@ -70,6 +70,7 @@ const userReducer = reducerWithInitialState<IUser | null>(null)
 
 const isPreviewReducer = reducerWithInitialState<boolean | null>(false)
     .case(preview, (old, evt) => true)
+    .case(previewEdit, (old, evt) => false)
     .build()
 
 const rootReducer = combineReducers<IState>({

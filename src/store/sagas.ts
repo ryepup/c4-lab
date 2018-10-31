@@ -3,14 +3,15 @@ import { StateService } from '@uirouter/core'
 import { SagaIterator } from 'redux-saga'
 import { all, call, put, select, take, takeLatest, throttle } from 'redux-saga/effects'
 import { Action } from 'typescript-fsa'
-import { DataStore, parse, toDot, toSvg, uriDecode } from '../core'
+import { DataStore, parse, toDot, toSvg } from '../core'
 import { NodeId } from '../core/interfaces'
 import {
-    angularInitialized, dotChanged, IPreview, ISourceChanged, IZoomChanged,
-    preview, sourceChanged, sourceParsed, sourceParseError, svgChanged, zoomChanged,
+    angularInitialized, dotChanged, ISourceChanged, IZoomChanged,
+    sourceChanged, sourceParsed, sourceParseError, svgChanged, zoomChanged,
 } from './actions'
 import exportSaga from './sagas/export'
 import githubSaga from './sagas/github'
+import previewSaga from './sagas/preview'
 
 function* onSourceChanged(action: Action<ISourceChanged>): SagaIterator {
     try {
@@ -66,15 +67,9 @@ function* updateZoom(action: Action<IZoomChanged>): SagaIterator {
     }
 }
 
-function* onPreview(action: Action<IPreview>): SagaIterator {
-    const source = uriDecode(action.payload.encodedSource)
-    yield put(sourceChanged({ source }))
-}
-
 function* latestSource(): SagaIterator { yield takeLatest(sourceChanged, onSourceChanged) }
 function* latestGraph(): SagaIterator { yield takeLatest(sourceParsed, render) }
 function* latestZoom(): SagaIterator { yield throttle(100, zoomChanged, updateZoom) }
-function* latestPreview(): SagaIterator { yield takeLatest(preview, onPreview) }
 
 function* init(): SagaIterator {
     yield take(angularInitialized.type)
@@ -96,7 +91,7 @@ export function* rootSaga(): SagaIterator {
         call(latestZoom),
         call(init),
         call(githubSaga),
-        call(latestPreview),
+        call(previewSaga),
         call(exportSaga),
     ])
 }

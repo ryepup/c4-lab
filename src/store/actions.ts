@@ -72,4 +72,5 @@ export const githubLoginComplete = actionCreator<IGithubLoginComplete>('C4_GITHU
 export const githubLogout = actionCreator('C4_GITHUB_LOGOUT')
 export const gistExport = actionCreator.async<IGistExportRequest, IGistExportResult>('C4_GIST_EXPORT')
 export const preview = actionCreator<IPreview>('C4_PREVIEW')
+export const previewEdit = actionCreator('C4_PREVIEW_EDIT')
 export const exported = actionCreator<IExportRequest>('C4_EXPORT')
