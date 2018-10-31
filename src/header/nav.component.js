@@ -4,7 +4,7 @@ import './nav.css'
 import { uriEncode, formats } from '../core/index'
 import { readAllText } from './importer'
 import * as aboutComponent from './about.component'
-import { sourceChanged, githubLoggedIn, githubLogout, gistExport } from '../store/actions'
+import { sourceChanged, githubLoggedIn, githubLogout, exported } from '../store/actions'
 
 /* global process */
 const githubLoginPopupUrl = process.env.C4_GITHUB_LOGIN_POPUP_URL
@@ -20,7 +20,7 @@ class NavController {
 
         this.unsubscribe = $ngRedux.connect(
             this.mapStateToThis,
-            { sourceChanged, githubLoggedIn, githubLogout, gistExport: gistExport.started })(this);
+            { sourceChanged, githubLoggedIn, githubLogout, exported })(this);
     }
 
     $onDestroy() {
@@ -44,13 +44,7 @@ class NavController {
     }
 
     export(format) {
-        const href = this.href();
-        if (format === 'gist') {
-            this.gistExport({ href })
-        } else {
-            // TODO: fire an action
-            this.onExport({ format, href })
-        }
+        this.exported({ format })
     }
 
     import(files) {
@@ -60,14 +54,15 @@ class NavController {
         }
     }
 
+    // TODO: make this a route
     openAbout() {
         this.$uibModal.open({
             component: aboutComponent.name
         })
     }
 
-    _onImport(text) {
-        this.sourceChanged({ source: text })
+    _onImport(source) {
+        this.sourceChanged({ source })
     }
 
     login() {
@@ -86,8 +81,4 @@ export const name = "c4LabNav"
 export const options = {
     template: template,
     controller: NavController,
-    bindings: {
-        onExport: '&'
-    }
-
 }

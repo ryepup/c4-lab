@@ -54,6 +54,10 @@ export interface IPreview {
     encodedSource: string
 }
 
+export interface IExportRequest {
+    format: string // TODO: use an enum
+}
+
 const actionCreator = actionCreatorFactory()
 
 export const sourceParsed = actionCreator<IEditorParseEvent>('C4_SOURCE_PARSED')
@@ -68,3 +72,4 @@ export const githubLoginComplete = actionCreator<IGithubLoginComplete>('C4_GITHU
 export const githubLogout = actionCreator('C4_GITHUB_LOGOUT')
 export const gistExport = actionCreator.async<IGistExportRequest, IGistExportResult>('C4_GIST_EXPORT')
 export const preview = actionCreator<IPreview>('C4_PREVIEW')
+export const exported = actionCreator<IExportRequest>('C4_EXPORT')

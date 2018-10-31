@@ -9,6 +9,7 @@ import {
     angularInitialized, dotChanged, IPreview, ISourceChanged, IZoomChanged,
     preview, sourceChanged, sourceParsed, sourceParseError, svgChanged, zoomChanged,
 } from './actions'
+import exportSaga from './sagas/export'
 import githubSaga from './sagas/github'
 
 function* onSourceChanged(action: Action<ISourceChanged>): SagaIterator {
@@ -30,6 +31,9 @@ function hrefTo($state: StateService, zoom: NodeId) {
 function* render(): SagaIterator {
     // TODO: make this type safe, need to mess with NodeId being nullable
     const { zoomNodeId, graph, $state, $window, source, isPreview } = yield select()
+
+    // TODO: resolve race where we call this from routes.js
+    if (!graph) { return }
 
     if (!isPreview) {
         new DataStore($window.localStorage).save(source)
@@ -74,9 +78,13 @@ function* latestPreview(): SagaIterator { yield takeLatest(preview, onPreview) }
 
 function* init(): SagaIterator {
     yield take(angularInitialized.type)
-    const { $window } = yield select()
-    if (!$window.localStorage) { return } // TODO: hack to make tests happy
-    const storage = new DataStore($window.localStorage)
+    if (!window.localStorage) { return } // TODO: hack to make tests happy
+
+    // skip restoring from local storage if we're on a preview page
+    if ((/load/i).test(window.location.hash)) {
+        return
+    }
+    const storage = new DataStore(window.localStorage)
     const source = storage.load()
     if (source) { yield put(sourceChanged({ source })) }
 }
@@ -89,5 +97,6 @@ export function* rootSaga(): SagaIterator {
         call(init),
         call(githubSaga),
         call(latestPreview),
+        call(exportSaga),
     ])
 }
