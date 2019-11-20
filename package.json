@@ -24,7 +24,7 @@
   "license": "ISC",
   "dependencies": {
     "@octokit/rest": "^15.12.1",
-    "angular": "^1.6.8",
+    "angular": "^1.7.9",
     "angular-animate": "^1.6.8",
     "angular-marked": "^1.2.2",
     "angular-ui-bootstrap": "^2.5.6",
